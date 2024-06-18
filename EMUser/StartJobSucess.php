@@ -2,14 +2,14 @@
 include '../connect.php';
 include '../session.php';
 
-if (!($_SESSION['type'] == 'puser')) {
+if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
     header('location:..\login.php');
 }
-if(!($_SESSION['DeleteJobSucess']==true))
+if(!($_SESSION['StartJob']==true))
 {
     header('location:..\login.php');
 }
-unset($_SESSION['DeleteJobSucess']);
+unset($_SESSION['StartJob']);
 ?>
 
 <!DOCTYPE html>
@@ -46,7 +46,7 @@ unset($_SESSION['DeleteJobSucess']);
     </div>
     <div class="container mt-5 ">
         <div class="mt-5">
-            <h1>Job Deleted Successfully.</h1>
+            <h1>Job Started Successfully</h1>
             <button type="back" class="btn btn-danger mt-3" name="back" ><a href="\MaintananceJobCard\PUser\indexPUser.php" style="text-decoration:none;color:white">Back to Main</a></button>
         </div>
     </div>

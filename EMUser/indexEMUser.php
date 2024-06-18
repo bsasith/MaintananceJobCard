@@ -29,54 +29,56 @@ if (!($_SESSION['type'] == 'puser' or $_SESSION['type'] == 'muser')) {
 <body>
     <div class="topbar">
         <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace'];
-         ?> User</h1>
+        ?> User</h1>
 
         <a href="\MaintananceJobCard\logout.php">
             <h1 class="topbar-logout">Logout &nbsp</h1>
         </a>
         <h1 class="topbar-username"><?php echo $_SESSION['username'] ?>&nbsp</h1>
 
-    </div> 
+    </div>
 
     <div class="container-fluid mt-5 align-items-center justify-content-center ">
 
-      
-            <!-- first line of boxes -->
-            <div class="grid-container ">
 
-                <!-- <a href="\MaintananceJobCard\PUser\SubmitJob.php" style="text-decoration: none;">
+        <!-- first line of boxes -->
+        <div class="grid-container ">
+
+            <!-- <a href="\MaintananceJobCard\PUser\SubmitJob.php" style="text-decoration: none;">
                     <div class="grid-item" id="box3">
                         <h1 class="box-text" style="color: black">Submit a <br>job</h1>
                     </div>
                 </a> -->
 
-                <a href="\MaintananceJobCard\PUser\DisplayPendingJobListPuser.php" style="text-decoration: none;">
-                    <div class="grid-item" id="box1">
-                        <h1 class="box-text" style="color: black">See my <br>Pending Jobs</h1>
-                    </div>
-                </a>
+            <a href="\MaintananceJobCard\EMUser\DislplayPendingJobListEMUser.php" style="text-decoration: none;">
+                <div class="grid-item" id="box1">
+                    <h1 class="box-text" style="color: black">See my <br>Pending Jobs</h1>
+                </div>
+            </a>
+
+            <a href="\MaintananceJobCard\EMUser\StartedJobsEMUser.php">
                 <div class="grid-item" id="box4">
                     <h1 class="box-text" style="color: black">Started Jobs</h1>
                 </div>
-                <div class="grid-item" id="box2">
-                    <h1 class="box-text" style="color: black">Finished  & Pending Approvals Jobs</h1>
-                </div>
 
-                <div class="grid-item box5" id="box5">
-                    <h1 class="box-text" style="color: black">Approved Jobs</h1>
+            </a>
+            <a href="\MaintananceJobCard\EMUser\FinishedJobsEMUser.php">
+                <div class="grid-item" id="box2">
+                    <h1 class="box-text" style="color: black">Finished & Pending Approvals Jobs</h1>
                 </div>
-                
-                <div class="grid-item box6" id="box6">
-                    <h1 class="box-text" style="color: black">Change Account info</h1>
-                </div>
-                
+            </a>
+
+            <div class="grid-item box6" id="box6">
+                <h1 class="box-text" style="color: black">Change Account info</h1>
             </div>
 
-            <!-- second line of boxes -->
+        </div>
 
-            <!-- <div class="box-secondline"> -->
+        <!-- second line of boxes -->
 
-                <!-- <a href="\MaintananceJobCard\PUser\SubmitJob.php">
+        <!-- <div class="box-secondline"> -->
+
+        <!-- <a href="\MaintananceJobCard\PUser\SubmitJob.php">
                     <div class="box" id="box3">
                         <h1 class="box-text" style="color: black">Submit a job</h1>
                     </div>
@@ -88,15 +90,15 @@ if (!($_SESSION['type'] == 'puser' or $_SESSION['type'] == 'muser')) {
                     </div>
                 </a> -->
 
-                <!-- <div class="box" id="box4">
+        <!-- <div class="box" id="box4">
                     <h1 class="box-text" style="color: black">Finished Jobs</h1>
                 </div> -->
 
 
-            <!-- </div> -->
+        <!-- </div> -->
 
 
-        
+
 
     </div>
 

@@ -2,7 +2,7 @@
 include '../connect.php';
 include '../session.php';
 
-if (!($_SESSION['type'] == 'puser')) {
+if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
     header('location:..\login.php');
 }
 
@@ -69,7 +69,8 @@ if (!($_SESSION['type'] == 'puser')) {
                     //sql fetch data
                     $workplace=$_SESSION['workplace'];
                     //echo $workplace;
-                    $sql = "Select * from `jobdatasheet` where JobPostingDev='$workplace' ";
+            
+                    $sql = "Select * from `jobdatasheet` where ReportTo='$workplace' and JobStatusM='Pending' ";
                     $result = mysqli_query($con, $sql);
 
                     while ($row = mysqli_fetch_assoc($result)) {
@@ -99,7 +100,8 @@ if (!($_SESSION['type'] == 'puser')) {
         <td>$priority</td>
         <td>$ReportTo</td>
         <td>$BriefDescription</td>
-       <td><a href='\MaintananceJobCard\PUser\UpdateDeleteJob.php?updateid=$id' class='btn btn-warning'>Update or <br>Delete</a></td>
+       <td><a href='\MaintananceJobCard\EMUser\StartJobEMUser.php?updateid=$id' class='btn btn-success'>Start</a>
+       <a href='\MaintananceJobCard\EMUser\StarrJobEMUser.php?updateid=$id' class='btn btn-danger mt-1'>Transfer</a> </td>
         
       </tr>
       

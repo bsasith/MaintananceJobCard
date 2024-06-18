@@ -2,7 +2,7 @@
 include '../connect.php';
 include '../session.php';
 
-if (!($_SESSION['type'] == 'puser')) {
+if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
     header('location:..\login.php');
 }
 
@@ -14,7 +14,7 @@ if (!($_SESSION['type'] == 'puser')) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Started Jobs</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,7 +48,7 @@ if (!($_SESSION['type'] == 'puser')) {
     <div class="container mt-5 ">
 
         <div class="mt-5">
-            <h1>Pending Jobs</h1>
+            <h1>Started Jobs</h1>
 
             <table class="table table-hover mt-3">
                 <thead>
@@ -69,7 +69,8 @@ if (!($_SESSION['type'] == 'puser')) {
                     //sql fetch data
                     $workplace=$_SESSION['workplace'];
                     //echo $workplace;
-                    $sql = "Select * from `jobdatasheet` where JobPostingDev='$workplace' ";
+            
+                    $sql = "Select * from `jobdatasheet` where  JobStatusM='Started' ";
                     $result = mysqli_query($con, $sql);
 
                     while ($row = mysqli_fetch_assoc($result)) {
@@ -99,7 +100,8 @@ if (!($_SESSION['type'] == 'puser')) {
         <td>$priority</td>
         <td>$ReportTo</td>
         <td>$BriefDescription</td>
-       <td><a href='\MaintananceJobCard\PUser\UpdateDeleteJob.php?updateid=$id' class='btn btn-warning'>Update or <br>Delete</a></td>
+       <td><a href='\MaintananceJobCard\EMUser\FinishJobEMUser.php?updateid=$id' class='btn btn-warning mt-1'>Finish</a> 
+       <a href='\MaintananceJobCard\EMUser\StarrJobEMUser.php?updateid=$id' class='btn btn-danger mt-1'>Transfer</a> </td>
         
       </tr>
       
