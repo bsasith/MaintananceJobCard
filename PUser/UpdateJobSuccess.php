@@ -36,9 +36,7 @@ unset($_SESSION['UpdateJobSucess']);
 
 <body >
     <div class="topbar">
-        <h1 class="topbar-text">Welcome <?php if ($_SESSION['type'] = "puser") {
-            echo "Production";
-        } ?> User</h1>
+        <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace']?> User</h1>
 
         <a href="\MaintananceJobCard\logout.php">
             <h1 class="topbar-logout">Logout &nbsp</h1>
