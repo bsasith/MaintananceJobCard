@@ -2,7 +2,7 @@
 include '../connect.php';
 include '../session.php';
 
-if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
+if (!($_SESSION['type'] == 'puser')) {
     header('location:..\login.php');
 }
 
@@ -71,7 +71,7 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                     $workplace=$_SESSION['workplace'];
                     //echo $workplace;
             
-                    $sql = "Select * from `jobdatasheet` where  JobStatusM='Finished' ";
+                    $sql = "Select * from `jobdatasheet` where  JobStatusM='Finished' and JobPostingDev='$workplace'";
                     $result = mysqli_query($con, $sql);
 
                     while ($row = mysqli_fetch_assoc($result)) {

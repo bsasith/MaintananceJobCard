@@ -93,13 +93,37 @@ if (isset($_POST['submit'])) {
                             <td style="width:500px;padding:5px">
                                 <select name="JobIssuingDivision" id="dept" onchange='divSelect()' class="form-select"
                                     required  >
-                                    
-                                    <option value="ACF" <?php if($_SESSION['workplace']=="ACF"){echo "selected";}?> >ACF</option>
+                                    <?php if($_SESSION['workplace']=="ACF")
+                                    {
+                                        echo "<option value='ACF'>ACF</option>";
+                                    }
+                                    if($_SESSION['workplace']=="CCF")
+                                    {
+                                        echo "<option value='CCF'>CCF</option>";
+                                    }
+                                    if($_SESSION['workplace']=="DR")
+                                    {
+                                        echo "<option value='DR'>DR</option>";
+                                    }
+                                    if($_SESSION['workplace']=="Flexible")
+                                    {
+                                        echo "<option value='Flexible'>Flexible</option>";
+                                    }
+                                    if($_SESSION['workplace']=="Aluminium Rodmill")
+                                    {
+                                        echo "<option value='Aluminium Rodmill'>Aluminium Rodmill</option>";
+                                    }
+                                    if($_SESSION['workplace']=="Ceylon Copper")
+                                    {
+                                        echo "<option value='Ceylon Copper'>Ceylon Copper</option>";
+                                    }
+                                ?>
+                                    <!-- <option value="ACF" <?php if($_SESSION['workplace']=="ACF"){echo "selected";}?> >ACF</option>
                                     <option value="CCF" <?php if($_SESSION['workplace']=="CCF"){echo "selected";}?> >CCF</option>
                                     <option value="DR" <?php if($_SESSION['workplace']=="DR"){echo "selected";}?> >DR</option>
                                     <option value="Flexible" <?php if($_SESSION['workplace']=="Flexible"){echo "selected";}?> >Flexible</option>
                                     <option value="Aluminium Rodmill" <?php if($_SESSION['workplace']=="Aluminium Rodmill"){echo "selected";}?> >Aluminium Rodmill</option>
-                                    <option value="Ceylon Copper" <?php if($_SESSION['workplace']=="Ceylon Copper"){echo "selected";}?> >Ceylon Copper</option>
+                                    <option value="Ceylon Copper" <?php if($_SESSION['workplace']=="Ceylon Copper"){echo "selected";}?> >Ceylon Copper</option> -->
                                 </select>
                             </td>
                         </tr>
