@@ -60,6 +60,9 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                         <th scope="col">Name of<br> the Machine</th>
                         <th scope="col">Priority</th>
                         <th scope="col">Report To</th>
+                        <th scope="col">Job Electrical<br> Status</th>
+                        <th scope="col">Job Mechanical<br> Status</th>
+                        
                         <th scope="col">Breif <br>Description</th>
                         <th scope="col">Approval Status </th>
                         <!-- <th scope="col">Operations</th> -->
@@ -70,8 +73,12 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                     //sql fetch data
                     $workplace=$_SESSION['workplace'];
                     //echo $workplace;
-            
-                    $sql = "Select * from `jobdatasheet` where  JobStatusM='Finished' ";
+            if($workplace=='Electrical'){
+                $sql = "Select * from `jobdatasheet` where  JobStatusE='Finished' and (ReportTo='$workplace' or ReportTo='Both') and Approval='Not Approved' ";
+            }else{
+                $sql = "Select * from `jobdatasheet` where  JobStatusM='Finished' and (ReportTo='$workplace' or ReportTo='Both') ";
+            }
+                    
                     $result = mysqli_query($con, $sql);
 
                     while ($row = mysqli_fetch_assoc($result)) {
@@ -83,6 +90,8 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                         $MachineName = $row['MachineName'];
                         $priority = $row['Priority'];
                         $ReportTo = $row['ReportTo'];
+                        $JobStatusE= $row['JobStatusE'];
+                        $JobStatusM= $row['JobStatusM'];
                         $BriefDescription = $row['BDescription'];
                         $JobStatusM=$row['JobStatusM'];
                         $Approval=$row['Approval'];
@@ -102,6 +111,8 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
         <td>$MachineName</td>
         <td>$priority</td>
         <td>$ReportTo</td>
+        <td>$JobStatusE</td>
+        <td>$JobStatusM</td>
         <td>$BriefDescription</td>
          <td>$Approval</td>
         

@@ -1,7 +1,7 @@
 <?php
 include '../connect.php';
 include '../session.php';
-if (!($_SESSION['type'] == 'puser' or $_SESSION['type'] == 'muser')) {
+if (!($_SESSION['type'] == 'euser' or $_SESSION['type'] == 'muser')) {
     header('location:..\login.php');
 }
 
@@ -67,7 +67,11 @@ if (!($_SESSION['type'] == 'puser' or $_SESSION['type'] == 'muser')) {
                     <h1 class="box-text" style="color: black">Finished & Pending Approvals Jobs</h1>
                 </div>
             </a>
-
+            <a href="\MaintananceJobCard\EMUser\ApprovedJobsEMUser.php">
+                <div class="grid-item box5" id="box5">
+                    <h1 class="box-text" style="color: black">Approved Jobs</h1>
+                </div>
+            </a>
             <div class="grid-item box6" id="box6">
                 <h1 class="box-text" style="color: black">Change Account info</h1>
             </div>

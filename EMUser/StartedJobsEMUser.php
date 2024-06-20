@@ -69,14 +69,18 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                     //sql fetch data
                     $workplace=$_SESSION['workplace'];
                     //echo $workplace;
-            
-                    $sql = "Select * from `jobdatasheet` where  JobStatusM='Started' ";
+            if ($workplace=='Electrical'){
+                $sql = "Select * from `jobdatasheet` where  JobStatusE='Started' ";
+            }else{
+                $sql = "Select * from `jobdatasheet` where  JobStatusM='Started' ";
+            }
+                    
                     $result = mysqli_query($con, $sql);
 
                     while ($row = mysqli_fetch_assoc($result)) {
                         $id = $row['id'];
                         $JobCodeNo = $row['JobCodeNo'];
-                        $username = $_SESSION['username'];
+                        $username = $row['Username'];
                         $JobIssuingDateTime = $row['JobPostingDateTime'];
                         $JobIssuingDivision = $row['JobPostingDev'];
                         $MachineName = $row['MachineName'];

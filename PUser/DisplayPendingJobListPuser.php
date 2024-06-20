@@ -37,7 +37,7 @@ if (!($_SESSION['type'] == 'puser')) {
 
 <body>
     <div class="topbar">
-        <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace']?> User</h1>
+        <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace'] ?> User</h1>
 
         <a href="\MaintananceJobCard\logout.php">
             <h1 class="topbar-logout">Logout &nbsp</h1>
@@ -67,9 +67,14 @@ if (!($_SESSION['type'] == 'puser')) {
                 <tbody>
                     <?php
                     //sql fetch data
-                    $workplace=$_SESSION['workplace'];
-                    //echo $workplace;
-                    $sql = "Select * from `jobdatasheet` where JobPostingDev='$workplace' ";
+                    $workplace = $_SESSION['workplace'];
+                    
+                    echo $workplace;
+                   
+                        $sql = "Select * from `jobdatasheet` where JobPostingDev='$workplace' and(JobStatusE='Pending' or JobStatusM='Pending' )";
+                  
+
+                    
                     $result = mysqli_query($con, $sql);
 
                     while ($row = mysqli_fetch_assoc($result)) {

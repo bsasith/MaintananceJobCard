@@ -15,15 +15,31 @@ if (isset($_POST['submit'])) {
     $ReportTo = $_POST['ReportTo'];
     $BriefDescription = $_POST['BriefDescription'];
     $username = $_SESSION['username'];
-    
+    $JobStatusE = null;
+    $JobStatusM = null;
+    if($ReportTo=='Both'){
+        $JobStatusE = 'Pending';
+        $JobStatusM = 'Pending';
+      }elseif($ReportTo=='Electrical'){
+        $JobStatusE = 'Pending';
+        $JobStatusM = 'NA';
+      }
+      else{
+        $JobStatusE = 'NA';
+        $JobStatusM = 'Pending';
+      }
+ 
     $_SESSION['SubmitJobSucess']=true;
 
-    $insert = "insert into jobdatasheet (JobCodeNo,JobPostingDateTime,JobPostingDev,MachineName,Priority,ReportTo,BDescription,Username) values 
-    ('$JobCodeNo',NOW(),'$JobIssuingDivision','$MachineName','$priority','$ReportTo','$BriefDescription','$username')";
+    $insert = "insert into jobdatasheet (JobCodeNo,JobPostingDateTime,JobPostingDev,MachineName,Priority,ReportTo,BDescription,Username,JobStatusE,JobStatusM) values 
+    ('$JobCodeNo',NOW(),'$JobIssuingDivision','$MachineName','$priority','$ReportTo','$BriefDescription','$username','$JobStatusE','$JobStatusM')";
 
     if ($con->query($insert) == TRUE) {
         $_SESSION['SubmitJobSucess']=true;
-        echo "Sucessfully add data";
+        // echo "Sucessfully add data";
+        // echo $ReportTo;
+        // echo $JobStatusE;
+        // echo $JobStatusM;
      header('location:..\PUser\SubmitJobSuccess.php');
    
     } else {
@@ -32,6 +48,8 @@ if (isset($_POST['submit'])) {
       //  header('location:location:..\PUser\indexPUser.php');
     }
     //$insert->close();
+
+
 }
 ?>
 

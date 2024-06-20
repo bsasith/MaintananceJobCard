@@ -14,7 +14,7 @@ if (!($_SESSION['type'] == 'puser')) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Started Jobs</title>
+    <title>Approved Jobs</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -37,7 +37,7 @@ if (!($_SESSION['type'] == 'puser')) {
 
 <body>
     <div class="topbar">
-        <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace'] ?> User</h1>
+        <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace']?> User</h1>
 
         <a href="\MaintananceJobCard\logout.php">
             <h1 class="topbar-logout">Logout &nbsp</h1>
@@ -48,7 +48,7 @@ if (!($_SESSION['type'] == 'puser')) {
     <div class="container mt-5 ">
 
         <div class="mt-5">
-            <h1>Finished Jobs</h1>
+            <h1>Approved Jobs</h1>
 
             <table class="table table-hover mt-3">
                 <thead>
@@ -62,17 +62,16 @@ if (!($_SESSION['type'] == 'puser')) {
                         <th scope="col">Report To</th>
                         <th scope="col">Breif <br>Description</th>
                         <th scope="col">Approval Status </th>
-                        <th scope="col">Operations</th>
+                        <!-- <th scope="col">Operations</th> -->
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     //sql fetch data
-                    $workplace = $_SESSION['workplace'];
+                    $workplace=$_SESSION['workplace'];
                     //echo $workplace;
-                    
-                        $sql = "Select * from `jobdatasheet` where  (JobStatusE='Finished' or JobStatusM='Finished') and JobPostingDev='$workplace' and Approval='Not Approved' ";
-                   
+            
+                    $sql = "Select * from `jobdatasheet` where  (JobStatusE='Finished' or JobStatusM='Finished' )and Approval='Approved' ";
                     $result = mysqli_query($con, $sql);
 
                     while ($row = mysqli_fetch_assoc($result)) {
@@ -85,8 +84,8 @@ if (!($_SESSION['type'] == 'puser')) {
                         $priority = $row['Priority'];
                         $ReportTo = $row['ReportTo'];
                         $BriefDescription = $row['BDescription'];
-                        $JobStatusM = $row['JobStatusM'];
-                        $Approval = $row['Approval'];
+                        $JobStatusM=$row['JobStatusM'];
+                        $Approval=$row['Approval'];
 
 
 
@@ -105,7 +104,7 @@ if (!($_SESSION['type'] == 'puser')) {
         <td>$ReportTo</td>
         <td>$BriefDescription</td>
          <td>$Approval</td>
-        <td><a href='\MaintananceJobCard\PUser\ApproveJobPUser.php?updateid=$id' class='btn btn-warning'>Approve <br>Job</a></td>
+        
       </tr>
       
       ";

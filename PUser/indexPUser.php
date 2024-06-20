@@ -55,18 +55,21 @@ if (!($_SESSION['type'] == 'puser')) {
                         <h1 class="box-text" style="color: black">See my <br>Pending Jobs</h1>
                     </div>
                 </a>
+                <a href="\MaintananceJobCard\PUser\StartedJobsPuser.php">
                 <div class="grid-item" id="box4">
                     <h1 class="box-text" style="color: black">Started Jobs</h1>
                 </div>
+                </a>
                 <a href="\MaintananceJobCard\PUser\FinishedJobsPUser.php">
                 <div class="grid-item" id="box2">
                     <h1 class="box-text" style="color: black">Finished Jobs</h1>
                 </div>
                 </a>
+                <a href="\MaintananceJobCard\PUser\ApprovedJobsPUser.php">
                 <div class="grid-item box5" id="box5">
                     <h1 class="box-text" style="color: black">Approved Jobs</h1>
                 </div>
-                
+                </a>
 
             </div>
 

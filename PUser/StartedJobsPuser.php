@@ -37,7 +37,7 @@ if (!($_SESSION['type'] == 'puser')) {
 
 <body>
     <div class="topbar">
-        <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace'] ?> User</h1>
+        <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace']?> User</h1>
 
         <a href="\MaintananceJobCard\logout.php">
             <h1 class="topbar-logout">Logout &nbsp</h1>
@@ -48,7 +48,7 @@ if (!($_SESSION['type'] == 'puser')) {
     <div class="container mt-5 ">
 
         <div class="mt-5">
-            <h1>Finished Jobs</h1>
+            <h1>Started Jobs</h1>
 
             <table class="table table-hover mt-3">
                 <thead>
@@ -61,18 +61,19 @@ if (!($_SESSION['type'] == 'puser')) {
                         <th scope="col">Priority</th>
                         <th scope="col">Report To</th>
                         <th scope="col">Breif <br>Description</th>
-                        <th scope="col">Approval Status </th>
-                        <th scope="col">Operations</th>
+                        <th scope="col">Job Status<br>Electrical</th>
+                        <th scope="col">Job Status<br>Mecahnical</th>
+                        <!-- <th scope="col">Approval Status </th> -->
+                        <!-- <th scope="col">Operations</th> -->
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     //sql fetch data
-                    $workplace = $_SESSION['workplace'];
+                    $workplace=$_SESSION['workplace'];
                     //echo $workplace;
-                    
-                        $sql = "Select * from `jobdatasheet` where  (JobStatusE='Finished' or JobStatusM='Finished') and JobPostingDev='$workplace' and Approval='Not Approved' ";
-                   
+            
+                    $sql = "Select * from `jobdatasheet` where  JobStatusE='Started' or JobStatusM='Started'";
                     $result = mysqli_query($con, $sql);
 
                     while ($row = mysqli_fetch_assoc($result)) {
@@ -85,8 +86,8 @@ if (!($_SESSION['type'] == 'puser')) {
                         $priority = $row['Priority'];
                         $ReportTo = $row['ReportTo'];
                         $BriefDescription = $row['BDescription'];
-                        $JobStatusM = $row['JobStatusM'];
-                        $Approval = $row['Approval'];
+                        $JobStatusM=$row['JobStatusE'];
+                        $JobStatusE=$row['JobStatusM'];
 
 
 
@@ -104,13 +105,17 @@ if (!($_SESSION['type'] == 'puser')) {
         <td>$priority</td>
         <td>$ReportTo</td>
         <td>$BriefDescription</td>
-         <td>$Approval</td>
-        <td><a href='\MaintananceJobCard\PUser\ApproveJobPUser.php?updateid=$id' class='btn btn-warning'>Approve <br>Job</a></td>
+        <td>$JobStatusM</td>
+        <td>$JobStatusE</td>
+         
+        
       </tr>
       
       ";
 
-                    } ?>
+                    }
+                    
+                    ?>
                 </tbody>
             </table>
             <button type="back" class="btn btn-danger mt-3" name="back"><a

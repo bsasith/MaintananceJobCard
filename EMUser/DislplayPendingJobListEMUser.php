@@ -2,7 +2,7 @@
 include '../connect.php';
 include '../session.php';
 
-if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
+if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
     header('location:..\login.php');
 }
 
@@ -37,7 +37,7 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
 
 <body>
     <div class="topbar">
-        <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace']?> User</h1>
+        <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace'] ?> User</h1>
 
         <a href="\MaintananceJobCard\logout.php">
             <h1 class="topbar-logout">Logout &nbsp</h1>
@@ -67,10 +67,19 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                 <tbody>
                     <?php
                     //sql fetch data
-                    $workplace=$_SESSION['workplace'];
+                    $workplace = $_SESSION['workplace'];
                     //echo $workplace;
-            
-                    $sql = "Select * from `jobdatasheet` where ReportTo='$workplace' and JobStatusM='Pending' ";
+                    if ($workplace == 'Electrical')
+                    {
+                        $sql = "Select * from `jobdatasheet` where (ReportTo='$workplace' or ReportTo='Both') and JobStatusE='Pending'  ";
+                    } 
+                    elseif($workplace == 'Mechanical') 
+                    {
+                        $sql = "Select * from `jobdatasheet` where (ReportTo='$workplace' or ReportTo='Both') and JobStatusM='Pending' ";
+                    }
+                    // elseif(($workplace == 'Mechanical') or ($workplace == 'Electrical') ){
+                    //     $sql = "Select * from `jobdatasheet` where  ReportTo='Both' and JobStatusM='Pending' and JobStatusE='Pending' ";
+                    // }
                     $result = mysqli_query($con, $sql);
 
                     while ($row = mysqli_fetch_assoc($result)) {

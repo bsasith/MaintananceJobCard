@@ -38,8 +38,17 @@ $JobStatusM = $row['JobStatusM'];
 if (isset($_POST['start'])) {
 
     $_SESSION['StartJob'] = true;
+    $workplace=$_SESSION['workplace'];
+    if ($workplace=='Electrical')
+    {
+        $insert = "update jobdatasheet set JobStatusE='Started' where id='$id'";
+    }
+    else
+    {
+        $insert = "update jobdatasheet set JobStatusM='Started' where id='$id'";
+    }
 
-    $insert = "update jobdatasheet set JobStatusM='Started' where id='$id'";
+    
 
     if ($con->query($insert) == TRUE) {
         //$_SESSION['SubmitJobSucess']=true;
@@ -61,16 +70,16 @@ if (isset($_POST['start'])) {
 
 
 // delete operation
-if (isset($_POST['delete'])) {
+// if (isset($_POST['delete'])) {
 
-    $sql = "delete  from `jobdatasheet` where id='$idu'";
-    $result = mysqli_query($con, $sql);
-    $_SESSION['DeleteJobSucess'] = true;
-    header('location:.\DeleteJobSuccess.php');
+//     $sql = "delete  from `jobdatasheet` where id='$idu'";
+//     $result = mysqli_query($con, $sql);
+//     $_SESSION['DeleteJobSucess'] = true;
+//     header('location:.\DeleteJobSuccess.php');
 
 
 
-}
+// }
 
 
 
