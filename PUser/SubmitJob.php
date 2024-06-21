@@ -17,6 +17,7 @@ if (isset($_POST['submit'])) {
     $username = $_SESSION['username'];
     $JobStatusE = null;
     $JobStatusM = null;
+    echo $ReportTo;
     if($ReportTo=='Both'){
         $JobStatusE = 'Pending';
         $JobStatusM = 'Pending';
@@ -24,11 +25,12 @@ if (isset($_POST['submit'])) {
         $JobStatusE = 'Pending';
         $JobStatusM = 'NA';
       }
-      else{
+    elseif($ReportTo=='Mechanical'){
         $JobStatusE = 'NA';
         $JobStatusM = 'Pending';
       }
- 
+ echo $JobStatusE;
+ echo $JobStatusM;
     $_SESSION['SubmitJobSucess']=true;
 
     $insert = "insert into jobdatasheet (JobCodeNo,JobPostingDateTime,JobPostingDev,MachineName,Priority,ReportTo,BDescription,Username,JobStatusE,JobStatusM) values 
@@ -48,9 +50,9 @@ if (isset($_POST['submit'])) {
       //  header('location:location:..\PUser\indexPUser.php');
     }
     //$insert->close();
-
-
 }
+
+
 ?>
 
 <!DOCTYPE html>

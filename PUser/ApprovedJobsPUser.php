@@ -71,7 +71,7 @@ if (!($_SESSION['type'] == 'puser')) {
                     $workplace=$_SESSION['workplace'];
                     //echo $workplace;
             
-                    $sql = "Select * from `jobdatasheet` where  (JobStatusE='Finished' or JobStatusM='Finished' )and Approval='Approved' ";
+                    $sql = "Select * from `jobdatasheet` where  JobPostingDev='$workplace' and (JobStatusE='Finished' or JobStatusM='Finished' )and Approval='Approved' ";
                     $result = mysqli_query($con, $sql);
 
                     while ($row = mysqli_fetch_assoc($result)) {

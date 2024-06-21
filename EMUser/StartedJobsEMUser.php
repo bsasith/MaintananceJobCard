@@ -60,7 +60,10 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                         <th scope="col">Name of<br> the Machine</th>
                         <th scope="col">Priority</th>
                         <th scope="col">Report To</th>
+                       
                         <th scope="col">Breif <br>Description</th>
+                        <th scope="col">Job Status<br>Electrical</th>
+                        <th scope="col">Job Status<br>Mecahnical</th>
                         <th scope="col">Operations</th>
                     </tr>
                 </thead>
@@ -70,9 +73,9 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                     $workplace=$_SESSION['workplace'];
                     //echo $workplace;
             if ($workplace=='Electrical'){
-                $sql = "Select * from `jobdatasheet` where  JobStatusE='Started' ";
+                $sql = "Select * from `jobdatasheet` where  JobStatusE='Started'and ReportTo='Electrical' ";
             }else{
-                $sql = "Select * from `jobdatasheet` where  JobStatusM='Started' ";
+                $sql = "Select * from `jobdatasheet` where  JobStatusM='Started' and ReportTo='Mechanical' ";
             }
                     
                     $result = mysqli_query($con, $sql);
@@ -87,7 +90,8 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                         $priority = $row['Priority'];
                         $ReportTo = $row['ReportTo'];
                         $BriefDescription = $row['BDescription'];
-
+                        $JobStatusM=$row['JobStatusE'];
+                        $JobStatusE=$row['JobStatusM'];
 
 
                         echo
@@ -104,8 +108,10 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
         <td>$priority</td>
         <td>$ReportTo</td>
         <td>$BriefDescription</td>
+        <td>$JobStatusM</td>
+        <td>$JobStatusE</td>
        <td><a href='\MaintananceJobCard\EMUser\FinishJobEMUser.php?updateid=$id' class='btn btn-warning mt-1'>Finish</a> 
-       <a href='\MaintananceJobCard\EMUser\StarrJobEMUser.php?updateid=$id' class='btn btn-danger mt-1'>Transfer</a> </td>
+       <a href='\MaintananceJobCard\EMUser\TransferJobEMUser.php?updateid=$id' class='btn btn-danger mt-1'>Transfer</a> </td>
         
       </tr>
       

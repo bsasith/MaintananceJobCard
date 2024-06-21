@@ -25,6 +25,7 @@ $priority = $row['Priority'];
 $ReportTo = $row['ReportTo'];
 $BriefDescription = $row['BDescription'];
 $JobStatusM = $row['JobStatusM'];
+$JobStatusE = $row['JobStatusM'];
 
 // $gen = explode(",",$gender);
 // $lang = explode(",",$datas);
@@ -35,26 +36,44 @@ $JobStatusM = $row['JobStatusM'];
 
 
 // update operation
-if (isset($_POST['finish'])) {
+if (isset($_POST['transfer'])) {
     $workplace=$_SESSION['workplace'];
-$finishcomment=$_POST['finishcomment'];
-    $_SESSION['FinishJob'] = true;
-    if ($workplace=='Electrical')
-    {
-        $insert = "update jobdatasheet set JobStatusE='Finished',FinishedCommentE='$finishcomment' where id='$id'";
+    $transferto=$_POST['transferto'];
+    $transfercomment=$_POST['transfercomment'];
+    $_SESSION['TransferJob'] = true;
+    
+    if ($JobStatusM=='Started'){
+        $JobStatusMT='Started';
     }
-    else
-    {
-        $insert = "update jobdatasheet set JobStatusM='Finished',FinishedCommentM='$finishcomment' where id='$id'";
+    else{
+        $JobStatusMT='Pending';
+    }
+    if ($JobStatusE=='Started'){
+        $JobStatusET='Started';
+    }else{
+        $JobStatusET='Pending';
     }
 
+
+    if ($transferto=='Electrical')
+    {
+        $insert = "update jobdatasheet set ReportTo='Electrical',TransferCommentM='$transfercomment',JobStatusE='$JobStatusET',JobStatusM='$JobStatusMT' where id='$id'";
+    }
+    elseif($transferto=='Mechanical')
+    {
+        $insert = "update jobdatasheet set ReportTo='Mechanical',TransferCommentE='$transfercomment',JobStatusE='$JobStatusET',JobStatusM='$JobStatusMT' where id='$id'";
+    }
+    elseif($transferto=='Both')
+    {
+        $insert = "update jobdatasheet set ReportTo='Both',TransferCommentM='$transfercomment',TransferCommentE='$transfercomment',JobStatusE='$JobStatusET',JobStatusM='$JobStatusMT' where id='$id'";
+    }
     //$insert = "update jobdatasheet set JobStatusM='Finished' where id='$id'";
 
     if ($con->query($insert) == TRUE) {
         //$_SESSION['SubmitJobSucess']=true;
-        echo "Sucessfully Started Job";
+        //echo "Sucessfully Started Job";
 
-        header('location:.\FinishedJobSuccesEMUser.php');
+        header('location:.\TransferJobSucessEMUser.php');
 
     } else {
 
@@ -75,7 +94,7 @@ if (isset($_POST['delete'])) {
     $sql = "delete  from `jobdatasheet` where id='$idu'";
     $result = mysqli_query($con, $sql);
     $_SESSION['DeleteJobSucess'] = true;
-    header('location:.\DeleteJobSuccess.php');
+    header('location:.\TransferJobSucessEMUser.php');
 
 
 
@@ -92,7 +111,7 @@ if (isset($_POST['delete'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Transfer Job</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -119,7 +138,7 @@ if (isset($_POST['delete'])) {
 
     </div>
     <div class="container mt-5 ">
-        <h1> Finish Job </h1>
+        <h1> Transfer Job </h1>
         <div class="mt-3">
             <form method="POST">
                 <table class="table table-striped w-50">
@@ -215,13 +234,35 @@ if (isset($_POST['delete'])) {
                         </td>
                     </tr>
                     </tr>
+                    <!-- table row transferto -->
+                    <tr>
+                        <td>
+                            Tranfer To
+                        </td>
+                        <td>
+                            <select name="transferto" id="" class="form-control">
+                                
+                                <?php
+                                 $workplace=$_SESSION['workplace'];
+                                if ($workplace=='Electrical')
+                                {
+                                    echo "<option value='Mechanical'>Mechanical</option>";
+                                    echo "<option value='Both'>Both Departments</option>";
+                                }elseif($workplace=='Mechanical'){
+                                    echo "<option value='Electrical'>Electrical</option>";
+                                    echo "<option value='Both'>Both Departments</option>";
+                                }
+                                ?>
+                            </select>
+                        </td>
+                    </tr>
                     <!-- table row comment -->
                     <tr>
                         <td>
-                            Finish Comment
+                            Transfer Comment
                         </td>
                         <td>
-                            <input type="text" class="form-control" name="finishcomment">
+                            <input type="text" class="form-control" name="transfercomment">
                         </td>
                     </tr>
                     </tr>
@@ -229,8 +270,8 @@ if (isset($_POST['delete'])) {
                 </table>
 
 
-                <button type="submit" class="btn btn-success mt-3" name="finish"
-                    onclick="return confirm('Are you sure?')">Finish & send for Approval</button>
+                <button type="submit" class="btn btn-success mt-3" name="transfer"
+                    onclick="return confirm('Are you sure?')">Transfer Job</button>
                 <!-- <button type="submit" class="btn btn-warning mt-3" name="delete"
             onclick="return confirm('Are you sure?')">Transfer</button> -->
                 <button type="back" class="btn btn-danger mt-3" name="back"><a

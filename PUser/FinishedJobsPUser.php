@@ -60,6 +60,8 @@ if (!($_SESSION['type'] == 'puser')) {
                         <th scope="col">Name of<br> the Machine</th>
                         <th scope="col">Priority</th>
                         <th scope="col">Report To</th>
+                        <th scope="col">Job Status Electrical</th>
+                        <th scope="col">Job Status Mechanical</th>
                         <th scope="col">Breif <br>Description</th>
                         <th scope="col">Approval Status </th>
                         <th scope="col">Operations</th>
@@ -84,6 +86,8 @@ if (!($_SESSION['type'] == 'puser')) {
                         $MachineName = $row['MachineName'];
                         $priority = $row['Priority'];
                         $ReportTo = $row['ReportTo'];
+                        $JobStatusE=$row['JobStatusE'];
+                        $JobStatusM=$row['JobStatusM'];
                         $BriefDescription = $row['BDescription'];
                         $JobStatusM = $row['JobStatusM'];
                         $Approval = $row['Approval'];
@@ -103,12 +107,33 @@ if (!($_SESSION['type'] == 'puser')) {
         <td>$MachineName</td>
         <td>$priority</td>
         <td>$ReportTo</td>
+         <td>$JobStatusE</td>
+          <td>$JobStatusM</td>
         <td>$BriefDescription</td>
          <td>$Approval</td>
-        <td><a href='\MaintananceJobCard\PUser\ApproveJobPUser.php?updateid=$id' class='btn btn-warning'>Approve <br>Job</a></td>
-      </tr>
+         ";
+        // echo $JobStatusE;
+         //echo $JobStatusM;
+         if($JobStatusE=='Finished' and $JobStatusM=='Finished')
+         {
+            echo " <td><a href='\MaintananceJobCard\PUser\ApproveJobPUser.php?updateid=$id' class='btn btn-warning'>Approve <br>Job</a></td>";
+         }elseif($JobStatusE=='Finished' and $JobStatusM=='NA'){
+            echo " <td><a href='\MaintananceJobCard\PUser\ApproveJobPUser.php?updateid=$id' class='btn btn-warning'>Approve <br>Job</a></td>";
+         }
+        elseif($JobStatusE=='NA' and $JobStatusM=='Finished'){
+            echo " <td><a href='\MaintananceJobCard\PUser\ApproveJobPUser.php?updateid=$id' class='btn btn-warning'>Approve <br>Job</a></td>";
+         }
+         elseif($JobStatusE=='Finished' and $JobStatusM=='Pending')
+         {
+            echo "<td>pending <br>finish M</tr></td>";
+         }
+         elseif($JobStatusE=='Pending' and $JobStatusM=='Finished')
+         {
+            echo "<td>pending <br>finish E</tr></td>";
+         }
+        
+       
       
-      ";
 
                     } ?>
                 </tbody>

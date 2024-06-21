@@ -68,7 +68,7 @@ if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
                     <?php
                     //sql fetch data
                     $workplace = $_SESSION['workplace'];
-                    //echo $workplace;
+                    echo $workplace;
                     if ($workplace == 'Electrical')
                     {
                         $sql = "Select * from `jobdatasheet` where (ReportTo='$workplace' or ReportTo='Both') and JobStatusE='Pending'  ";
@@ -85,7 +85,7 @@ if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
                     while ($row = mysqli_fetch_assoc($result)) {
                         $id = $row['id'];
                         $JobCodeNo = $row['JobCodeNo'];
-                        $username = $_SESSION['username'];
+                        $username = $row['Username'];
                         $JobIssuingDateTime = $row['JobPostingDateTime'];
                         $JobIssuingDivision = $row['JobPostingDev'];
                         $MachineName = $row['MachineName'];
@@ -110,7 +110,7 @@ if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
         <td>$ReportTo</td>
         <td>$BriefDescription</td>
        <td><a href='\MaintananceJobCard\EMUser\StartJobEMUser.php?updateid=$id' class='btn btn-success'>Start</a>
-       <a href='\MaintananceJobCard\EMUser\StarrJobEMUser.php?updateid=$id' class='btn btn-danger mt-1'>Transfer</a> </td>
+       <a href='\MaintananceJobCard\EMUser\TransferJobEMUser.php?updateid=$id' class='btn btn-danger mt-1'>Transfer</a> </td>
         
       </tr>
       
