@@ -72,10 +72,11 @@ if (!($_SESSION['type'] == 'euser' or $_SESSION['type'] == 'muser')) {
                     <h1 class="box-text" style="color: black">Approved Jobs</h1>
                 </div>
             </a>
+            <a href="\MaintananceJobCard\ChangeAcountinfoAlluser.php" style="text-decoration: none;">
             <div class="grid-item box6" id="box6">
                 <h1 class="box-text" style="color: black">Change Account info</h1>
             </div>
-
+            </a>
         </div>
 
         <!-- second line of boxes -->
