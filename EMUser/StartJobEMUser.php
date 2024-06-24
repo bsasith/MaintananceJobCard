@@ -25,7 +25,7 @@ $priority = $row['Priority'];
 $ReportTo = $row['ReportTo'];
 $BriefDescription = $row['BDescription'];
 $JobStatusM = $row['JobStatusM'];
-
+$JobStatusE = $row['JobStatusE'];
 // $gen = explode(",",$gender);
 // $lang = explode(",",$datas);
 // $pl = explode(",",$place);
@@ -38,17 +38,14 @@ $JobStatusM = $row['JobStatusM'];
 if (isset($_POST['start'])) {
 
     $_SESSION['StartJob'] = true;
-    $workplace=$_SESSION['workplace'];
-    if ($workplace=='Electrical')
-    {
+    $workplace = $_SESSION['workplace'];
+    if ($workplace == 'Electrical') {
         $insert = "update jobdatasheet set JobStatusE='Started' where id='$id'";
-    }
-    else
-    {
+    } else {
         $insert = "update jobdatasheet set JobStatusM='Started' where id='$id'";
     }
 
-    
+
 
     if ($con->query($insert) == TRUE) {
         //$_SESSION['SubmitJobSucess']=true;
@@ -119,7 +116,7 @@ if (isset($_POST['start'])) {
 
     </div>
     <div class="container mt-5 ">
-        <h1> Start or Transfer Job </h1>
+        <h1> Start Job </h1>
         <div class="mt-3">
             <form method="POST">
                 <table class="table table-striped w-50">
@@ -185,6 +182,24 @@ if (isset($_POST['start'])) {
                         </td>
                         <td>
                             <?php echo $ReportTo; ?>
+                        </td>
+                    </tr>
+                    <!-- Table row -->
+                    <tr>
+                        <td>
+                            Electrical Department Status
+                        </td>
+                        <td>
+                            <?php echo $JobStatusE; ?>
+                        </td>
+                    </tr>
+                    <!-- Table row -->
+                    <tr>
+                        <td>
+                            Mechanical Department Status
+                        </td>
+                        <td>
+                            <?php echo $JobStatusM; ?>
                         </td>
                     </tr>
                     <!-- Table row -->

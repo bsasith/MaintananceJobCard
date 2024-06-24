@@ -49,7 +49,11 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
 
         <div class="mt-5">
             <h1>Approved Jobs</h1>
-
+            <form method="post">
+                <div><input type="text" class="form-control w-25" style="float:left" name="query"></div>
+                <div><button class="btn btn-dark mb-4 mx-3 " type="submit" name="search" style="float:left">Search</button></div>
+                
+            </form>
             <table class="table table-hover mt-3">
                 <thead>
                     <tr>
@@ -67,13 +71,15 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                 </thead>
                 <tbody>
                     <?php
+                     if(isset($_POST['search'])){
+                        $query=$_POST['query'];
                     //sql fetch data
                     $workplace=$_SESSION['workplace'];
                    // echo $workplace;
                     if($workplace=='Electrical'){
-                        $sql = "Select * from `jobdatasheet` where  JobStatusE='Finished' and Approval='Approved' and (ReportTo='$workplace' or ReportTo='Both') ";
+                        $sql = "Select * from `jobdatasheet` where (BDescription like '%$query%' or MachineName like '%$query%' or JobCodeNo like '%$query%' or JobPostingDev like '%$query%' or ReportTo like '%$query%') and JobStatusE='Finished' and Approval='Approved' and (ReportTo='$workplace' or ReportTo='Both') ";
                     }else{
-                        $sql = "Select * from `jobdatasheet` where  JobStatusM='Finished' and Approval='Approved' and (ReportTo='$workplace' or ReportTo='Both')";
+                        $sql = "Select * from `jobdatasheet` where (BDescription like '%$query%' or MachineName like '%$query%' or JobCodeNo like '%$query%' or JobPostingDev like '%$query%' or ReportTo like '%$query%') and  JobStatusM='Finished' and Approval='Approved' and (ReportTo='$workplace' or ReportTo='Both')";
                         }
                     
                     
@@ -114,7 +120,7 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
       
       ";
 
-                    } ?>
+                    } }?>
                 </tbody>
             </table>
             <button type="back" class="btn btn-danger mt-3" name="back"><a

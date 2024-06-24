@@ -25,7 +25,7 @@ $priority = $row['Priority'];
 $ReportTo = $row['ReportTo'];
 $BriefDescription = $row['BDescription'];
 $JobStatusM = $row['JobStatusM'];
-
+$JobStatusE = $row['JobStatusE'];
 // $gen = explode(",",$gender);
 // $lang = explode(",",$datas);
 // $pl = explode(",",$place);
@@ -187,10 +187,28 @@ if (isset($_POST['delete'])) {
                             <?php echo $ReportTo; ?>
                         </td>
                     </tr>
+                     <!-- Table row -->
+                     <tr>
+                        <td>
+                            Electrical Status
+                        </td>
+                        <td>
+                            <?php echo $JobStatusE; ?>
+                        </td>
+                    </tr>
                     <!-- Table row -->
                     <tr>
                         <td>
-                            Brief Description
+                            Mechanical Department Status
+                        </td>
+                        <td>
+                            <?php echo $JobStatusM; ?>
+                        </td>
+                    </tr>
+                    <!-- Table row -->
+                    <tr>
+                        <td>
+                            Brief Department Description
                         </td>
                         <td>
                             <?php echo $BriefDescription; ?>

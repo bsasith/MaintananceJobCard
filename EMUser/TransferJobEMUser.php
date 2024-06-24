@@ -209,6 +209,24 @@ if (isset($_POST['delete'])) {
                     <!-- Table row -->
                     <tr>
                         <td>
+                            Electrical Status
+                        </td>
+                        <td>
+                            <?php echo $JobStatusE; ?>
+                        </td>
+                    </tr>
+                    <!-- Table row -->
+                    <tr>
+                        <td>
+                            Mechanical Department Status
+                        </td>
+                        <td>
+                            <?php echo $JobStatusM; ?>
+                        </td>
+                    </tr>
+                    <!-- Table row -->
+                    <tr>
+                        <td>
                             Brief Description
                         </td>
                         <td>

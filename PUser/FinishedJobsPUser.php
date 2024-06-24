@@ -123,11 +123,11 @@ if (!($_SESSION['type'] == 'puser')) {
         elseif($JobStatusE=='NA' and $JobStatusM=='Finished'){
             echo " <td><a href='\MaintananceJobCard\PUser\ApproveJobPUser.php?updateid=$id' class='btn btn-warning'>Approve <br>Job</a></td>";
          }
-         elseif($JobStatusE=='Finished' and $JobStatusM=='Pending')
+         elseif($JobStatusE=='Finished' and $JobStatusM=='Pending' or $JobStatusM=='Started')
          {
             echo "<td>pending <br>finish M</tr></td>";
          }
-         elseif($JobStatusE=='Pending' and $JobStatusM=='Finished')
+         elseif($JobStatusE=='Pending' or  $JobStatusE=='Started' and $JobStatusM=='Finished' )
          {
             echo "<td>pending <br>finish E</tr></td>";
          }

@@ -73,9 +73,9 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                     $workplace=$_SESSION['workplace'];
                     //echo $workplace;
             if ($workplace=='Electrical'){
-                $sql = "Select * from `jobdatasheet` where  JobStatusE='Started'and ReportTo='Electrical' ";
+                $sql = "Select * from `jobdatasheet` where  JobStatusE='Started'and (ReportTo='Electrical' or ReportTo='Both') ";
             }else{
-                $sql = "Select * from `jobdatasheet` where  JobStatusM='Started' and ReportTo='Mechanical' ";
+                $sql = "Select * from `jobdatasheet` where  JobStatusM='Started' and (ReportTo='Mechanical' or ReportTo='Both') ";
             }
                     
                     $result = mysqli_query($con, $sql);
