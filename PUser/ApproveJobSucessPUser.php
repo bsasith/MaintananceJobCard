@@ -3,11 +3,11 @@ include '../connect.php';
 include '../session.php';
 
 if (!($_SESSION['type'] == 'puser')) {
-    header('location:..\login.php');
+    header('location:..\index.php');
 }
 if(!($_SESSION['ApproveJobSucess']==true))
 {
-    header('location:..\login.php');
+    header('location:..\index.php');
 }
 unset($_SESSION['SubmitJobSucess']);
 ?>

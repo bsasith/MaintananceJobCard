@@ -7,7 +7,7 @@ if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
 }
 if(!($_SESSION['StartJob']==true))
 {
-    header('location:..\login.php');
+    header('location:..\index.php');
 }
 unset($_SESSION['StartJob']);
 ?>

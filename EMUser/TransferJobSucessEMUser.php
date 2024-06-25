@@ -3,11 +3,11 @@ include '../connect.php';
 include '../session.php';
 
 if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
-    header('location:..\login.php');
+    header('location:..\index.php');
 }
 if(!($_SESSION['TransferJob']==true))
 {
-    header('location:..\login.php');
+    header('location:..\index.php');
 }
 unset($_SESSION['TransferJob']);
 ?>

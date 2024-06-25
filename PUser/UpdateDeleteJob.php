@@ -3,7 +3,7 @@ include '../connect.php';
 include '../session.php';
 
 if (!($_SESSION['type'] == 'puser')) {
-    header('location:..\login.php');
+    header('location:..\index.php');
 }
 //
 $idu = $_GET['updateid'];

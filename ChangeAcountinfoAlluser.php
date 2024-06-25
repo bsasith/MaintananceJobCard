@@ -3,7 +3,7 @@ include 'connect.php';
 include 'session.php';
 
 if (!(($_SESSION['type'] == 'puser') or ($_SESSION['type'] == 'muser') or ($_SESSION['type'] == 'euser'))) {
-    header('location:..\login.php');
+    header('location:..\index.php');
 }
 //fetch data
 
