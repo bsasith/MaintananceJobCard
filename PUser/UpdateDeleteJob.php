@@ -45,8 +45,16 @@ if (isset($_POST['update'])) {
     $username = $_SESSION['username'];
    
    $_SESSION['UpdateJobSucess']=true;
-
-    $insert = "update jobdatasheet set JobCodeNo='$JobCodeNo',JobPostingDateTime=NOW(),JobPostingDev='$JobIssuingDivision',MachineName='$MachineName',Priority='$priority',ReportTo='$ReportTo',BDescription='$BriefDescription',Username='$username' where id='$idu'";
+if ($ReportTo=='Electrical')
+{
+    $insert = "update jobdatasheet set JobCodeNo='$JobCodeNo',JobPostingDateTime=NOW(),JobPostingDev='$JobIssuingDivision',MachineName='$MachineName',Priority='$priority',ReportTo='$ReportTo',BDescription='$BriefDescription',Username='$username',JobStatusE='Pending',JobStatusM='NA' where id='$idu'";
+}
+elseif($ReportTo=='Mechanical'){
+    $insert = "update jobdatasheet set JobCodeNo='$JobCodeNo',JobPostingDateTime=NOW(),JobPostingDev='$JobIssuingDivision',MachineName='$MachineName',Priority='$priority',ReportTo='$ReportTo',BDescription='$BriefDescription',Username='$username',JobStatusE='NA',JobStatusM='Pending' where id='$idu'";
+}else{
+    $insert = "update jobdatasheet set JobCodeNo='$JobCodeNo',JobPostingDateTime=NOW(),JobPostingDev='$JobIssuingDivision',MachineName='$MachineName',Priority='$priority',ReportTo='$ReportTo',BDescription='$BriefDescription',Username='$username',JobStatusM='Pending',JobStatusE='Pending' where id='$idu'";
+}
+    
 
     if ($con->query($insert) == TRUE) {
         //$_SESSION['SubmitJobSucess']=true;

@@ -49,7 +49,7 @@ if (isset($_POST['start'])) {
 
     if ($con->query($insert) == TRUE) {
         //$_SESSION['SubmitJobSucess']=true;
-        echo "Sucessfully Started Job";
+        //echo "Sucessfully Started Job";
 
         header('location:.\StartJobSucess.php');
 

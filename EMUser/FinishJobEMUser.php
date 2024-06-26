@@ -43,7 +43,7 @@ $finishcomment=$_POST['finishcomment'];
     {
         $insert = "update jobdatasheet set JobStatusE='Finished',FinishedCommentE='$finishcomment' where id='$id'";
     }
-    else
+    elseif($workplace=='Mechanical')
     {
         $insert = "update jobdatasheet set JobStatusM='Finished',FinishedCommentM='$finishcomment' where id='$id'";
     }
@@ -52,7 +52,7 @@ $finishcomment=$_POST['finishcomment'];
 
     if ($con->query($insert) == TRUE) {
         //$_SESSION['SubmitJobSucess']=true;
-        echo "Sucessfully Started Job";
+        //echo "Sucessfully Started Job";
 
         header('location:.\FinishedJobSuccesEMUser.php');
 

@@ -41,7 +41,7 @@ unset($_SESSION['SubmitJobSucess']);
         <a href="\MaintananceJobCard\logout.php">
             <h1 class="topbar-logout">Logout &nbsp</h1>
         </a>
-        <h1 class="topbar-username"><?php echo $_SESSION['username'] ?>&nbsp</h1>
+        <h1 class="topbar-username"><?php echo $_SESSION['username']?>&nbsp</h1>
 
     </div>
     <div class="container mt-5 ">

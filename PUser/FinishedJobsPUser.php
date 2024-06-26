@@ -127,7 +127,7 @@ if (!($_SESSION['type'] == 'puser')) {
          {
             echo "<td>pending <br>finish M</tr></td>";
          }
-         elseif($JobStatusE=='Pending' or  $JobStatusE=='Started' and $JobStatusM=='Finished' )
+         elseif($JobStatusM=='Finished' and  $JobStatusE=='Pending' or $JobStatusM=='Started')
          {
             echo "<td>pending <br>finish E</tr></td>";
          }
