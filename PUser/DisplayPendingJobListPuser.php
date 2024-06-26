@@ -71,7 +71,7 @@ if (!($_SESSION['type'] == 'puser')) {
                     
                     echo $workplace;
                    
-                        $sql = "Select * from `jobdatasheet` where JobPostingDev='$workplace' and(JobStatusE='Pending' or JobStatusM='Pending' )";
+                        $sql = "Select * from `jobdatasheet` where `JobPostingDev`='$workplace' and (`JobStatusE`='Pending' or `JobStatusM`='Pending') ";
                   
 
                     
@@ -103,7 +103,7 @@ if (!($_SESSION['type'] == 'puser')) {
         <td>$MachineName</td>
         <td>$priority</td>
         <td>$ReportTo</td>
-        <td>$BriefDescription</td>
+        <td style='white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;'>$BriefDescription</td>
        <td><a href='\MaintananceJobCard\PUser\UpdateDeleteJob.php?updateid=$id' class='btn btn-warning'>Update or <br>Delete</a></td>
         
       </tr>

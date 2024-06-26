@@ -107,11 +107,11 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
         <td>$MachineName</td>
         <td>$priority</td>
         <td>$ReportTo</td>
-        <td>$BriefDescription</td>
+        <td style='white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;'>$BriefDescription</td>
         <td>$JobStatusM</td>
         <td>$JobStatusE</td>
        <td><a href='\MaintananceJobCard\EMUser\FinishJobEMUser.php?updateid=$id' class='btn btn-warning mt-1'>Finish</a> 
-       <a href='\MaintananceJobCard\EMUser\TransferJobEMUser.php?updateid=$id' class='btn btn-danger mt-1'>Transfer</a> </td>
+       <a href='\MaintananceJobCard\EMUser\TransferStartedJobEMUser.php?updateid=$id' class='btn btn-danger mt-1'>Transfer</a> </td>
         
       </tr>
       

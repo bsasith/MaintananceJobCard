@@ -37,72 +37,30 @@ $JobStatusE = $row['JobStatusM'];
 
 // update operation
 if (isset($_POST['transfer'])) {
-    $workplace=$_SESSION['workplace'];
-    $transferto=$_POST['transferto'];
-    $transfercomment=$_POST['transfercomment'];
+    $workplace = $_SESSION['workplace'];
+    $transferto = $_POST['transferto'];
+    $transfercomment = $_POST['transfercomment'];
     $_SESSION['TransferJob'] = true;
-    
-// if($transferto=='Mechanical'and $JobStatusE='Started')
-// {
-//     $JobStatusM='Pending';
-//     $JobStatusE='Finished';
-
-// }
-if($transferto=='Electrical'and $JobStatusM='Started')
-{
-    $JobStatusM='Finished';
-    $JobStatusE='Pending';
-
-// }
-// elseif($transferto=='Mechanical'and $JobStatusE='Pending')
-// {
-//     $JobStatusM='Pending';
-//     $JobStatusE='NA';
-
-// }
-// elseif($transferto=='Electrical'and $JobStatusM='Pending')
-// {
-//     $JobStatusM='Pending';
-//     $JobStatusE='NA';
-
-// }
-///////////////////////////////////
-// elseif($transferto=='Both'and $JobStatusE='Pending')
-// {
-//     $JobStatusM='Pending';
-//     $JobStatusE='Pending';
-
-// }
-// elseif($transferto=='Both'and $JobStatusM='Pending')
-// {
-//     $JobStatusM='Pending';
-//     $JobStatusE='Pending';
-
-// }
-// elseif($transferto=='Both'and $JobStatusE='Started')
-// {
-//     $JobStatusM='Pending';
-//     $JobStatusE='Started';
-
-// }   
-// elseif($transferto=='Both'and $JobStatusM='Started')
-// {
-//     $JobStatusM='Started';
-//     $JobStatusE='Pending';
-
-// }   
 
 
-    if ($transferto=='Electrical')
-    {
+    if ($transferto == 'Electrical') {
+        $JobStatusM = 'NA';
+        $JobStatusE = 'Pending';
+    }
+    elseif ($transferto == 'Mechanical') {
+        $JobStatusM = 'Pending';
+        $JobStatusE = 'NA';
+    }
+    elseif ($transferto == 'Both') {
+        $JobStatusM = 'Pending';
+        $JobStatusE = 'Pending';
+    }
+
+    if ($transferto == 'Electrical') {
         $insert = "update jobdatasheet set ReportTo='Electrical',TransferCommentM='$transfercomment',JobStatusE='$JobStatusE',JobStatusM='$JobStatusM' where id='$id'";
-    }
-    elseif($transferto=='Mechanical')
-    {
+    } elseif ($transferto == 'Mechanical') {
         $insert = "update jobdatasheet set ReportTo='Mechanical',TransferCommentE='$transfercomment',JobStatusE='$JobStatusE',JobStatusM='$JobStatusM' where id='$id'";
-    }
-    elseif($transferto=='Both')
-    {
+    } elseif ($transferto == 'Both') {
         $insert = "update jobdatasheet set ReportTo='Both',TransferCommentM='$transfercomment',TransferCommentE='$transfercomment',JobStatusE='$JobStatusE',JobStatusM='$JobStatusM' where id='$id'";
     }
     //$insert = "update jobdatasheet set JobStatusM='Finished' where id='$id'";
@@ -126,17 +84,18 @@ if($transferto=='Electrical'and $JobStatusM='Started')
 
 
 
+
 // delete operation
-if (isset($_POST['delete'])) {
+// if (isset($_POST['delete'])) {
 
-    $sql = "delete  from `jobdatasheet` where id='$idu'";
-    $result = mysqli_query($con, $sql);
-    $_SESSION['DeleteJobSucess'] = true;
-    header('location:.\TransferJobSucessEMUser.php');
+//     $sql = "delete  from `jobdatasheet` where id='$idu'";
+//     $result = mysqli_query($con, $sql);
+//     $_SESSION['DeleteJobSucess'] = true;
+//     header('location:.\TransferJobSucessEMUser.php');
 
 
 
-}
+// }
 
 
 
@@ -176,7 +135,7 @@ if (isset($_POST['delete'])) {
 
     </div>
     <div class="container mt-5 ">
-        <h1> Transfer Job </h1>
+        <h1> Transfer Pending Job </h1>
         <div class="mt-3">
             <form method="POST">
                 <table class="table table-striped w-50">
@@ -286,7 +245,7 @@ if (isset($_POST['delete'])) {
                             echo $since_start->d . ' days<br>';
                             echo $since_start->h . ' hours<br>';
                             echo $since_start->i . ' minutes<br>';
-                             ?>
+                            ?>
                         </td>
                     </tr>
                     </tr>
@@ -297,14 +256,13 @@ if (isset($_POST['delete'])) {
                         </td>
                         <td>
                             <select name="transferto" id="" class="form-control">
-                                
+
                                 <?php
-                                 $workplace=$_SESSION['workplace'];
-                                if ($workplace=='Electrical')
-                                {
+                                $workplace = $_SESSION['workplace'];
+                                if ($workplace == 'Electrical') {
                                     echo "<option value='Mechanical'>Mechanical</option>";
                                     echo "<option value='Both'>Both Departments</option>";
-                                }elseif($workplace=='Mechanical'){
+                                } elseif ($workplace == 'Mechanical') {
                                     echo "<option value='Electrical'>Electrical</option>";
                                     echo "<option value='Both'>Both Departments</option>";
                                 }

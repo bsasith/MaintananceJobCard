@@ -109,7 +109,7 @@ if (!($_SESSION['type'] == 'puser')) {
         <td>$ReportTo</td>
          <td>$JobStatusE</td>
           <td>$JobStatusM</td>
-        <td>$BriefDescription</td>
+        <td style='white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;'>$BriefDescription</td>
          <td>$Approval</td>
          ";
         // echo $JobStatusE;

@@ -74,7 +74,7 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                     $workplace=$_SESSION['workplace'];
                     //echo $workplace;
             if($workplace=='Electrical'){
-                $sql = "Select * from `jobdatasheet` where  JobStatusE='Finished' and (ReportTo='$workplace' or ReportTo='Both') and Approval='Not Approved' ";
+                $sql = "Select * from `jobdatasheet` where  JobStatusE='Finished' and (ReportTo='$workplace' or ReportTo='Both') and Approval='Not Approved'";
             }else{
                 $sql = "Select * from `jobdatasheet` where  JobStatusM='Finished' and (ReportTo='$workplace' or ReportTo='Both') and Approval='Not Approved'";
             }
@@ -113,7 +113,7 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
         <td>$ReportTo</td>
         <td>$JobStatusE</td>
         <td>$JobStatusM</td>
-        <td>$BriefDescription</td>
+        <td style='white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;'>$BriefDescription</td>
          <td>$Approval</td>
         
       </tr>

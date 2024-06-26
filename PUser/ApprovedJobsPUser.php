@@ -108,7 +108,7 @@ if (!($_SESSION['type'] == 'puser')) {
         <td>$MachineName</td>
         <td>$priority</td>
         <td>$ReportTo</td>
-        <td>$BriefDescription</td>
+        <td style='white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;'>$BriefDescription</td>
          <td>$Approval</td>
         
       </tr>
