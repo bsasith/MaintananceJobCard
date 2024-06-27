@@ -68,7 +68,7 @@ if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
                     <?php
                     //sql fetch data
                     $workplace = $_SESSION['workplace'];
-                    echo $workplace;
+                    //echo $workplace;
                     if ($workplace == 'Electrical')
                     {
                         $sql = "Select * from `jobdatasheet` where (ReportTo='$workplace' or ReportTo='Both') and JobStatusE='Pending'  ";

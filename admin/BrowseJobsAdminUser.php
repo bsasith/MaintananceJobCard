@@ -115,7 +115,7 @@ if (!($_SESSION['type'] == 'admin')) {
 <td>$MachineName</td>
 <td>$Priority</td>
 <td>$ReportTo</td>
-<td>$BDescription</td>
+<td style='white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;'>$BDescription</td>
 <td>$Username</td>
 <td>$JobStatusE</td>
 <td>$JobStatusM</td>
