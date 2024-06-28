@@ -5,7 +5,7 @@ include 'session.php';
 if (!(($_SESSION['type'] == 'puser') or ($_SESSION['type'] == 'muser') or ($_SESSION['type'] == 'euser'))) {
     header('location:..\index.php');
 }
-//fetch data
+//fetch data from database
 
 $idu = $_SESSION['userID'];
 
