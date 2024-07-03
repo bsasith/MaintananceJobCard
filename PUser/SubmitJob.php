@@ -2,6 +2,8 @@
 include '../connect.php';
 include '../session.php';
 
+date_default_timezone_set('Asia/Colombo');
+$date = date("Y-m-d G:i:s");
 if (!($_SESSION['type'] == 'puser')) {
     header('location:..\index.php');
 }
@@ -34,7 +36,7 @@ if (isset($_POST['submit'])) {
     $_SESSION['SubmitJobSucess']=true;
 
     $insert = "insert into jobdatasheet (JobCodeNo,JobPostingDateTime,JobPostingDev,MachineName,Priority,ReportTo,BDescription,Username,JobStatusE,JobStatusM) values 
-    ('$JobCodeNo',NOW(),'$JobIssuingDivision','$MachineName','$priority','$ReportTo','$BriefDescription','$username','$JobStatusE','$JobStatusM')";
+    ('$JobCodeNo','$date','$JobIssuingDivision','$MachineName','$priority','$ReportTo','$BriefDescription','$username','$JobStatusE','$JobStatusM')";
 
     if ($con->query($insert) == TRUE) {
         $_SESSION['SubmitJobSucess']=true;
