@@ -20,6 +20,10 @@ if (!($_SESSION['type'] == 'puser')) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jockey+One&display=swap" rel="stylesheet">
+    <script
+  src="https://code.jquery.com/jquery-3.7.1.js"
+  integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+  crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="\MaintananceJobCard\styles\SubmitJobstyle.css">
 
@@ -31,6 +35,7 @@ if (!($_SESSION['type'] == 'puser')) {
         th,
         td {
             text-align: center;
+            cursor: pointer; 
         }
     </style>
 </head>
@@ -68,13 +73,13 @@ if (!($_SESSION['type'] == 'puser')) {
                     <?php
                     //sql fetch data
                     $workplace = $_SESSION['workplace'];
-                    
-                    echo $workplace;
-                   
-                        $sql = "Select * from `jobdatasheet` where `JobPostingDev`='$workplace' and (`JobStatusE`='Pending' or `JobStatusM`='Pending') ";
-                  
 
-                    
+                    echo $workplace;
+
+                    $sql = "Select * from `jobdatasheet` where `JobPostingDev`='$workplace' and (`JobStatusE`='Pending' or `JobStatusM`='Pending') ";
+
+
+
                     $result = mysqli_query($con, $sql);
 
                     while ($row = mysqli_fetch_assoc($result)) {
@@ -87,15 +92,16 @@ if (!($_SESSION['type'] == 'puser')) {
                         $priority = $row['Priority'];
                         $ReportTo = $row['ReportTo'];
                         $BriefDescription = $row['BDescription'];
+                        $TryCount = $row['TryCount'];
+                        ?>
 
 
 
-                        echo
-                            "
 
-
-     <tr>
-        
+                        <tr class='clickable-row' data-href='https://www.google.co.uk/'>
+                            <?php
+                            echo
+                                "
         <td>$JobCodeNo</td>
         <td>$username</td>
         <td>$JobIssuingDateTime</td>
@@ -104,11 +110,18 @@ if (!($_SESSION['type'] == 'puser')) {
         <td>$priority</td>
         <td>$ReportTo</td>
         <td style='white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;'>$BriefDescription</td>
-       <td><a href='\MaintananceJobCard\PUser\UpdateDeleteJob.php?updateid=$id' class='btn btn-warning'>Update or <br>Delete</a></td>
-        
-      </tr>
-      
-      ";
+";
+                            if ($TryCount == '1') {
+                                echo "<td><a href='\MaintananceJobCard\PUser\UpdateDeleteJob.php?updateid=$id' class='btn btn-warning'>Update or <br>Delete</a></td>";
+                            } else {
+                                echo "<td>Second Try</td>  </tr>";
+                            }
+
+
+
+
+
+
 
                     } ?>
                 </tbody>
@@ -120,6 +133,12 @@ if (!($_SESSION['type'] == 'puser')) {
     </div>
 
 
-
+    <script>
+        jQuery(document).ready(function ($) {
+            $(".clickable-row").click(function () {
+                window.location = $(this).data("href");
+            });
+        });
+    </script>
 </body>
 </body>

@@ -73,7 +73,7 @@ if (!($_SESSION['type'] == 'puser')) {
                     $workplace = $_SESSION['workplace'];
                     //echo $workplace;
                     
-                        $sql = "Select * from `jobdatasheet` where  (JobStatusE='Finished' or JobStatusM='Finished') and JobPostingDev='$workplace' and Approval='Not Approved' ";
+                        $sql = "Select * from `jobdatasheet` where  (JobStatusE='Finished' or JobStatusM='Finished') and JobPostingDev='$workplace' and Approval='Pending Approval' ";
                    
                     $result = mysqli_query($con, $sql);
 
@@ -116,12 +116,16 @@ if (!($_SESSION['type'] == 'puser')) {
          //echo $JobStatusM;
          if($JobStatusE=='Finished' and $JobStatusM=='Finished')
          {
-            echo " <td><a href='\MaintananceJobCard\PUser\ApproveJobPUser.php?updateid=$id' class='btn btn-warning'>Approve <br>Job</a></td>";
+            echo " <td><a href='\MaintananceJobCard\PUser\PUser\ApproveJobPUser.php?updateid=$id' class='btn btn-warning'>Approve <br>Job</a></td>";
+            echo " <td><a href='\MaintananceJobCard\PUser\\DisapproveJobPUser.php?updateid=$id' class='btn btn-danger'>Disapprove <br>Job</a></td>";
          }elseif($JobStatusE=='Finished' and $JobStatusM=='NA'){
             echo " <td><a href='\MaintananceJobCard\PUser\ApproveJobPUser.php?updateid=$id' class='btn btn-warning'>Approve <br>Job</a></td>";
+            echo " <td><a href='\MaintananceJobCard\PUser\DisapproveJobPUser.php?updateid=$id' class='btn btn-danger'>Disapprove <br>Job</a></td>";
          }
+       
         elseif($JobStatusE=='NA' and $JobStatusM=='Finished'){
             echo " <td><a href='\MaintananceJobCard\PUser\ApproveJobPUser.php?updateid=$id' class='btn btn-warning'>Approve <br>Job</a></td>";
+            echo " <td><a href='\MaintananceJobCard\PUser\DisapproveJobPUser.php?updateid=$id' class='btn btn-danger'>Disapprove <br>Job</a></td>";
          }
          elseif($JobStatusE=='Finished' and $JobStatusM=='Pending' or $JobStatusM=='Started')
          {

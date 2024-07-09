@@ -35,8 +35,8 @@ if (isset($_POST['submit'])) {
  //echo $JobStatusM;
     $_SESSION['SubmitJobSucess']=true;
 
-    $insert = "insert into jobdatasheet (JobCodeNo,JobPostingDateTime,JobPostingDev,MachineName,Priority,ReportTo,BDescription,Username,JobStatusE,JobStatusM) values 
-    ('$JobCodeNo','$date','$JobIssuingDivision','$MachineName','$priority','$ReportTo','$BriefDescription','$username','$JobStatusE','$JobStatusM')";
+    $insert = "insert into jobdatasheet (JobCodeNo,JobPostingDateTime,JobPostingDev,MachineName,Priority,ReportTo,BDescription,Username,JobStatusE,JobStatusM,TryCount) values 
+    ('$JobCodeNo','$date','$JobIssuingDivision','$MachineName','$priority','$ReportTo','$BriefDescription','$username','$JobStatusE','$JobStatusM','1')";
 
     if ($con->query($insert) == TRUE) {
         $_SESSION['SubmitJobSucess']=true;
