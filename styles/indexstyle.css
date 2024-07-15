@@ -91,6 +91,15 @@ h1.box-text {
 
 }
 
+#box7 {
+    background-color: #FF7A00;
+}
+
+#box7:hover {
+    opacity: 80%;
+
+}
+
 a {
     text-decoration: none;
 }

@@ -20,10 +20,8 @@ if (!($_SESSION['type'] == 'puser')) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jockey+One&display=swap" rel="stylesheet">
-    <script
-  src="https://code.jquery.com/jquery-3.7.1.js"
-  integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-  crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="\MaintananceJobCard\styles\SubmitJobstyle.css">
 
@@ -35,7 +33,7 @@ if (!($_SESSION['type'] == 'puser')) {
         th,
         td {
             text-align: center;
-            cursor: pointer; 
+            cursor: pointer;
         }
     </style>
 </head>
@@ -74,8 +72,8 @@ if (!($_SESSION['type'] == 'puser')) {
                     //sql fetch data
                     $workplace = $_SESSION['workplace'];
 
-                    echo $workplace;
-
+                    //echo $workplace;
+                    
                     $sql = "Select * from `jobdatasheet` where `JobPostingDev`='$workplace' and (`JobStatusE`='Pending' or `JobStatusM`='Pending') ";
 
 
@@ -93,15 +91,15 @@ if (!($_SESSION['type'] == 'puser')) {
                         $ReportTo = $row['ReportTo'];
                         $BriefDescription = $row['BDescription'];
                         $TryCount = $row['TryCount'];
-                        ?>
+                        
 
 
 
-
-                        <tr class='clickable-row' data-href='https://www.google.co.uk/'>
-                            <?php
-                            echo
+ echo
                                 "
+                        <tr class='clickable-row' data-href='\MaintananceJobCard\PUser\ViewJobPUser.php?updateid=$id'>
+                            
+                           
         <td>$JobCodeNo</td>
         <td>$username</td>
         <td>$JobIssuingDateTime</td>
@@ -113,8 +111,10 @@ if (!($_SESSION['type'] == 'puser')) {
 ";
                             if ($TryCount == '1') {
                                 echo "<td><a href='\MaintananceJobCard\PUser\UpdateDeleteJob.php?updateid=$id' class='btn btn-warning'>Update or <br>Delete</a></td>";
+                            } else if ($TryCount == '3') {
+                                echo "<td>Disapproved <br>Job</td>  </tr>";
                             } else {
-                                echo "<td>Second Try</td>  </tr>";
+                                echo "<td>Transferred Job</td>  </tr>";
                             }
 
 

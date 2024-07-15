@@ -2,7 +2,7 @@
 include '../connect.php';
 include '../session.php';
 
-if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
+if (!($_SESSION['type'] == 'puser')) {
     header('location:..\index.php');
 }
 
@@ -26,6 +26,11 @@ $ReportTo = $row['ReportTo'];
 $BriefDescription = $row['BDescription'];
 $JobStatusM = $row['JobStatusM'];
 $JobStatusE = $row['JobStatusE'];
+$FinishedCommentE = $row['FinishedCommentE'];
+$FinishedCommentM = $row['FinishedCommentM'];
+$TransferCommentE = $row['TransferCommentE'];
+$TransferCommentM = $row['TransferCommentE'];
+$DisapproveComment = $row['DisapproveComment'];
 // $gen = explode(",",$gender);
 // $lang = explode(",",$datas);
 // $pl = explode(",",$place);
@@ -35,34 +40,34 @@ $JobStatusE = $row['JobStatusE'];
 
 
 // update operation
-if (isset($_POST['finish'])) {
-    $workplace=$_SESSION['workplace'];
-$finishcomment=$_POST['finishcomment'];
-    $_SESSION['FinishJob'] = true;
-    if ($workplace=='Electrical')
-    {
-        $insert = "update jobdatasheet set JobStatusE='Finished',FinishedCommentE='$finishcomment' where id='$id'";
-    }
-    elseif($workplace=='Mechanical')
-    {
-        $insert = "update jobdatasheet set JobStatusM='Finished',FinishedCommentM='$finishcomment' where id='$id'";
-    }
+// if (isset($_POST['finish'])) {
+//     $workplace=$_SESSION['workplace'];
+// $finishcomment=$_POST['finishcomment'];
+//     $_SESSION['FinishJob'] = true;
+//     if ($workplace=='Electrical')
+//     {
+//         $insert = "update jobdatasheet set JobStatusE='Finished',FinishedCommentE='$finishcomment' where id='$id'";
+//     }
+//     elseif($workplace=='Mechanical')
+//     {
+//         $insert = "update jobdatasheet set JobStatusM='Finished',FinishedCommentM='$finishcomment' where id='$id'";
+//     }
 
-    //$insert = "update jobdatasheet set JobStatusM='Finished' where id='$id'";
+//     //$insert = "update jobdatasheet set JobStatusM='Finished' where id='$id'";
 
-    if ($con->query($insert) == TRUE) {
-        //$_SESSION['SubmitJobSucess']=true;
-        //echo "Sucessfully Started Job";
+//     if ($con->query($insert) == TRUE) {
+//         //$_SESSION['SubmitJobSucess']=true;
+//         //echo "Sucessfully Started Job";
 
-        header('location:.\FinishedJobSuccesEMUser.php');
+//         header('location:.\FinishedJobSuccesEMUser.php');
 
-    } else {
+//     } else {
 
-        echo mysqli_error($con);
-        //  header('location:location:..\PUser\indexPUser.php');
-    }
-    //$insert->close();
-}
+//         echo mysqli_error($con);
+//         //  header('location:location:..\PUser\indexPUser.php');
+//     }
+//     //$insert->close();
+// }
 
 
 
@@ -119,7 +124,7 @@ if (isset($_POST['delete'])) {
 
     </div>
     <div class="container mt-5 ">
-        <h1> Finish Job </h1>
+        <h1>View Job </h1>
         <div class="mt-3">
             <form method="POST">
                 <table class="table table-striped w-50">
@@ -187,8 +192,8 @@ if (isset($_POST['delete'])) {
                             <?php echo $ReportTo; ?>
                         </td>
                     </tr>
-                     <!-- Table row -->
-                     <tr>
+                    <!-- Table row -->
+                    <tr>
                         <td>
                             Electrical Department Status
                         </td>
@@ -208,12 +213,73 @@ if (isset($_POST['delete'])) {
                     <!-- Table row -->
                     <tr>
                         <td>
-                            Brief Department Description
+                            Brief Description
                         </td>
                         <td>
                             <?php echo $BriefDescription; ?>
                         </td>
                         <!-- Table row -->
+                        <?php
+                        if (!is_null($FinishedCommentE)) {
+                            echo "<tr>
+                        <td>
+                            Finished Comment Electrical
+                        </td>
+                        <td>
+                             $FinishedCommentE 
+                        </td>";
+                        }
+                        ?>
+
+                        <!-- Table row -->
+                        <?php
+                        if (!is_null($FinishedCommentM)) {
+                            echo "<tr>
+                        <td>
+                            Finished Comment Mechanical
+                        </td>
+                        <td>
+                             $FinishedCommentM 
+                        </td>";
+                        }
+                        ?>
+                        <!-- Table row -->
+                        <?php
+                        if (!is_null($TransferCommentE)) {
+                            echo "<tr>
+                        <td>
+                            Transfer Comment Electrical
+                        </td>
+                        <td>
+                             $TransferCommentE 
+                        </td>";
+                        }
+                        ?>
+                        <!-- Table row -->
+                        <?php
+                        if (!is_null($TransferCommentM)) {
+                            echo "<tr>
+                        <td>
+                            Transfer Comment Mechanical
+                        </td>
+                        <td>
+                             $TransferCommentM 
+                        </td>";
+                        }
+                        ?>
+                        <!-- Table row -->
+                        <?php
+                        if (!is_null($DisapproveComment)) {
+                            echo "<tr>
+                        <td>
+                            Transfer Comment Mechanical
+                        </td>
+                        <td>
+                             $DisapproveComment
+                        </td>";
+                        }
+                        ?>
+
                     <tr>
                         <td>
                             Total DownTime
@@ -229,26 +295,26 @@ if (isset($_POST['delete'])) {
                             echo $since_start->d . ' days<br>';
                             echo $since_start->h . ' hours<br>';
                             echo $since_start->i . ' minutes<br>';
-                             ?>
+                            ?>
                         </td>
                     </tr>
                     </tr>
                     <!-- table row comment -->
-                    <tr>
+                    <!-- <tr>
                         <td>
                             Finish Comment
                         </td>
                         <td>
-                            <input type="text" class="form-control" name="finishcomment" required>
+                            <input type="text" class="form-control" name="finishcomment">
                         </td>
-                    </tr>
+                    </tr> -->
                     </tr>
 
                 </table>
 
 
-                <button type="submit" class="btn btn-success mt-3" name="finish"
-                    onclick="return confirm('Are you sure?')">Finish & send for Approval</button>
+                <!-- <button type="submit" class="btn btn-success mt-3" name="finish"
+                    onclick="return confirm('Are you sure?')">Finish & send for Approval</button> -->
                 <!-- <button type="submit" class="btn btn-warning mt-3" name="delete"
             onclick="return confirm('Are you sure?')">Transfer</button> -->
                 <button type="back" class="btn btn-danger mt-3" name="back"><a

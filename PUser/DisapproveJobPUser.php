@@ -27,6 +27,7 @@ $ReportTo = $row['ReportTo'];
 $BriefDescription = $row['BDescription'];
 $JobStatusM = $row['JobStatusM'];
 $JobStatusE = $row['JobStatusE'];
+$disapprovecomment=$row['DisapproveComment'];
 
 // $gen = explode(",",$gender);
 // $lang = explode(",",$datas);
@@ -43,13 +44,13 @@ if (isset($_POST['disapprove'])) {
 
     $_SESSION['DisapproveJobSucess']=true;
 if ($JobIssuingDivision='Electrical'){
-    $insert = "update jobdatasheet set Approval='Disapproved',JobStatusE='Pending',TryCount='2' where id='$id'";
+    $insert = "update jobdatasheet set Approval='Disapproved',JobStatusE='Pending',TryCount='3',DisapproveComment='$disapprovecomment' where id='$id'";
 }
 elseif($JobIssuingDivision='Mechanical'){
-    $insert = "update jobdatasheet set Approval='Disapproved',JobStatusM='Pending',TryCount='2' where id='$id'";
+    $insert = "update jobdatasheet set Approval='Disapproved',JobStatusM='Pending',TryCount='3',DisapproveComment='$disapprovecomment' where id='$id'";
 }
 elseif($JobIssuingDivision='Both'){
-    $insert = "update jobdatasheet set Approval='Disapproved',JobStatusE='Pending',JobStatusM='Pending',TryCount='2' where id='$id'";
+    $insert = "update jobdatasheet set Approval='Disapproved',JobStatusE='Pending',JobStatusM='Pending',TryCount='3',DisapproveComment='$disapprovecomment' where id='$id'";
 }
 
     if ($con->query($insert) == TRUE) {
@@ -201,12 +202,12 @@ elseif($JobIssuingDivision='Both'){
                     <!-- table row comment -->
                     <tr>
                         <td>
-                            Finish Comment
+                            Disapproving Comment
                         </td>
                         <td>
-                            <input type="text" class="form-control" name="disapprovecomment">
+                            <input type="text" class="form-control" name="disapprovecomment" required>
                         </td>
-                    </tr>s
+                    </tr>
 
                 </table>
 

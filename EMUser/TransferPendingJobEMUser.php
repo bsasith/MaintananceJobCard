@@ -276,7 +276,7 @@ if (isset($_POST['transfer'])) {
                             Transfer Comment
                         </td>
                         <td>
-                            <input type="text" class="form-control" name="transfercomment">
+                            <input type="text" class="form-control" name="transfercomment" required>
                         </td>
                     </tr>
                     </tr>
