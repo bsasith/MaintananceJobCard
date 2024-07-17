@@ -21,6 +21,7 @@ $username = $_SESSION['username'];
 $JobIssuingDateTime = $row['JobPostingDateTime'];
 $JobIssuingDivision = $row['JobPostingDev'];
 $MachineName = $row['MachineName'];
+$Username2=$row['Username'];
 $priority = $row['Priority'];
 $ReportTo = $row['ReportTo'];
 $BriefDescription = $row['BDescription'];
@@ -31,6 +32,7 @@ $FinishedCommentM = $row['FinishedCommentM'];
 $TransferCommentE = $row['TransferCommentE'];
 $TransferCommentM = $row['TransferCommentE'];
 $DisapproveComment = $row['DisapproveComment'];
+$TryCount = $row['TryCount'];
 // $gen = explode(",",$gender);
 // $lang = explode(",",$datas);
 // $pl = explode(",",$place);
@@ -125,7 +127,7 @@ if (isset($_POST['delete'])) {
     </div>
     <div class="container mt-5 ">
         <h1>View Job </h1>
-        <div class="mt-3">
+        <div class="mt-3 mb-5">
             <form method="POST">
                 <table class="table table-striped w-50">
                     <tr>
@@ -141,10 +143,10 @@ if (isset($_POST['delete'])) {
                     <!-- Table row -->
                     <tr>
                         <td>
-                            User name
+                            Issuing User
                         </td>
                         <td>
-                            <?php echo $username; ?>
+                            <?php echo $Username2; ?>
                         </td>
                     </tr>
                     <!-- Table row -->
@@ -208,6 +210,22 @@ if (isset($_POST['delete'])) {
                         </td>
                         <td>
                             <?php echo $JobStatusM; ?>
+                        </td>
+                    </tr>
+                    <!-- Table row -->
+                    <tr>
+                        <td>
+                            Job Origin
+                        </td>
+                        <td>
+                            <?php
+                            if ($TryCount == '1') {
+                                echo "Fresh Job";
+                            } else if ($TryCount == '2') {
+                                echo "Transferred<br>Job ";
+                            } else if ($TryCount == '3') {
+                                echo "Disapproved<br> Job";
+                            } ?>
                         </td>
                     </tr>
                     <!-- Table row -->
@@ -317,9 +335,13 @@ if (isset($_POST['delete'])) {
                     onclick="return confirm('Are you sure?')">Finish & send for Approval</button> -->
                 <!-- <button type="submit" class="btn btn-warning mt-3" name="delete"
             onclick="return confirm('Are you sure?')">Transfer</button> -->
-                <button type="back" class="btn btn-danger mt-3" name="back"><a
+                <button type="back" class="btn btn-danger mt-3 mx-2" name="back"><a
                         href="\MaintananceJobCard\EMUser\indexEMUser.php" style="text-decoration:none;color:white">Back
                         to Main</a></button>
+                <button type="back" class="btn btn-warning mt-3" name="back"><a class="text-dark"
+                        href="\MaintananceJobCard\PUser\DisplayPendingJobListPuser.php"
+                        style="text-decoration:none;color:white">Back to
+                        list</a></button>
             </form>
         </div>
     </div>

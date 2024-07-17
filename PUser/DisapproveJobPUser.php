@@ -43,14 +43,14 @@ if (isset($_POST['disapprove'])) {
     $disapprovecomment = $_POST['disapprovecomment'];
 
     $_SESSION['DisapproveJobSucess']=true;
-if ($JobIssuingDivision='Electrical'){
-    $insert = "update jobdatasheet set Approval='Disapproved',JobStatusE='Pending',TryCount='3',DisapproveComment='$disapprovecomment' where id='$id'";
+if ($ReportTo=='Electrical'){
+    $insert = "update jobdatasheet set Approval='Not Approved',JobStatusE='Pending',TryCount='3',DisapproveComment='$disapprovecomment' where id='$id'";
 }
-elseif($JobIssuingDivision='Mechanical'){
-    $insert = "update jobdatasheet set Approval='Disapproved',JobStatusM='Pending',TryCount='3',DisapproveComment='$disapprovecomment' where id='$id'";
+elseif($ReportTo=='Mechanical'){
+    $insert = "update jobdatasheet set Approval='Not Approved',JobStatusM='Pending',TryCount='3',DisapproveComment='$disapprovecomment' where id='$id'";
 }
-elseif($JobIssuingDivision='Both'){
-    $insert = "update jobdatasheet set Approval='Disapproved',JobStatusE='Pending',JobStatusM='Pending',TryCount='3',DisapproveComment='$disapprovecomment' where id='$id'";
+elseif($ReportTo=='Both'){
+    $insert = "update jobdatasheet set Approval='Not Approved',JobStatusE='Pending',JobStatusM='Pending',TryCount='3',DisapproveComment='$disapprovecomment' where id='$id'";
 }
 
     if ($con->query($insert) == TRUE) {

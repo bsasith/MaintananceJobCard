@@ -20,6 +20,8 @@ if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jockey+One&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="\MaintananceJobCard\styles\SubmitJobstyle.css">
 
@@ -60,6 +62,7 @@ if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
                         <th scope="col">Name of<br> the Machine</th>
                         <th scope="col">Priority</th>
                         <th scope="col">Report To</th>
+                        <th scope="col">Origin <br>of the Job</th>
                         <th scope="col">Breif <br>Description</th>
                         <th scope="col">Operations</th>
                     </tr>
@@ -68,13 +71,10 @@ if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
                     <?php
                     //sql fetch data
                     $workplace = $_SESSION['workplace'];
-                    //echo $workplace;
-                    if ($workplace == 'Electrical')
-                    {
+                    echo $workplace;
+                    if ($workplace == 'Electrical') {
                         $sql = "Select * from `jobdatasheet` where (ReportTo='$workplace' or ReportTo='Both') and JobStatusE='Pending'  ";
-                    } 
-                    elseif($workplace == 'Mechanical') 
-                    {
+                    } elseif ($workplace == 'Mechanical') {
                         $sql = "Select * from `jobdatasheet` where (ReportTo='$workplace' or ReportTo='Both') and JobStatusM='Pending' ";
                     }
                     // elseif(($workplace == 'Mechanical') or ($workplace == 'Electrical') ){
@@ -92,14 +92,14 @@ if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
                         $priority = $row['Priority'];
                         $ReportTo = $row['ReportTo'];
                         $BriefDescription = $row['BDescription'];
-
+                        $TryCount = $row['TryCount'];
 
 
                         echo
                             "
 
-
-     <tr>
+        <tr class='clickable-row' data-href='\MaintananceJobCard\EMUser\ViewJobEMUser.php?updateid=$id'>
+    
         
         <td>$JobCodeNo</td>
         <td>$username</td>
@@ -107,8 +107,16 @@ if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
         <td>$JobIssuingDivision</td>
         <td>$MachineName</td>
         <td>$priority</td>
-        <td>$ReportTo</td>
-        <td style='white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;'>$BriefDescription</td>
+        <td>$ReportTo</td>";
+                        if ($TryCount == '1') {
+                            echo "<td>Fresh Job</td>";
+                        } else if ($TryCount == '2') {
+                            echo "<td>Transferred<br>Job</td>  ";
+                        } else if ($TryCount == '3') {
+                            echo "<td>Disapproved<br> Job</td> ";
+                        }
+                        echo "
+                            <td style='white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;'>$BriefDescription</td>
        <td><a href='\MaintananceJobCard\EMUser\StartJobEMUser.php?updateid=$id' class='btn btn-success'>Start</a>
        <a href='\MaintananceJobCard\EMUser\TransferPendingJobEMUser.php?updateid=$id' class='btn btn-danger mt-1'>Transfer</a> </td>
         
@@ -122,10 +130,17 @@ if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
             <button type="back" class="btn btn-danger mt-3" name="back"><a
                     href="\MaintananceJobCard\PUser\indexPUser.php" style="text-decoration:none;color:white">Back to
                     Main</a></button>
+            
         </div>
     </div>
 
-
+    <script>
+        jQuery(document).ready(function ($) {
+            $(".clickable-row").click(function () {
+                window.location = $(this).data("href");
+            });
+        });
+    </script>
 
 </body>
 </body>

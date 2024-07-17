@@ -58,7 +58,7 @@ if (!($_SESSION['type'] == 'euser' or $_SESSION['type'] == 'muser')) {
 
             <a href="\MaintananceJobCard\EMUser\StartedJobsEMUser.php" style="text-decoration: none;">
                 <div class="grid-item" id="box4">
-                    <h1 class="box-text" style="color: black">Started Jobs</h1>
+                    <h1 class="box-text" style="color: black">Finish Job</h1>
                 </div>
 
             </a>

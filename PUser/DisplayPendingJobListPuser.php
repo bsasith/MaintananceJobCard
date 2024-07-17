@@ -61,6 +61,8 @@ if (!($_SESSION['type'] == 'puser')) {
                         <th scope="col">Issuing <br>date & time</th>
                         <th scope="col">Job Issuing<br> Division</th>
                         <th scope="col">Name of<br> the Machine</th>
+                        <th scope="col">Electrical Status</th>
+                        <th scope="col">Mechcanical Status</th>
                         <th scope="col">Priority</th>
                         <th scope="col">Report To</th>
                         <th scope="col">Breif <br>Description</th>
@@ -90,6 +92,8 @@ if (!($_SESSION['type'] == 'puser')) {
                         $priority = $row['Priority'];
                         $ReportTo = $row['ReportTo'];
                         $BriefDescription = $row['BDescription'];
+                        $JobStatusE=$row['JobStatusE'];
+                        $JobStatusM=$row['JobStatusM'];
                         $TryCount = $row['TryCount'];
                         
 
@@ -105,6 +109,8 @@ if (!($_SESSION['type'] == 'puser')) {
         <td>$JobIssuingDateTime</td>
         <td>$JobIssuingDivision</td>
         <td>$MachineName</td>
+        <td>$JobStatusE</td>
+        <td>$JobStatusM</td>
         <td>$priority</td>
         <td>$ReportTo</td>
         <td style='white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;'>$BriefDescription</td>

@@ -62,7 +62,7 @@ if (!($_SESSION['type'] == 'puser')) {
                 </a>
                 <a href="\MaintananceJobCard\PUser\FinishedJobsPUser.php" style="text-decoration: none;">
                 <div class="grid-item" id="box2">
-                    <h1 class="box-text" style="color: black">Finished Jobs</h1>
+                    <h1 class="box-text" style="color: black">Pending Approvals</h1>
                 </div>
                 </a>
 
