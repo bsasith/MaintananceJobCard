@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 27, 2024 at 07:37 AM
+-- Generation Time: Jul 17, 2024 at 01:39 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -39,22 +39,27 @@ CREATE TABLE `jobdatasheet` (
   `Username` varchar(50) NOT NULL,
   `JobStatusE` enum('Pending','Started','Finished','Approved','NA') NOT NULL,
   `JobStatusM` enum('Pending','Started','Finished','Approved','NA') NOT NULL,
-  `Approval` enum('Not Approved','Approved','','') NOT NULL,
+  `Approval` enum('Pending Approval','Not Approved','Approved','') NOT NULL,
   `FinishedCommentE` varchar(255) DEFAULT NULL,
   `FinishedCommentM` varchar(500) DEFAULT NULL,
   `TransferCommentE` varchar(500) DEFAULT NULL,
-  `TransferCommentM` varchar(500) DEFAULT NULL
+  `TransferCommentM` varchar(500) DEFAULT NULL,
+  `ApproveComment` varchar(1000) DEFAULT NULL,
+  `DisapproveComment` varchar(1000) DEFAULT NULL,
+  `DownTime` varchar(500) DEFAULT NULL,
+  `TryCount` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `jobdatasheet`
 --
 
-INSERT INTO `jobdatasheet` (`id`, `JobCodeNo`, `JobPostingDateTime`, `JobPostingDev`, `MachineName`, `Priority`, `ReportTo`, `BDescription`, `Username`, `JobStatusE`, `JobStatusM`, `Approval`, `FinishedCommentE`, `FinishedCommentM`, `TransferCommentE`, `TransferCommentM`) VALUES
-(172, 'JO151265', '2024-06-26 14:25:18', 'ACF', 'A20', 'Low', 'Both', 'Jonto Rohdes', 'ranga', 'Finished', 'Finished', 'Approved', 'dfsfsfsf', '', '', ''),
-(173, 'JO557555', '2024-06-26 14:31:27', 'ACF', 'A20', 'Low', 'Mechanical', 'dddddddddddddddddddddddddddd', 'ranga', 'NA', 'Started', 'Not Approved', '', '', '', ''),
-(174, 'JO133325', '2024-06-26 14:46:09', 'ACF', 'A20', 'Low', 'Electrical', 'girraf', 'ranga', 'Finished', 'NA', 'Not Approved', 'sdfsfds', '', 'fdsfsdfsfs', 'dfdfsfssf'),
-(175, 'JO795615', '2024-06-26 14:54:27', 'ACF', 'A20', 'Low', 'Electrical', 'Wikis are enabled by wiki software, otherwise known as wiki engines. A wiki engine, being a form of a content management system, differs from other web-based systems such as blog software or static site generators, in that the content is created without any defined owner or leader, and wikis have little inherent structure, allowing structure to emerge according to the needs of the users.[1] Wiki engines usually allow content to be written using a simplified markup language and sometimes edited w', 'ranga', 'Finished', 'NA', 'Approved', '', '', '', '');
+INSERT INTO `jobdatasheet` (`id`, `JobCodeNo`, `JobPostingDateTime`, `JobPostingDev`, `MachineName`, `Priority`, `ReportTo`, `BDescription`, `Username`, `JobStatusE`, `JobStatusM`, `Approval`, `FinishedCommentE`, `FinishedCommentM`, `TransferCommentE`, `TransferCommentM`, `ApproveComment`, `DisapproveComment`, `DownTime`, `TryCount`) VALUES
+(213, 'JO561794', '2024-07-17 10:13:52', 'CCF', 'B20', 'Low', 'Both', 'Job 1 Dispp both', 'lanka', 'Finished', 'Finished', 'Approved', 'ghfhfh', 'gdfgdgdf', NULL, NULL, NULL, NULL, NULL, 1),
+(214, 'JO723162', '2024-07-17 10:18:58', 'CCF', 'B20', 'Low', 'Electrical', 'thytrftfhfh', 'lanka', 'Finished', 'Finished', 'Pending Approval', 'hkhkhk', NULL, 'uhhhh', 'uihuihio', NULL, 'gfnvjgjghjg', NULL, 3),
+(215, 'JO292773', '2024-07-17 10:29:08', 'CCF', 'B20', 'Low', 'Electrical', 'ddfsfsfsd', 'lanka', 'Pending', 'NA', 'Pending Approval', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(216, 'JO712447', '2024-07-17 14:43:52', 'CCF', 'B20', 'Low', 'Mechanical', 'sdfsfsdfd', 'lanka', 'NA', 'Finished', 'Pending Approval', NULL, 'fdffg', NULL, NULL, NULL, NULL, '00-00-00 00:47:41', 1),
+(217, 'JO615431', '2024-07-17 15:33:16', 'CCF', 'B20', 'Low', 'Mechanical', 'dfsdfssdf', 'lanka', 'NA', 'Finished', 'Pending Approval', NULL, 'bvhjgjgjjg', NULL, NULL, NULL, NULL, '00-00-00 00:01:20', 1);
 
 -- --------------------------------------------------------
 
@@ -110,7 +115,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `jobdatasheet`
 --
 ALTER TABLE `jobdatasheet`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=176;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=218;
 
 --
 -- AUTO_INCREMENT for table `users`
