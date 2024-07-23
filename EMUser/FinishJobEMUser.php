@@ -37,6 +37,8 @@ $JobStatusE = $row['JobStatusE'];
 // update operation
 if (isset($_POST['finish'])) {
     /////Down time Calculation
+    $manpower=$_POST['manpower'];
+    $finishcomment=$_POST['finishcomment'];
     date_default_timezone_set("Asia/Colombo");
     $now = date("Y-m-d H:i:s");
     $start_date = new DateTime(date("Y-m-d H:i:s"));
@@ -50,9 +52,9 @@ if (isset($_POST['finish'])) {
     $finishcomment = $_POST['finishcomment'];
     $_SESSION['FinishJob'] = true;
     if ($workplace == 'Electrical') {
-        $insert = "update jobdatasheet set JobStatusE='Finished',FinishedCommentE='$finishcomment',DownTime='$interval_string' where id='$id'";
+        $insert = "update jobdatasheet set JobStatusE='Finished',FinishedCommentE='$finishcomment',DownTime='$interval_string',ManPowerInvolved='$manpower' where id='$id'";
     } elseif ($workplace == 'Mechanical') {
-        $insert = "update jobdatasheet set JobStatusM='Finished',FinishedCommentM='$finishcomment',DownTime='$interval_string' where id='$id'";
+        $insert = "update jobdatasheet set JobStatusM='Finished',FinishedCommentM='$finishcomment',DownTime='$interval_string',ManPowerInvolved='$manpower' where id='$id'";
     }
 
     //$insert = "update jobdatasheet set JobStatusM='Finished' where id='$id'";
@@ -239,6 +241,15 @@ if (isset($_POST['delete'])) {
                             ?>
                         </td>
                     </tr>
+                    </tr>
+                    <!-- table row comment -->
+                    <tr>
+                        <td>
+                            Man Power Involved
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="manpower" required>
+                        </td>
                     </tr>
                     <!-- table row comment -->
                     <tr>
