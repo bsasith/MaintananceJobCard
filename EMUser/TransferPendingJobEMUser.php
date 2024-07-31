@@ -43,25 +43,25 @@ if (isset($_POST['transfer'])) {
     $_SESSION['TransferJob'] = true;
 
 
-    if ($transferto == 'Electrical') {
-        $JobStatusM = 'NA';
-        $JobStatusE = 'Pending';
-    }
-    elseif ($transferto == 'Mechanical') {
-        $JobStatusM = 'Pending';
-        $JobStatusE = 'NA';
-    }
-    elseif ($transferto == 'Both') {
-        $JobStatusM = 'Pending';
-        $JobStatusE = 'Pending';
-    }
+    // if ($transferto == 'Electrical') {
+    //     $JobStatusM = 'NA';
+    //     $JobStatusE = 'Pending';
+    // }
+    // elseif ($transferto == 'Mechanical') {
+    //     $JobStatusM = 'Pending';
+    //     $JobStatusE = 'NA';
+    // }
+    // elseif ($transferto == 'Both') {
+    //     $JobStatusM = 'Pending';
+    //     $JobStatusE = 'Pending';
+    // }
 
     if ($transferto == 'Electrical') {
-        $insert = "update jobdatasheet set ReportTo='Electrical',TransferCommentM='$transfercomment',JobStatusE='$JobStatusE',JobStatusM='$JobStatusM',TryCount='3' where id='$id'";
+        $insert = "update jobdatasheet set ReportTo='Electrical',TransferCommentM='$transfercomment',JobStatusE='Pending',JobStatusM='NA',TryCount='3' where id='$id'";
     } elseif ($transferto == 'Mechanical') {
-        $insert = "update jobdatasheet set ReportTo='Mechanical',TransferCommentE='$transfercomment',JobStatusE='$JobStatusE',JobStatusM='$JobStatusM',TryCount='3' where id='$id'";
+        $insert = "update jobdatasheet set ReportTo='Mechanical',TransferCommentE='$transfercomment',JobStatusE='NA',JobStatusM='Pending',TryCount='3' where id='$id'";
     } elseif ($transferto == 'Both') {
-        $insert = "update jobdatasheet set ReportTo='Both',TransferCommentM='$transfercomment',TransferCommentE='$transfercomment',JobStatusE='$JobStatusE',JobStatusM='$JobStatusM',TryCount='2' where id='$id'";
+        $insert = "update jobdatasheet set ReportTo='Both',TransferCommentM='$transfercomment',TransferCommentE='$transfercomment',JobStatusE='Pending',JobStatusM='Pending',TryCount='2' where id='$id'";
     }
     //$insert = "update jobdatasheet set JobStatusM='Finished' where id='$id'";
 
