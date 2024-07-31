@@ -43,29 +43,31 @@ if (isset($_POST['transfer'])) {
     $_SESSION['TransferJob'] = true;
 
 
-    if ($transferto == 'Electrical') {
-        $JobStatusM = 'Finished';
-        $JobStatusE = 'Pending';
-    }
-    elseif ($transferto == 'Mechanical') {
-        $JobStatusM = 'Pending';
-        $JobStatusE = 'Finished';
-    }
-    elseif ($transferto == 'Both' and $JobStatusM = 'Started') {
-        $JobStatusM = 'Started';
-        $JobStatusE = 'Pending';
-    }
-    elseif ($transferto == 'Both' and $JobStatusE = 'Started') {
-        $JobStatusM = 'Pending';
-        $JobStatusE = 'Started';
-    }
+    // if ($transferto == 'Electrical') {
+    //     $JobStatusM = 'Finished';
+    //     $JobStatusE = 'Pending';
+    // }
+    // elseif ($transferto == 'Mechanical') {
+    //     $JobStatusM = 'Pending';
+    //     $JobStatusE = 'Finished';
+    // }
+    // elseif ($transferto == 'Both' and $JobStatusM = 'Started') {
+    //     $JobStatusM = 'Started';
+    //     $JobStatusE = 'Pending';
+    // }
+    // elseif ($transferto == 'Both' and $JobStatusE = 'Started') {
+    //     $JobStatusM = 'Pending';
+    //     $JobStatusE = 'Started';
+    // }
 
     if ($transferto == 'Electrical') {
-        $insert = "update jobdatasheet set ReportTo='Electrical',TransferCommentM='$transfercomment',JobStatusE='$JobStatusE',JobStatusM='$JobStatusM',TryCount='2' where id='$id'";
+        $insert = "update jobdatasheet set ReportTo='Electrical',TransferCommentM='$transfercomment',JobStatusE='Pending',JobStatusM='Finished',TryCount='2' where id='$id'";
     } elseif ($transferto == 'Mechanical') {
-        $insert = "update jobdatasheet set ReportTo='Mechanical',TransferCommentE='$transfercomment',JobStatusE='$JobStatusE',JobStatusM='$JobStatusM',TryCount='2' where id='$id'";
-    } elseif ($transferto == 'Both') {
-        $insert = "update jobdatasheet set ReportTo='Both',TransferCommentM='$transfercomment',TransferCommentE='$transfercomment',JobStatusE='$JobStatusE',JobStatusM='$JobStatusM',TryCount='2' where id='$id'";
+        $insert = "update jobdatasheet set ReportTo='Mechanical',TransferCommentE='$transfercomment',JobStatusE='Finished',JobStatusM='Pending',TryCount='2' where id='$id'";
+    } elseif (($transferto == 'Both') and ($workplace =='Electrical') ) {
+        $insert = "update jobdatasheet set ReportTo='Both',TransferCommentM='$transfercomment',TransferCommentE='$transfercomment',JobStatusM='Pending',TryCount='2' where id='$id'";
+    }elseif (($transferto == 'Both') and ($workplace =='Mechanical') ) {
+        $insert = "update jobdatasheet set ReportTo='Both',TransferCommentM='$transfercomment',TransferCommentE='$transfercomment',JobStatusE='Pending',TryCount='2' where id='$id'";
     }
     //$insert = "update jobdatasheet set JobStatusM='Finished' where id='$id'";
 
