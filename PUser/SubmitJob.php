@@ -139,6 +139,18 @@ if (isset($_POST['submit'])) {
                                     {
                                         echo "<option value='Ceylon Copper'>Ceylon Copper</option>";
                                     }
+                                    if($_SESSION['workplace']=="Bail Room")
+                                    {
+                                        echo "<option value='Bail Room'>Bail Room</option>";
+                                    }
+                                    if($_SESSION['workplace']=="Drum Yard")
+                                    {
+                                        echo "<option value='Drum Yard'>Drum Yard</option>";
+                                    }
+                                    if($_SESSION['workplace']=="Carpentry")
+                                    {
+                                        echo "<option value='Carpentry'>Carpentry</option>";
+                                    }
                                 ?>
                                     <!-- <option value="ACF" <?php if($_SESSION['workplace']=="ACF"){echo "selected";}?> >ACF</option>
                                     <option value="CCF" <?php if($_SESSION['workplace']=="CCF"){echo "selected";}?> >CCF</option>
@@ -219,13 +231,15 @@ if (isset($_POST['submit'])) {
             var select = document.getElementById('division');
             var dept = document.getElementById('dept').value;
             var x = Array("");
-            var a = Array("A20", "A30", "A40", "A50");
-            var b = Array("B20", "B30", "B40", "B50");
-            var c = Array("C20", "C30", "C40", "C50");
-            var d = Array("D20", "D30", "D40", "D50");
-            var e = Array("E20", "E30", "E40", "E50");
-            var f = Array("F20", "F30", "F40", "F50");
-
+            var a = Array("MACHINES","JOHN ROYLE EXTRUDER","GENERAL ENGINEERING EXTRUDER","HIGH SPEED BOW STRANDER","MAJI LAYING UP MACHINE","ALIND STRANDER I","ALIND STRANDER II","SKIP STRANDER","BABCOCK W/D MACHINE I","BABCOCK W/D MACHINE II","AGEING FURNACE","CURING CHAMBER","REVOMAX STEAM BOILER","SM STRANDER II","HOSN 1600 BUNCHER","HOLD W/D MACHINE","AEI STRANDER","SCREW COMPRESSOR - 1   [ELANG]","PISTON TYPE COMPRESSOR - ATLAS COPCO","PISTON TYPE COMPRESSOR ","SCREW COMPRESSOR - LANG","SCREW COMPRESSOR - CICCATO");
+            var b = Array("SICTRA W/D MACHINE","RIGID STRANDER","GOLDEN EXTRUDER 120+45/60+45mm","YOSHIDA DRUM TWISTER","MAPRE EXTRUDER","GENERAL ENGINEERING EXTRUDER","BEKEART W/D MACHINE","DRUM TWISTER","ARMOURING MACHINE ","REELING WINDER ","MAJI ARMOURING MACHINE","SETIC BUNCHER  1250mm","TINNING PLANT","CUTTING WINDER I & II","PIONEER MEDIUM W/D MACHINE  [DB 17]","1250 PIONEER DOUBLE TWIST BUNCHER","SCREW COMPRESSOR - 1   [LANG]","SCREW COMPRESSOR - 2   [LANG]","PISTON TYPE COMPRESSOR - 1   [ATLAS]","PISTON TYPE COMPRESSOR - 2   [ATLAS]","PISTON TYPE COMPRESSOR - 3   [KIRLOSCAR]","PISTON TYPE COMPRESSOR - 4   [KIRLOSCAR]","PISTON TYPE COMPRESSOR - 5   [KIRLOSCAR]");
+            var c = Array("MICA TAPING MACHINE I","MICA TAPING MACHINE II","KU KA MA BUNCHER","FRANCIS SHAW MACHINE ","GOLDEN TEC. 80+45/90+45 EXTRUDER","NMC TANDEM EXTRUDER LINE","PIONEER EXTRUDER","REEL 'O' TECH CUTTING WINDER","CUTTING WINDER","NORTHEMPTON EXTRUDER","PIONEER TANDEM EXTRUDER 70+60mm","SCREW COMPRESSOR - LANG");
+            var d = Array("SETIC BUNCHER 630","ANDOURT EXTRUDER","CORTINOVIS BUNCHER","MULTI W/D MACHINE","CUTTING WINDER WITH PIONEER AUTO COILER","CUTTING WINDER WITH AUTO COILER","CUTTING WINDER I","CUTTING WINDER II","BOW TWINER");
+            var e = Array("MELTING FURNACE","HOLDING FURNACE","CASTING MACHINE","INDUCTION HEATER","ROD ROLLING MACHINE","TAKEUP 1 & 2","GANTRY CRANE 2T","GANTRY CRANE 3T","SCREW COMPRESSOR - LANG");
+            var f = Array("CONTINUOUS CASTING MACHINE 8-17mm ","BUSBAR MACHINE","PIONEER FURNACE","COMPRESSOR","PISTON TYPE COMPRESSOR - ATLAS COPCO");
+            var g = Array("FIREFOX MACHINE","PULAVERISER MACHINE","COMPACT MACHINE","STRIP MACHINE I , II , III","BAIL MACHINE I , II , III","HYDRAULIC CUTTER");
+            var h = Array("GANTRY CRANE 20T","CUTTING WINDER I , II , III","SCREW COMPRESSOR - CICCATO ");
+            var k = Array("WOOD PLANER MACHINE - 1 [LIDA]","WOOD PLANER MACHINE - 2","HOLE SAW MACHINE - 1","HOLE SAW MACHINE - 2","CIRCULAR SAW MACHINE - 1","CIRCULAR SAW MACHINE - 2","BAND SAW MACHINE - 1","BAND SAW MACHINE - 2","CUTOFF MACHINE","LATHE MACHINE - 1","LATHE MACHINE - 2","BUT WELDER","BENCH GRINDER");
             select.options.length = 0;
 
             if (dept === "") {
@@ -241,22 +255,35 @@ if (isset($_POST['submit'])) {
                     select[select.length] = new Option(b[i], b[i]);
                 }
             } else if (dept === "DR") {
-                for (var i = 0; i < b.length; ++i) {
+                for (var i = 0; i < c.length; ++i) {
                     select[select.length] = new Option(c[i], c[i]);
                 }
             } else if (dept === "Flexible") {
-                for (var i = 0; i < b.length; ++i) {
+                for (var i = 0; i < d.length; ++i) {
                     select[select.length] = new Option(d[i], d[i]);
                 }
             } else if (dept === "Aluminium Rodmill") {
-                for (var i = 0; i < b.length; ++i) {
+                for (var i = 0; i < e.length; ++i) {
                     select[select.length] = new Option(e[i], e[i]);
                 }
             } else if (dept === "Ceylon Copper") {
-                for (var i = 0; i < b.length; ++i) {
+                for (var i = 0; i < f.length; ++i) {
                     select[select.length] = new Option(f[i], f[i]);
                 }
+            } else if (dept === "Bail Room") {
+                for (var i = 0; i < g.length; ++i) {
+                    select[select.length] = new Option(g[i], g[i]);
+                }
+            } else if (dept === "Drum Yard") {
+                for (var i = 0; i < h.length; ++i) {
+                    select[select.length] = new Option(h[i], h[i]);
+                }
+            }else if (dept === "Carpentry") {
+                for (var i = 0; i < k.length; ++i) {
+                    select[select.length] = new Option(k[i], k[i]);
+                }
             }
+
 
         }
     </script>
