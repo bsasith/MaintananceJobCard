@@ -169,9 +169,53 @@ if (isset($_POST['submit'])) {
                             </td>
                             <td style="width:500px;padding:5px">
 
-                                <select id='division' class="form-select" name="MachineName" required>
-                                    <!-- <option selected>Choose Machine</option> -->
-                                    <option></option>
+                            <select id='division' class="form-select" name="MachineName" required>
+                                    <?php
+                                   $workplace=  $_SESSION['workplace'];
+                                    if ($workplace == 'ACF') {
+                                        $Factory = 'acfmachines';
+                                    }
+                                    if ($workplace == 'CCF') {
+                                        $Factory = 'ccfmachines';
+                                    }
+                                    if ($workplace == 'DR') {
+                                        $Factory = 'drmachines';
+                                    }
+                                    if ($workplace == 'Flexible') {
+                                        $Factory = 'flexiblemachines';
+                                    }
+                                    if ($workplace == 'Ceylon Copper') {
+                                        $Factory = 'ceyloncoppermachines';
+                                    }
+                                    if ($workplace == 'Aluminium Rodmill') {
+                                        $Factory = 'aluminiumrodmillmachines';
+                                    }
+                                    if ($workplace == 'Drum Yard') {
+                                        $Factory = 'drumyardmachines';
+                                    }
+
+                                    if ($workplace == 'Bail Room') {
+                                        $Factory = 'bailmachines';
+                                    }
+                                    if ($workplace == 'Carpentry') {
+                                        $Factory = 'carpentrymachines';
+                                    }
+
+                                    $query = "SELECT * FROM $Factory";
+                                    $result = $con->query($query);
+
+                                    if ($result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo '<option value="' . $row['MachineName'] . '">' . $row['MachineName'] . '</option>';
+                                        }
+                                    } else {
+                                        echo '<option value="">No data available</option>';
+                                    }
+                                    ?>
+                                    <!-- <option value="<?php $MachineName ?>" <?php if ($MachineName != null) {
+                                          echo "selected";
+                                      } ?>tion> -->
+
                                 </select>
                             </td>
                         </tr>
@@ -225,7 +269,7 @@ if (isset($_POST['submit'])) {
         </form>
     </div>
     </div>
-    <script>
+    <!-- <script>
         function divSelect() {
 
             var select = document.getElementById('division');
@@ -286,7 +330,7 @@ if (isset($_POST['submit'])) {
 
 
         }
-    </script>
+    </script> -->
 
     <script>
         var char = "123456759",
