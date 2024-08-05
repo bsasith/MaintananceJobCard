@@ -237,7 +237,7 @@ if (isset($_POST['delete'])) {
                                     if ($result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {?>
                                             
-                                            <option value="<?php  $row['MachineName'] ?> " <?php if ($MachineName==$row['MachineName']){echo 'selected';}?>><?php echo $row['MachineName']; ?></option>
+                                            <option value="<?php  echo $row['MachineName']; ?> " <?php if ($MachineName==$row['MachineName']){echo 'selected';}?>><?php echo $row['MachineName']; ?></option>
                                        <?php }
                                     } else {
                                         echo '<option value="">No data available</option>';
