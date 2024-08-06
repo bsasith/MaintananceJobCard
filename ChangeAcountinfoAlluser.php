@@ -38,7 +38,7 @@ if (isset($_POST['submit'])) {
             echo "<div class='alert alert-success' role='alert'>
    <strong>Password Change Successful</strong> 
 </div>";
-            header( 'refresh:2; .\login.php');
+            header( 'refresh:2; .\index.php');
 
 
         } else {

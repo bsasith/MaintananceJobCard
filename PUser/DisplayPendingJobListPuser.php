@@ -74,7 +74,7 @@ if (!($_SESSION['type'] == 'puser')) {
                     //sql fetch data
                     $workplace = $_SESSION['workplace'];
 
-                    //echo $workplace;
+                    echo $workplace;
                     
                     $sql = "Select * from `jobdatasheet` where `JobPostingDev`='$workplace' and (`JobStatusE`='Pending' or `JobStatusM`='Pending') ";
 

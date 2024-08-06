@@ -113,7 +113,7 @@ if (isset($_POST['submit'])) {
                                 <label class="pr-3">Job Issuing Division</label>
                             </td>
                             <td style="width:500px;padding:5px">
-                                <select name="JobIssuingDivision" id="dept" onchange='divSelect()' class="form-select"
+                                <select name="JobIssuingDivision" id="dept"  class="form-select"
                                     required  >
                                     <?php if($_SESSION['workplace']=="ACF")
                                     {

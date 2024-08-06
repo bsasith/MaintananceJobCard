@@ -150,26 +150,43 @@ if (isset($_POST['delete'])) {
                                 <select name="JobIssuingDivision" id="dept" onchange='divSelect()' class="form-select"
                                     required>
 
-                                    <?php if ($_SESSION['workplace'] == "ACF") {
+                                    <?php if($_SESSION['workplace']=="ACF")
+                                    {
                                         echo "<option value='ACF'>ACF</option>";
                                     }
-                                    if ($_SESSION['workplace'] == "CCF") {
+                                    if($_SESSION['workplace']=="CCF")
+                                    {
                                         echo "<option value='CCF'>CCF</option>";
                                     }
-                                    if ($_SESSION['workplace'] == "DR") {
+                                    if($_SESSION['workplace']=="DR")
+                                    {
                                         echo "<option value='DR'>DR</option>";
                                     }
-                                    if ($_SESSION['workplace'] == "Flexible") {
+                                    if($_SESSION['workplace']=="Flexible")
+                                    {
                                         echo "<option value='Flexible'>Flexible</option>";
                                     }
-                                    if ($_SESSION['workplace'] == "Aluminium Rodmill") {
+                                    if($_SESSION['workplace']=="Aluminium Rodmill")
+                                    {
                                         echo "<option value='Aluminium Rodmill'>Aluminium Rodmill</option>";
                                     }
-                                    if ($_SESSION['workplace'] == "Ceylon Copper") {
+                                    if($_SESSION['workplace']=="Ceylon Copper")
+                                    {
                                         echo "<option value='Ceylon Copper'>Ceylon Copper</option>";
                                     }
-                                    ?>
-
+                                    if($_SESSION['workplace']=="Bail Room")
+                                    {
+                                        echo "<option value='Bail Room'>Bail Room</option>";
+                                    }
+                                    if($_SESSION['workplace']=="Drum Yard")
+                                    {
+                                        echo "<option value='Drum Yard'>Drum Yard</option>";
+                                    }
+                                    if($_SESSION['workplace']=="Carpentry")
+                                    {
+                                        echo "<option value='Carpentry'>Carpentry</option>";
+                                    }
+                                ?>
                                     <!-- <option value="ACF" <?php if ($JobIssuingDivision == "ACF") {
                                         echo "selected";
                                     } ?>>ACF</option>>ACF</option>
