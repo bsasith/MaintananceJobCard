@@ -19,37 +19,36 @@ if (isset($_POST['submit'])) {
     $username = $_SESSION['username'];
     $JobStatusE = null;
     $JobStatusM = null;
-   // echo $ReportTo;
-    if($ReportTo=='Both'){
+    // echo $ReportTo;
+    if ($ReportTo == 'Both') {
         $JobStatusE = 'Pending';
         $JobStatusM = 'Pending';
-      }elseif($ReportTo=='Electrical'){
+    } elseif ($ReportTo == 'Electrical') {
         $JobStatusE = 'Pending';
         $JobStatusM = 'NA';
-      }
-    elseif($ReportTo=='Mechanical'){
+    } elseif ($ReportTo == 'Mechanical') {
         $JobStatusE = 'NA';
         $JobStatusM = 'Pending';
-      }
- //echo $JobStatusE;
- //echo $JobStatusM;
-    $_SESSION['SubmitJobSucess']=true;
+    }
+    //echo $JobStatusE;
+    //echo $JobStatusM;
+    $_SESSION['SubmitJobSucess'] = true;
 
     $insert = "insert into jobdatasheet (JobCodeNo,JobPostingDateTime,JobPostingDev,MachineName,Priority,ReportTo,BDescription,Username,JobStatusE,JobStatusM,TryCount) values 
     ('$JobCodeNo','$date','$JobIssuingDivision','$MachineName','$priority','$ReportTo','$BriefDescription','$username','$JobStatusE','$JobStatusM','1')";
 
     if ($con->query($insert) == TRUE) {
-        $_SESSION['SubmitJobSucess']=true;
+        $_SESSION['SubmitJobSucess'] = true;
         // echo "Sucessfully add data";
         // echo $ReportTo;
         // echo $JobStatusE;
         // echo $JobStatusM;
-     header('location:..\PUser\SubmitJobSuccess.php');
-   
+        header('location:..\PUser\SubmitJobSuccess.php');
+
     } else {
 
         echo mysqli_error($con);
-      //  header('location:location:..\PUser\indexPUser.php');
+        //  header('location:location:..\PUser\indexPUser.php');
     }
     //$insert->close();
 }
@@ -81,7 +80,7 @@ if (isset($_POST['submit'])) {
 
 <body onload="eee();divSelect()">
     <div class="topbar">
-        <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace']?> User</h1>
+        <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace'] ?> User</h1>
 
         <a href="\MaintananceJobCard\logout.php">
             <h1 class="topbar-logout">Logout &nbsp</h1>
@@ -101,7 +100,8 @@ if (isset($_POST['submit'])) {
                                 <label class="pr-3">Job code No</label>
                             </td>
                             <td style="width:500px;padding:5px">
-                                <input type="text" name="JobCodeNo" class="form-control" id="JobCodeNo" readonly required>
+                                <input type="text" name="JobCodeNo" class="form-control" id="JobCodeNo" readonly
+                                    required>
                             </td>
 
                         </tr>
@@ -113,51 +113,53 @@ if (isset($_POST['submit'])) {
                                 <label class="pr-3">Job Issuing Division</label>
                             </td>
                             <td style="width:500px;padding:5px">
-                                <select name="JobIssuingDivision" id="dept"  class="form-select"
-                                    required  >
-                                    <?php if($_SESSION['workplace']=="ACF")
-                                    {
+                                <select name="JobIssuingDivision" id="dept" class="form-select" required>
+                                    <?php if ($_SESSION['workplace'] == "ACF") {
                                         echo "<option value='ACF'>ACF</option>";
                                     }
-                                    if($_SESSION['workplace']=="CCF")
-                                    {
+                                    if ($_SESSION['workplace'] == "CCF") {
                                         echo "<option value='CCF'>CCF</option>";
                                     }
-                                    if($_SESSION['workplace']=="DR")
-                                    {
+                                    if ($_SESSION['workplace'] == "DR") {
                                         echo "<option value='DR'>DR</option>";
                                     }
-                                    if($_SESSION['workplace']=="Flexible")
-                                    {
+                                    if ($_SESSION['workplace'] == "Flexible") {
                                         echo "<option value='Flexible'>Flexible</option>";
                                     }
-                                    if($_SESSION['workplace']=="Aluminium Rodmill")
-                                    {
+                                    if ($_SESSION['workplace'] == "Aluminium Rodmill") {
                                         echo "<option value='Aluminium Rodmill'>Aluminium Rodmill</option>";
                                     }
-                                    if($_SESSION['workplace']=="Ceylon Copper")
-                                    {
+                                    if ($_SESSION['workplace'] == "Ceylon Copper") {
                                         echo "<option value='Ceylon Copper'>Ceylon Copper</option>";
                                     }
-                                    if($_SESSION['workplace']=="Bail Room")
-                                    {
+                                    if ($_SESSION['workplace'] == "Bail Room") {
                                         echo "<option value='Bail Room'>Bail Room</option>";
                                     }
-                                    if($_SESSION['workplace']=="Drum Yard")
-                                    {
+                                    if ($_SESSION['workplace'] == "Drum Yard") {
                                         echo "<option value='Drum Yard'>Drum Yard</option>";
                                     }
-                                    if($_SESSION['workplace']=="Carpentry")
-                                    {
+                                    if ($_SESSION['workplace'] == "Carpentry") {
                                         echo "<option value='Carpentry'>Carpentry</option>";
                                     }
-                                ?>
-                                    <!-- <option value="ACF" <?php if($_SESSION['workplace']=="ACF"){echo "selected";}?> >ACF</option>
-                                    <option value="CCF" <?php if($_SESSION['workplace']=="CCF"){echo "selected";}?> >CCF</option>
-                                    <option value="DR" <?php if($_SESSION['workplace']=="DR"){echo "selected";}?> >DR</option>
-                                    <option value="Flexible" <?php if($_SESSION['workplace']=="Flexible"){echo "selected";}?> >Flexible</option>
-                                    <option value="Aluminium Rodmill" <?php if($_SESSION['workplace']=="Aluminium Rodmill"){echo "selected";}?> >Aluminium Rodmill</option>
-                                    <option value="Ceylon Copper" <?php if($_SESSION['workplace']=="Ceylon Copper"){echo "selected";}?> >Ceylon Copper</option> -->
+                                    ?>
+                                    <!-- <option value="ACF" <?php if ($_SESSION['workplace'] == "ACF") {
+                                        echo "selected";
+                                    } ?> >ACF</option>
+                                    <option value="CCF" <?php if ($_SESSION['workplace'] == "CCF") {
+                                        echo "selected";
+                                    } ?> >CCF</option>
+                                    <option value="DR" <?php if ($_SESSION['workplace'] == "DR") {
+                                        echo "selected";
+                                    } ?> >DR</option>
+                                    <option value="Flexible" <?php if ($_SESSION['workplace'] == "Flexible") {
+                                        echo "selected";
+                                    } ?> >Flexible</option>
+                                    <option value="Aluminium Rodmill" <?php if ($_SESSION['workplace'] == "Aluminium Rodmill") {
+                                        echo "selected";
+                                    } ?> >Aluminium Rodmill</option>
+                                    <option value="Ceylon Copper" <?php if ($_SESSION['workplace'] == "Ceylon Copper") {
+                                        echo "selected";
+                                    } ?> >Ceylon Copper</option> -->
                                 </select>
                             </td>
                         </tr>
@@ -169,9 +171,9 @@ if (isset($_POST['submit'])) {
                             </td>
                             <td style="width:500px;padding:5px">
 
-                            <select id='division' class="form-select" name="MachineName" required>
+                                <select id='division' class="form-select" name="MachineName" required>
                                     <?php
-                                   $workplace=  $_SESSION['workplace'];
+                                    $workplace = $_SESSION['workplace'];
                                     if ($workplace == 'ACF') {
                                         $Factory = 'acfmachines';
                                     }
@@ -242,7 +244,7 @@ if (isset($_POST['submit'])) {
                                 <label class="pr-3">Report to</label>
                             </td>
                             <td style="width:500px;padding:5px">
-                                <select name="ReportTo"  class="form-select" required placeholder="Report To">
+                                <select name="ReportTo" class="form-select" required placeholder="Report To">
 
                                     <option value="Electrical">Electrical</option>
                                     <option value="Mechanical">Mechanical</option>
@@ -257,7 +259,8 @@ if (isset($_POST['submit'])) {
                                 <label class="pr-3">Breif Description</label>
                             </td>
                             <td style="width:500px;padding:5px">
-                                <textarea name="BriefDescription" class="form-control" id="exampleFormControlTextarea1" rows="3" required></textarea>
+                                <textarea name="BriefDescription" class="form-control" id="exampleFormControlTextarea1"
+                                    rows="3" required></textarea>
                             </td>
 
                         </tr>
@@ -265,7 +268,8 @@ if (isset($_POST['submit'])) {
         </div>
         </table>
         <button type="submit" class="btn btn-primary mt-3" name="submit">Submit</button>
-        <button type="back" class="btn btn-danger mt-3" name="back" ><a href="\MaintananceJobCard\PUser\indexPUser.php" style="text-decoration:none;color:white">Back to Main</a></button>
+        <button type="back" class="btn btn-danger mt-3" name="back"><a href="\MaintananceJobCard\PUser\indexPUser.php"
+                style="text-decoration:none;color:white">Back to Main</a></button>
         </form>
     </div>
     </div>

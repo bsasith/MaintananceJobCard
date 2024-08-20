@@ -77,7 +77,7 @@ if (!($_SESSION['type'] == 'puser')) {
                     $workplace = $_SESSION['workplace'];
                     //echo $workplace;
                     
-                    $sql = "Select * from `jobdatasheet` where  (BDescription like '%$query%' or MachineName like '%$query%' or ReportTo like '%$query%' or JobPostingDateTime	like '%$query%') and (Approval='Approved' and JobPostingDev='$workplace')";
+                    $sql = "Select * from `jobdatasheet` where  (BDescription like '%$query%' or MachineName like '%$query%' or ReportTo like '%$query%' or JobPostingDateTime	like '%$query%') and (Approval='Approved' and JobPostingDev='$workplace') order by JobPostingDateTime DESC";
                     $result = mysqli_query($con, $sql);
 
                     while ($row = mysqli_fetch_assoc($result)) {

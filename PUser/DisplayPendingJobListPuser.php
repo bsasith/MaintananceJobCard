@@ -76,7 +76,7 @@ if (!($_SESSION['type'] == 'puser')) {
 
                     echo $workplace;
                     
-                    $sql = "Select * from `jobdatasheet` where `JobPostingDev`='$workplace' and (`JobStatusE`='Pending' or `JobStatusM`='Pending') ";
+                    $sql = "Select * from `jobdatasheet` where `JobPostingDev`='$workplace' and (`JobStatusE`='Pending' or `JobStatusM`='Pending') order by JobPostingDateTime DESC ";
 
 
 

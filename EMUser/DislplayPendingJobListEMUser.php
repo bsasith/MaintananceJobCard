@@ -73,9 +73,9 @@ if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
                     $workplace = $_SESSION['workplace'];
                     echo $workplace;
                     if ($workplace == 'Electrical') {
-                        $sql = "Select * from `jobdatasheet` where (ReportTo='$workplace' or ReportTo='Both') and JobStatusE='Pending'  ";
+                        $sql = "Select * from `jobdatasheet` where (ReportTo='$workplace' or ReportTo='Both') and JobStatusE='Pending' order by JobPostingDateTime DESC ";
                     } elseif ($workplace == 'Mechanical') {
-                        $sql = "Select * from `jobdatasheet` where (ReportTo='$workplace' or ReportTo='Both') and JobStatusM='Pending' ";
+                        $sql = "Select * from `jobdatasheet` where (ReportTo='$workplace' or ReportTo='Both') and JobStatusM='Pending' order by JobPostingDateTime DESC";
                     }
                     // elseif(($workplace == 'Mechanical') or ($workplace == 'Electrical') ){
                     //     $sql = "Select * from `jobdatasheet` where  ReportTo='Both' and JobStatusM='Pending' and JobStatusE='Pending' ";
