@@ -36,7 +36,7 @@ if (isset($_POST['submit'])) {
 
     $insert = "insert into jobdatasheet (JobCodeNo,JobPostingDateTime,JobPostingDev,MachineName,Priority,ReportTo,BDescription,Username,JobStatusE,JobStatusM,TryCount) values 
     ('$JobCodeNo','$date','$JobIssuingDivision','$MachineName','$priority','$ReportTo','$BriefDescription','$username','$JobStatusE','$JobStatusM','1')";
-
+    
     if ($con->query($insert) == TRUE) {
         $_SESSION['SubmitJobSucess'] = true;
         // echo "Sucessfully add data";
@@ -78,7 +78,7 @@ if (isset($_POST['submit'])) {
     </style>
 </head>
 
-<body onload="eee();divSelect()">
+<body onload="eee()">
     <div class="topbar">
         <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace'] ?> User</h1>
 
@@ -97,11 +97,26 @@ if (isset($_POST['submit'])) {
                         <tr>
 
                             <td style="width:200px;padding:5px">
+                                <label class="pr-3">Job Type</label>
+                            </td>
+                            <td style="width:500px;padding:5px">
+                                <select name="JobType" id="JobType" class="form-select" onchange="eee()" required>
+                                    
+                                    <option value="JobOrder">Job Order</option>
+                                    <option value="WorkOrder">Work Order</option>
+
+                            </td>
+
+                        </tr>
+
+                        <!-- Row of input fields -->
+                        <tr>
+
+                            <td style="width:200px;padding:5px">
                                 <label class="pr-3">Job code No</label>
                             </td>
                             <td style="width:500px;padding:5px">
-                                <input type="text" name="JobCodeNo" class="form-control" id="JobCodeNo" readonly
-                                    required>
+                                <input type="text" name="JobCodeNo" class="form-control" id="JobCodeNo" readonly required>
                             </td>
 
                         </tr>
@@ -335,23 +350,41 @@ if (isset($_POST['submit'])) {
 
         }
     </script> -->
+<?php
+$sql = "SELECT * FROM jobdatasheet ORDER BY id DESC LIMIT 1";
 
+$result = mysqli_query($con, $sql);
+
+$row = mysqli_fetch_assoc($result);
+
+$id = $row['id'];
+echo $id;
+?>
     <script>
-        var char = "123456759",
-            serialLenght = 6;
+        // var char = "123456759",
+        //     serialLenght = 6;
 
         function eee() {
-            'use strict';
+        //     'use strict';
 
-            var randomKey = "";
-            for (var i = 0; i < serialLenght; ++i) {
-                var randomSingle = char[Math.floor(Math.random() * char.length)];
-                randomKey += randomSingle;
+        //     var randomKey = "";
+        //     for (var i = 0; i < serialLenght; ++i) {
 
+        //         var randomSingle = char[Math.floor(Math.random() * char.length)];
+        //         randomKey += randomSingle;
+
+        //     }
+        //     console.log(randomKey)
+            const selectedValue = document.getElementById("JobType").value;
+            if (selectedValue=="WorkOrder"){
+                document.getElementById('JobCodeNo').value = "WO" + "<?php echo $id+1;?>";
             }
-            console.log(randomKey)
-            document.getElementById('JobCodeNo').value = "JO" + randomKey
+            if (selectedValue=="JobOrder"){
+                document.getElementById('JobCodeNo').value = "JO" + "<?php echo $id+1;?>";
+                }
+            
         }
     </script>
-</body>
+
+</bod>
 </body>

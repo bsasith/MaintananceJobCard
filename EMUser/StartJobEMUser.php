@@ -36,13 +36,28 @@ $JobStatusE = $row['JobStatusE'];
 
 // update operation
 if (isset($_POST['start'])) {
+    $Jobtype = $_POST['JobType'];
+    if ($Jobtype == "JO") {
+
+        $JobOrderPrefix = "JO";
+
+        $NewJobCodeNo = $JobOrderPrefix . substr($JobCodeNo, 2);
+
+    }
+    if ($Jobtype == "WO") {
+
+        $JobOrderPrefix = "WO";
+
+        $NewJobCodeNo = $JobOrderPrefix . substr($JobCodeNo, 2);
+
+    }
 
     $_SESSION['StartJob'] = true;
     $workplace = $_SESSION['workplace'];
     if ($workplace == 'Electrical') {
-        $insert = "update jobdatasheet set JobStatusE='Started',Approval='Pending Approval' where id='$id'";
+        $insert = "update jobdatasheet set JobCodeNo=' $NewJobCodeNo',JobStatusE='Started',Approval='Pending Approval' where id='$id'";
     } else {
-        $insert = "update jobdatasheet set JobStatusM='Started',Approval='Pending Approval' where id='$id'";
+        $insert = "update jobdatasheet set JobCodeNo=' $NewJobCodeNo',JobStatusM='Started',Approval='Pending Approval' where id='$id'";
     }
 
 
@@ -105,7 +120,7 @@ if (isset($_POST['start'])) {
     </style>
 </head>
 
-<body onload="divSelect()">
+<body >
     <div class="topbar">
         <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace'] ?> User</h1>
 
@@ -120,14 +135,33 @@ if (isset($_POST['start'])) {
         <div class="mt-3">
             <form method="POST">
                 <table class="table table-striped w-50">
+                    <h1 id="demo"></h1>
                     <tr>
-                        <!-- Table row -->
+                    <tr>
+
+                        <td style="width:200px;padding:5px">
+                            <label class="pr-3">Job Type</label>
+                        </td>
+                        <td style="width:500px;padding:5px">
+                            <select name="JobType" id="mySelect" class="form-select" required onchange="updateTextbox()">
+                                <option value="JO">Job Order</option>
+                                <option value="WO">Work Order</option>
+
+
+                        </td>
+
+                    </tr>
+                    <!-- Table row -->
                     <tr>
                         <td>
                             Job code No
                         </td>
                         <td>
-                            <?php echo $JobCodeNo; ?>
+                            <input class="form-control" id="myTextbox" type="text" value="<?php echo "$JobCodeNo";?>" >
+                            <script>
+
+                            </script>
+
                         </td>
                     </tr>
                     <!-- Table row -->
@@ -225,8 +259,28 @@ if (isset($_POST['start'])) {
             </form>
         </div>
     </div>
+    <script>
+    function updateTextbox() {
+            const selectedValue = document.getElementById("mySelect").value;
+            const textbox = document.getElementById("myTextbox");
+            const textbox1 = "<?php echo "$JobCodeNo";?>";
+            
+            if (selectedValue === "JO") {
+                textbox.value = 'JO'+ textbox1.substr(2);
+            } else if (selectedValue === "WO") {
+                textbox.value = 'WO'+ textbox1.substr(2);
+            } else {
+                textbox.value = "";
+            }
+        }
+    </script>
+        
+        
+        <!-- <script> -->
+        
 
-
+        
+    <!-- </script> -->
 
 
 </body>
