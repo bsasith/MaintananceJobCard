@@ -47,6 +47,7 @@ unset($_SESSION['SubmitJobSucess']);
     <div class="container mt-5 ">
         <div class="mt-5">
             <h1>Job Entered Successfully.</h1>
+            
             <button type="back" class="btn btn-danger mt-3" name="back" ><a href="\MaintananceJobCard\PUser\indexPUser.php" style="text-decoration:none;color:white">Back to Main</a></button>
         </div>
     </div>

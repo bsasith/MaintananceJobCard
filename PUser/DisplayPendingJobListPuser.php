@@ -119,7 +119,9 @@ if (!($_SESSION['type'] == 'puser')) {
                                 echo "<td><a href='\MaintananceJobCard\PUser\UpdateDeleteJob.php?updateid=$id' class='btn btn-warning'>Update or <br>Delete</a></td>";
                             } else if ($TryCount == '3') {
                                 echo "<td>Disapproved <br>Job</td>  </tr>";
-                            } else {
+                            } else if ($TryCount == '4') {
+                                echo "<td>Job started </td>  </tr>";
+                            }else{
                                 echo "<td>Transferred Job</td>  </tr>";
                             }
 

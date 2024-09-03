@@ -55,9 +55,9 @@ if (isset($_POST['start'])) {
     $_SESSION['StartJob'] = true;
     $workplace = $_SESSION['workplace'];
     if ($workplace == 'Electrical') {
-        $insert = "update jobdatasheet set JobCodeNo=' $NewJobCodeNo',JobStatusE='Started',Approval='Pending Approval' where id='$id'";
+        $insert = "update jobdatasheet set JobCodeNo=' $NewJobCodeNo',JobStatusE='Started',Approval='Pending Approval',TryCount='4' where id='$id'";
     } else {
-        $insert = "update jobdatasheet set JobCodeNo=' $NewJobCodeNo',JobStatusM='Started',Approval='Pending Approval' where id='$id'";
+        $insert = "update jobdatasheet set JobCodeNo=' $NewJobCodeNo',JobStatusM='Started',Approval='Pending Approval',TryCount='4' where id='$id'";
     }
 
 

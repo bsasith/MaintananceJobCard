@@ -8,9 +8,19 @@ if (!($_SESSION['type'] == 'puser')) {
     header('location:..\index.php');
 }
 
+$sql = "SELECT * FROM jobdatasheet ORDER BY id DESC LIMIT 1";
+
+$result = mysqli_query($con, $sql);
+
+$row = mysqli_fetch_assoc($result);
+
+$id = $row['id'];
+//echo $id;
+
 if (isset($_POST['submit'])) {
 
     $JobCodeNo = $_POST['JobCodeNo'];
+    $Jobtype = $_POST['JobType'];
     $JobIssuingDivision = $_POST['JobIssuingDivision'];
     $MachineName = $_POST['MachineName'];
     $priority = $_POST['priority'];
@@ -34,24 +44,219 @@ if (isset($_POST['submit'])) {
     //echo $JobStatusM;
     $_SESSION['SubmitJobSucess'] = true;
 
-    $insert = "insert into jobdatasheet (JobCodeNo,JobPostingDateTime,JobPostingDev,MachineName,Priority,ReportTo,BDescription,Username,JobStatusE,JobStatusM,TryCount) values 
-    ('$JobCodeNo','$date','$JobIssuingDivision','$MachineName','$priority','$ReportTo','$BriefDescription','$username','$JobStatusE','$JobStatusM','1')";
-    
-    if ($con->query($insert) == TRUE) {
-        $_SESSION['SubmitJobSucess'] = true;
-        // echo "Sucessfully add data";
-        // echo $ReportTo;
-        // echo $JobStatusE;
-        // echo $JobStatusM;
-        header('location:..\PUser\SubmitJobSuccess.php');
+    //-----------------------------------------------------------------------------------------------------
+    try {
+        $con->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+        $con->query("LOCK TABLES serial_numbers WRITE");
 
-    } else {
-
-        echo mysqli_error($con);
-        //  header('location:location:..\PUser\indexPUser.php');
-    }
-    //$insert->close();
+        $sql2 = "SELECT * FROM serial_numbers ORDER BY id DESC LIMIT 1";
+        $result2 = mysqli_query($con, $sql2);
+        $num = mysqli_num_rows($result2);
+        $serial_no =null;
+if ($Jobtype =="JobOrder"){
+    $JobSerString="JO";
 }
+if ($Jobtype =="WorkOrder"){
+    $JobSerString="WO";
+}
+        if ($num == 0) {
+            
+            $serial_no = $JobSerString.$id ;
+
+            $sql3 = "INSERT INTO serial_numbers (serial_no, status) VALUES ('$serial_no', 'used')";
+            $result3 = mysqli_query($con, $sql3);
+            if(!$result3){
+                echo"not happen";
+            }
+
+        }
+        if ($num > 0) {
+            $row = mysqli_fetch_assoc($result);
+            $serial_no = $row['serial_no'];
+            $raw_serial = (substr($serial_no, 2));
+            if ($raw_serial == $id) {
+                $raw_serial = $id;
+                $raw_serial++;
+                $serial_no = $JobSerString . $raw_serial;
+                $sql4 = "INSERT INTO serial_numbers (serial_no, status) VALUES ('$serial_no', 'used')";
+                $result4 = mysqli_query($con, $sql4);
+                
+            } else {
+                $raw_serial = $id;
+                $raw_serial++;
+                
+                $serial_no = $JobSerString . $raw_serial;
+                $sql3 = "INSERT INTO serial_numbers (serial_no, status) VALUES ('$serial_no', 'used')";
+                $result3 = mysqli_query($con, $sql3);
+                
+            }
+
+        }
+        $con->query("LOCK TABLES `jobdatasheet` WRITE");
+        $insert = "insert into jobdatasheet (JobCodeNo,JobPostingDateTime,JobPostingDev,MachineName,Priority,ReportTo,BDescription,Username,JobStatusE,JobStatusM,TryCount) values 
+        ('$serial_no','$date','$JobIssuingDivision','$MachineName','$priority','$ReportTo','$BriefDescription','$username','$JobStatusE','$JobStatusM','1')";
+
+
+
+        if ($con->query($insert) == TRUE) {
+            $_SESSION['SubmitJobSucess'] = true;
+            $con->commit();
+            header('location:..\PUser\SubmitJobSuccess.php');
+
+        } else {
+
+            echo mysqli_error($con);
+
+        }
+    } catch (Exception $e) {
+        // Rollback the transaction on error
+        $con->rollback();
+        echo "Failed to submit form: " . $e->getMessage();
+    } finally {
+        // Unlock the table
+        $con->query("UNLOCK TABLES");
+        // Close connection
+        $con->close();
+    }
+}
+
+    //-----------------------------------------------------------------------------------------------------
+//     try {
+//         $con->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+//         $con->query("LOCK TABLES serial_numbers WRITE");
+//         $sql = "SELECT * FROM serial_numbers ORDER BY id DESC LIMIT 1";
+//         $result = mysqli_query($con, $sql);
+//         $num = mysqli_num_rows($result);
+
+    //         if ($num > 0) {
+//             $row = mysqli_fetch_assoc($result);
+//             $serial_no = $row['serial_no'];
+//             $serial_id=$id;
+//             $serial_no = "JO".$id;
+//             $serial_id = $row['id'];
+//             $sql2 = "UPDATE serial_numbers SET status = 'used' WHERE id = $serial_id";
+//             $result2 = mysqli_query($con, $sql2);
+//         } else {
+//             $serial_id=$id;
+//             $serial_no = "JO".$id;
+//             $sql2 = "INSERT INTO serial_numbers ($serial_no, status) VALUES (NULL, 'used')";
+//             $result2 = mysqli_query($con, $sql2);
+//             $serial_no = $con->insert_id;
+//         }
+//         $con->query("LOCK TABLES `jobdatasheet` WRITE");
+//         $insert = "insert into jobdatasheet (JobCodeNo,JobPostingDateTime,JobPostingDev,MachineName,Priority,ReportTo,BDescription,Username,JobStatusE,JobStatusM,TryCount) values 
+//         ('$JobCodeNo','$date','$JobIssuingDivision','$MachineName','$priority','$ReportTo','$BriefDescription','$username','$JobStatusE','$JobStatusM','1')";
+
+
+
+    //         if ($con->query($insert) == TRUE) {
+//             $_SESSION['SubmitJobSucess'] = true;
+
+    //             header('location:..\PUser\SubmitJobSuccess.php');
+
+    //         } else {
+
+    //             echo mysqli_error($con);
+
+    //         }
+//     } catch (Exception $e) {
+//         // Rollback the transaction on error
+//         $con->rollback();
+//         echo "Failed to submit form: " . $e->getMessage();
+//     } finally {
+//         // Unlock the table
+//         $con->query("UNLOCK TABLES");
+//         // Close connection
+//         $con->close();
+//     }
+
+    // }
+//-----------------------------------------------------------------------------------------------
+// try {
+// // Start transaction
+//     $con->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+
+    //      // Lock the serial_numbers table to prevent race conditions
+//      $con->query("LOCK TABLES serial_numbers WRITE");
+
+    //      // Check if there are any canceled serial numbers available
+//     $stmt = $con->prepare("SELECT id, serial_no FROM serial_numbers WHERE status = 'canceled' LIMIT 1 FOR UPDATE");
+//      $stmt->execute();
+//      $result = $stmt->get_result();
+
+    //     if ($result->num_rows > 0) {
+//          // Reuse the canceled serial number
+//          $row = $result->fetch_assoc();
+//          $serial_no = $row['serial_no'];
+//          $serial_id = $row['id'];
+
+    //         // Update the status to 'used'
+//         $stmt = $con->prepare("UPDATE serial_numbers SET status = 'used' WHERE id = ?");
+//         $stmt->bind_param("i", $serial_id);
+//         $stmt->execute();
+//     } else {
+//         // Generate a new serial number by inserting a new record
+//         $stmt = $con->prepare("INSERT INTO serial_numbers (serial_no, status) VALUES (NULL, 'used')");
+//         $stmt->execute();
+
+    //         // Get the newly generated serial number
+//         $serial_no = $con->insert_id;
+//     }
+
+    //     // Insert the form data with the serial number
+//     $con->query("LOCK TABLES `jobdatasheet` WRITE");
+//     $stmt = $con->prepare("INSERT INTO `jobdatasheet` 
+//     (JobCodeNo, JobPostingDateTime, JobPostingDev, MachineName, Priority, ReportTo, BDescription, Username, JobStatusE, JobStatusM) 
+//     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+    // if ($stmt === false) {
+//     throw new Exception("Prepare statement failed: " . $con->error);
+// }
+
+    // $stmt->bind_param("isssssssss", 
+//     $JobCodeNo, 
+//     $date, 
+//     $JobIssuingDivision, 
+//     $MachineName, 
+//     $priority, 
+//     $ReportTo, 
+//     $BriefDescription, 
+//     $username, 
+//     $JobStatusE, 
+//     $JobStatusM
+// );
+//     // Commit the transaction
+//     $con->commit();
+//     header('location:..\PUser\SubmitJobSuccess.php');
+//     echo "Form submitted successfully. Your serial number is: " . $serial_no;
+
+    // } catch (Exception $e) {
+//     // Rollback the transaction on error
+//     $con->rollback();
+//     echo "Failed to submit form: " . $e->getMessage();
+// } finally {
+//     // Unlock the table
+//     $con->query("UNLOCK TABLES");
+//     // Close connection
+//     $con->close();
+// }
+
+    //-----------------------------------------------------------------------------------------------
+//     $insert = "insert into jobdatasheet (JobCodeNo,JobPostingDateTime,JobPostingDev,MachineName,Priority,ReportTo,BDescription,Username,JobStatusE,JobStatusM,TryCount) values 
+//     ('$JobCodeNo','$date','$JobIssuingDivision','$MachineName','$priority','$ReportTo','$BriefDescription','$username','$JobStatusE','$JobStatusM','1')";
+
+//     if ($con->query($insert) == TRUE) {
+//         $_SESSION['SubmitJobSucess'] = true;
+
+//         header('location:..\PUser\SubmitJobSuccess.php');
+
+//     } else {
+
+//         echo mysqli_error($con);
+
+//     }
+
+// }
 
 
 ?>
@@ -101,7 +306,7 @@ if (isset($_POST['submit'])) {
                             </td>
                             <td style="width:500px;padding:5px">
                                 <select name="JobType" id="JobType" class="form-select" onchange="eee()" required>
-                                    
+
                                     <option value="JobOrder">Job Order</option>
                                     <option value="WorkOrder">Work Order</option>
 
@@ -110,16 +315,17 @@ if (isset($_POST['submit'])) {
                         </tr>
 
                         <!-- Row of input fields -->
-                        <tr>
+                        <!-- <tr>
 
                             <td style="width:200px;padding:5px">
                                 <label class="pr-3">Job code No</label>
                             </td>
                             <td style="width:500px;padding:5px">
-                                <input type="text" name="JobCodeNo" class="form-control" id="JobCodeNo" readonly required>
+                                <input type="text" name="JobCodeNo" class="form-control" id="JobCodeNo" readonly
+                                    required>
                             </td>
 
-                        </tr>
+                        </tr> -->
 
                         <!-- Row of input fields -->
                         <tr>
@@ -350,41 +556,52 @@ if (isset($_POST['submit'])) {
 
         }
     </script> -->
-<?php
-$sql = "SELECT * FROM jobdatasheet ORDER BY id DESC LIMIT 1";
+    <?php
 
-$result = mysqli_query($con, $sql);
-
-$row = mysqli_fetch_assoc($result);
-
-$id = $row['id'];
-echo $id;
-?>
+    ?>
     <script>
         // var char = "123456759",
         //     serialLenght = 6;
 
         function eee() {
-        //     'use strict';
+            //     'use strict';
 
-        //     var randomKey = "";
-        //     for (var i = 0; i < serialLenght; ++i) {
+            //     var randomKey = "";
+            //     for (var i = 0; i < serialLenght; ++i) {
 
-        //         var randomSingle = char[Math.floor(Math.random() * char.length)];
-        //         randomKey += randomSingle;
+            //         var randomSingle = char[Math.floor(Math.random() * char.length)];
+            //         randomKey += randomSingle;
 
-        //     }
-        //     console.log(randomKey)
+            //     }
+            //     console.log(randomKey)
             const selectedValue = document.getElementById("JobType").value;
-            if (selectedValue=="WorkOrder"){
-                document.getElementById('JobCodeNo').value = "WO" + "<?php echo $id+1;?>";
-            }
-            if (selectedValue=="JobOrder"){
-                document.getElementById('JobCodeNo').value = "JO" + "<?php echo $id+1;?>";
-                }
+            //const selectedId = "<?php echo $id; ?>";
+            <?php
+            //$_SESSION['selectedId']=$id;
             
+            // if (isset($_SESSION['selectedId'])) {
+            
+            //     $_SESSION['selectedId'] = $id;
+            //     $_SESSION['selectedId']++;
+            
+            // } 
+            // else if (!isset($_SESSION['selectedId'])) {
+            
+            //     $_SESSION['selectedId'] = $id;
+            //     $_SESSION['selectedId']++;
+            
+            // }
+            // echo $_SESSION['selectedId'];
+            ?>
+
+            if (selectedValue == "WorkOrder") {
+                document.getElementById('JobCodeNo').value = "WO" + "<?php echo $id + 1; ?>";
+            }
+            if (selectedValue == "JobOrder") {
+                document.getElementById('JobCodeNo').value = "JO" + "<?php echo $id + 1; ?>";
+            }
+
         }
     </script>
 
-</bod>
 </body>

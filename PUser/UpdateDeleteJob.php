@@ -36,15 +36,22 @@ $BriefDescription = $row['BDescription'];
 // update operation
 if (isset($_POST['update'])) {
 
-
-    $JobCodeNo = $_POST['JobCodeNo'];
+$JobType=$_POST['JobType'];
+    //$JobCodeNo = $_POST['JobCodeNo'];
     $JobIssuingDivision = $_POST['JobIssuingDivision'];
     $MachineName = $_POST['MachineName'];
     $priority = $_POST['priority'];
     $ReportTo = $_POST['ReportTo'];
     $BriefDescription = $_POST['BriefDescription'];
     $username = $_SESSION['username'];
-
+if ($JobType=="JobOrder")
+{
+    $JobCodeNo="JO".(substr($JobCodeNo, 2));
+}
+if ($JobType=="WorkOrder")
+{
+    $JobCodeNo="WO".(substr($JobCodeNo, 2));
+}
     $_SESSION['UpdateJobSucess'] = true;
     if ($ReportTo == 'Electrical') {
         $insert = "update jobdatasheet set JobCodeNo='$JobCodeNo',JobPostingDateTime='$date',JobPostingDev='$JobIssuingDivision',MachineName='$MachineName',Priority='$priority',ReportTo='$ReportTo',BDescription='$BriefDescription',Username='$username',JobStatusE='Pending',JobStatusM='NA' where id='$idu'";
@@ -127,6 +134,20 @@ if (isset($_POST['delete'])) {
             <form method="POST">
                 <table>
                     <div class="form-group">
+                        <tr>
+
+                            <td style="width:200px;padding:5px">
+                                <label class="pr-3">Job Type</label>
+                            </td>
+                            <td style="width:500px;padding:5px">
+                                <select name="JobType" id="JobType" class="form-select" onchange="eee()" required>
+
+                                    <option value="JobOrder"<?php if((substr($JobCodeNo, 0, 2))=="JO"){echo "selected";}?>>Job Order</option>
+                                    <option value="WorkOrder"<?php if((substr($JobCodeNo, 0, 2))=="WO"){echo "selected";}?>>Work Order</option>
+
+                            </td>
+
+                        </tr>
                         <!-- Row of input fields -->
                         <tr>
 
@@ -150,43 +171,34 @@ if (isset($_POST['delete'])) {
                                 <select name="JobIssuingDivision" id="dept" onchange='divSelect()' class="form-select"
                                     required>
 
-                                    <?php if($_SESSION['workplace']=="ACF")
-                                    {
+                                    <?php if ($_SESSION['workplace'] == "ACF") {
                                         echo "<option value='ACF'>ACF</option>";
                                     }
-                                    if($_SESSION['workplace']=="CCF")
-                                    {
+                                    if ($_SESSION['workplace'] == "CCF") {
                                         echo "<option value='CCF'>CCF</option>";
                                     }
-                                    if($_SESSION['workplace']=="DR")
-                                    {
+                                    if ($_SESSION['workplace'] == "DR") {
                                         echo "<option value='DR'>DR</option>";
                                     }
-                                    if($_SESSION['workplace']=="Flexible")
-                                    {
+                                    if ($_SESSION['workplace'] == "Flexible") {
                                         echo "<option value='Flexible'>Flexible</option>";
                                     }
-                                    if($_SESSION['workplace']=="Aluminium Rodmill")
-                                    {
+                                    if ($_SESSION['workplace'] == "Aluminium Rodmill") {
                                         echo "<option value='Aluminium Rodmill'>Aluminium Rodmill</option>";
                                     }
-                                    if($_SESSION['workplace']=="Ceylon Copper")
-                                    {
+                                    if ($_SESSION['workplace'] == "Ceylon Copper") {
                                         echo "<option value='Ceylon Copper'>Ceylon Copper</option>";
                                     }
-                                    if($_SESSION['workplace']=="Bail Room")
-                                    {
+                                    if ($_SESSION['workplace'] == "Bail Room") {
                                         echo "<option value='Bail Room'>Bail Room</option>";
                                     }
-                                    if($_SESSION['workplace']=="Drum Yard")
-                                    {
+                                    if ($_SESSION['workplace'] == "Drum Yard") {
                                         echo "<option value='Drum Yard'>Drum Yard</option>";
                                     }
-                                    if($_SESSION['workplace']=="Carpentry")
-                                    {
+                                    if ($_SESSION['workplace'] == "Carpentry") {
                                         echo "<option value='Carpentry'>Carpentry</option>";
                                     }
-                                ?>
+                                    ?>
                                     <!-- <option value="ACF" <?php if ($JobIssuingDivision == "ACF") {
                                         echo "selected";
                                     } ?>>ACF</option>>ACF</option>
@@ -218,7 +230,7 @@ if (isset($_POST['delete'])) {
 
                                 <select id='division' class="form-select" name="MachineName" required>
                                     <?php
-                                   $workplace=  $_SESSION['workplace'];
+                                    $workplace = $_SESSION['workplace'];
                                     if ($workplace == 'ACF') {
                                         $Factory = 'acfmachines';
                                     }
@@ -252,10 +264,13 @@ if (isset($_POST['delete'])) {
                                     $result = $con->query($query);
 
                                     if ($result->num_rows > 0) {
-                                        while ($row = $result->fetch_assoc()) {?>
-                                            
-                                            <option value="<?php  echo $row['MachineName']; ?> " <?php if ($MachineName==$row['MachineName']){echo 'selected';}?>><?php echo $row['MachineName']; ?></option>
-                                       <?php }
+                                        while ($row = $result->fetch_assoc()) { ?>
+
+                                            <option value="<?php echo $row['MachineName']; ?> " <?php if ($MachineName == $row['MachineName']) {
+                                                     echo 'selected';
+                                                 } ?>>
+                                                <?php echo $row['MachineName']; ?></option>
+                                        <?php }
                                     } else {
                                         echo '<option value="">No data available</option>';
                                     }
@@ -337,20 +352,20 @@ if (isset($_POST['delete'])) {
         </form>
     </div>
     </div>
-    <select name="priority" id="dept" class="form-select" required placeholder="Choose Priority">
+    <!-- <select name="priority" id="dept" class="form-select" required placeholder="Choose Priority">
         <?php
-        $query = "SELECT * FROM acfmachines";
-        $result = $con->query($query);
-
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                echo '<option value="' . $row['id'] . '">' . $row['MachineName'] . '</option>';
-            }
-        } else {
-            echo '<option value="">No data available</option>';
-        }
-        ?>
-        <!-- <script>
+        // $query = "SELECT * FROM acfmachines";
+        // $result = $con->query($query);
+        
+        // if ($result->num_rows > 0) {
+        //     while ($row = $result->fetch_assoc()) {
+        //         echo '<option value="' . $row['id'] . '">' . $row['MachineName'] . '</option>';
+        //     }
+        // } else {
+        //     echo '<option value="">No data available</option>';
+        // }
+        ?> -->
+    <!-- <script>
         function divSelect() {
 
             var select = document.getElementById('division');
