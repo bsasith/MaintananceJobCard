@@ -140,7 +140,7 @@ if (isset($_POST['delete'])) {
                                 <label class="pr-3">Job Type</label>
                             </td>
                             <td style="width:500px;padding:5px">
-                                <select name="JobType" id="JobType" class="form-select" onchange="eee()" required>
+                                <select name="JobType" id="JobType" class="form-select" onchange="updateTextbox()" required>
 
                                     <option value="JobOrder"<?php if((substr($JobCodeNo, 0, 2))=="JO"){echo "selected";}?>>Job Order</option>
                                     <option value="WorkOrder"<?php if((substr($JobCodeNo, 0, 2))=="WO"){echo "selected";}?>>Work Order</option>
@@ -156,7 +156,7 @@ if (isset($_POST['delete'])) {
                             </td>
                             <td style="width:500px;padding:5px">
                                 <input type="text" name="JobCodeNo" class="form-control" id="JobCodeNo"
-                                    value="<?php echo $JobCodeNo; ?>" readonly required>
+                                value="<?php echo $JobCodeNo; ?>" readonly required>
                             </td>
 
                         </tr>
@@ -427,7 +427,20 @@ if (isset($_POST['delete'])) {
 
         }
     </script> -->
+    <script>
+        function updateTextbox() {
+            const selectedValue = document.getElementById("JobType").value;
+            const textbox = document.getElementById("JobCodeNo");
 
+            if (selectedValue === "JobOrder") {
+                textbox.value = "JO"+"<?php echo substr($JobCodeNo, 2);?>";
+            } else if (selectedValue === "WorkOrder") {
+                textbox.value = "WO"+"<?php echo substr($JobCodeNo, 2);?>";
+            } else {
+                textbox.value = "";
+            }
+        }
+    </script>
 
 </body>
 </body>

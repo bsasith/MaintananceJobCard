@@ -76,7 +76,7 @@ if (!($_SESSION['type'] == 'puser')) {
 
                     echo $workplace;
                     
-                    $sql = "Select * from `jobdatasheet` where `JobPostingDev`='$workplace' and (`JobStatusE`='Pending' or `JobStatusM`='Pending') order by JobPostingDateTime DESC ";
+                    $sql = "Select * from `jobdatasheet` where `JobPostingDev`='$workplace' and (`JobStatusE`='Pending' or `JobStatusM`='Pending') and JobStatusE NOT IN('Started') and JobStatusM NOT IN('Started') order by JobPostingDateTime DESC ";
 
 
 
@@ -119,11 +119,10 @@ if (!($_SESSION['type'] == 'puser')) {
                                 echo "<td><a href='\MaintananceJobCard\PUser\UpdateDeleteJob.php?updateid=$id' class='btn btn-warning'>Update or <br>Delete</a></td>";
                             } else if ($TryCount == '3') {
                                 echo "<td>Disapproved <br>Job</td>  </tr>";
-                            } else if ($TryCount == '4') {
-                                echo "<td>Job started </td>  </tr>";
-                            }else{
+                            } else{
                                 echo "<td>Transferred Job</td>  </tr>";
                             }
+
 
 
 

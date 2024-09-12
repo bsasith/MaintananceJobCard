@@ -219,13 +219,16 @@ if (isset($_POST['delete'])) {
                         </td>
                         <td>
                             <?php
-                            if ($TryCount == '1') {
-                                echo "Fresh Job";
-                            } else if ($TryCount == '2') {
+                            // if ($TryCount == '1' or $TryCount == '4' ) {
+                            //     echo "Fresh Job";
+                             if ($TryCount == '2') {
                                 echo "Transferred<br>Job ";
                             } else if ($TryCount == '3') {
                                 echo "Disapproved<br> Job";
-                            } ?>
+                            } else{
+                                echo "Fresh Job";
+                            }
+                                ?>
                         </td>
                     </tr>
                     <!-- Table row -->
@@ -348,6 +351,6 @@ if (isset($_POST['delete'])) {
 
 
 
-
+    
 </body>
 </body>
