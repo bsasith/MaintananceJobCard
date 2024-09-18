@@ -120,7 +120,7 @@ if (isset($_POST['start'])) {
     </style>
 </head>
 
-<body >
+<body>
     <div class="topbar">
         <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace'] ?> User</h1>
 
@@ -143,9 +143,16 @@ if (isset($_POST['start'])) {
                             <label class="pr-3">Job Type</label>
                         </td>
                         <td style="width:500px;padding:5px">
-                            <select name="JobType" id="mySelect" class="form-select" required onchange="updateTextbox()">
-                                <option value="JO">Job Order</option>
-                                <option value="WO">Work Order</option>
+                            <select name="JobType" id="JobType" class="form-select" required
+                                onchange="updateTextbox()">
+                                <option value="JobOrder" <?php if ((substr($JobCodeNo, 0, 2)) == "JO") {
+                                    echo "selected";
+                                } ?>>
+                                    Job Order</option>
+                                <option value="WorkOrder" <?php if ((substr($JobCodeNo, 0, 2)) == "WO") {
+                                    echo "selected";
+                                } ?>>Work Order</option>
+
 
 
                         </td>
@@ -156,13 +163,28 @@ if (isset($_POST['start'])) {
                         <td>
                             Job code No
                         </td>
-                        <td>
-                            <input class="form-control" id="myTextbox" type="text" value="<?php echo "$JobCodeNo";?>" >
-                            <script>
 
-                            </script>
+                        <!-- <input class="form-control" id="JobCodeNo" type="text" value="<?php echo "$JobCodeNo"; ?>" > -->
+                        <script>
+                            function updateTextbox() {
+                                const selectedValue = document.getElementById("JobType").value;
+                                const textbox = document.getElementById("JobCodeNo");
 
+                                if (selectedValue === "JobOrder") {
+                                    textbox.value = "JO" + "<?php echo substr($JobCodeNo, 2); ?>";
+                                } else if (selectedValue === "WorkOrder") {
+                                    textbox.value = "WO" + "<?php echo substr($JobCodeNo, 2); ?>";
+                                } else {
+                                    textbox.value = "";
+                                }
+                            }
+                        </script>
+
+                        <td style="width:500px;padding:5px">
+                            <input type="text" name="JobCodeNo" class="form-control" id="JobCodeNo"
+                                value="<?php echo $JobCodeNo; ?>" readonly required>
                         </td>
+
                     </tr>
                     <!-- Table row -->
                     <tr>
@@ -259,11 +281,11 @@ if (isset($_POST['start'])) {
             </form>
         </div>
     </div>
-    <script>
+    <!-- <script>
     function updateTextbox() {
             const selectedValue = document.getElementById("mySelect").value;
             const textbox = document.getElementById("myTextbox");
-            const textbox1 = "<?php echo "$JobCodeNo";?>";
+            const textbox1 = "<?php echo "$JobCodeNo"; ?>";
             
             if (selectedValue === "JO") {
                 textbox.value = 'JO'+ textbox1.substr(2);
@@ -273,14 +295,10 @@ if (isset($_POST['start'])) {
                 textbox.value = "";
             }
         }
-    </script>
-        
-        
-        <!-- <script> -->
-        
+    </script> -->
 
-        
-    <!-- </script> -->
+
+
 
 
 </body>
