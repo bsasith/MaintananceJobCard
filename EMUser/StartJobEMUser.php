@@ -36,28 +36,22 @@ $JobStatusE = $row['JobStatusE'];
 
 // update operation
 if (isset($_POST['start'])) {
-    $Jobtype = $_POST['JobType'];
-    if ($Jobtype == "JO") {
-
-        $JobOrderPrefix = "JO";
-
-        $NewJobCodeNo = $JobOrderPrefix . substr($JobCodeNo, 2);
-
-    }
-    if ($Jobtype == "WO") {
-
-        $JobOrderPrefix = "WO";
-
-        $NewJobCodeNo = $JobOrderPrefix . substr($JobCodeNo, 2);
-
-    }
+    $JobType=$_POST['JobType'];
+if ($JobType=="JobOrder")
+{
+    $JobCodeNo="JO".(substr($JobCodeNo, 2));
+}
+if ($JobType=="WorkOrder")
+{
+    $JobCodeNo="WO".(substr($JobCodeNo, 2));
+}
 
     $_SESSION['StartJob'] = true;
     $workplace = $_SESSION['workplace'];
     if ($workplace == 'Electrical') {
-        $insert = "update jobdatasheet set JobCodeNo=' $NewJobCodeNo',JobStatusE='Started',Approval='Pending Approval' where id='$id'";
+        $insert = "update jobdatasheet set JobCodeNo='$JobCodeNo',JobStatusE='Started',Approval='Pending Approval' where id='$id'";
     } else {
-        $insert = "update jobdatasheet set JobCodeNo=' $NewJobCodeNo',JobStatusM='Started',Approval='Pending Approval' where id='$id'";
+        $insert = "update jobdatasheet set JobCodeNo='$JobCodeNo',JobStatusM='Started',Approval='Pending Approval' where id='$id'";
     }
 
 
