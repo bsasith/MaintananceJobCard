@@ -62,13 +62,13 @@ if (!($_SESSION['type'] == 'puser')) {
                 </a>
                 <a href="\MaintananceJobCard\PUser\FinishedJobsPUser.php" style="text-decoration: none;">
                 <div class="grid-item" id="box2">
-                    <h1 class="box-text" style="color: black">Pending Approvals</h1>
+                    <h1 class="box-text" style="color: black">Jobs Pending <br>for Certification</h1>
                 </div>
                 </a>
 
-                <a href="\MaintananceJobCard\PUser\ApprovedJobsPUser.php" style="text-decoration: none;">
+                <a href="\MaintananceJobCard\PUser\CertifiedJobsPUser.php" style="text-decoration: none;">
                 <div class="grid-item box5" id="box5">
-                    <h1 class="box-text" style="color: black">Approved Jobs</h1>
+                    <h1 class="box-text" style="color: black">Certified <br>Jobs</h1>
                 </div>
                 </a>
 <!-- 

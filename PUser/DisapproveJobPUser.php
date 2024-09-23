@@ -44,13 +44,12 @@ if (isset($_POST['disapprove'])) {
 
     $_SESSION['DisapproveJobSucess']=true;
 if ($ReportTo=='Electrical'){
-    $insert = "update jobdatasheet set Approval='Not Approved',JobStatusE='Pending',TryCount='3',DisapproveComment='$disapprovecomment' where id='$id'";
-}
-elseif($ReportTo=='Mechanical'){
-    $insert = "update jobdatasheet set Approval='Not Approved',JobStatusM='Pending',TryCount='3',DisapproveComment='$disapprovecomment' where id='$id'";
+    $insert = "update jobdatasheet set Certification='Not Certified',JobStatusE='Pending',TryCount='3',DisapproveComment='$disapprovecomment' where id='$id'";
+}elseif ($ReportTo=='Mechanical'){
+    $insert = "update jobdatasheet set Certification='Not Certified',JobStatusM='Pending',TryCount='3',DisapproveComment='$disapprovecomment' where id='$id'";
 }
 elseif($ReportTo=='Both'){
-    $insert = "update jobdatasheet set Approval='Not Approved',JobStatusE='Pending',JobStatusM='Pending',TryCount='3',DisapproveComment='$disapprovecomment' where id='$id'";
+    $insert = "update jobdatasheet set Certification='Not Certified',JobStatusE='Pending',JobStatusM='Pending',TryCount='3',DisapproveComment='$disapprovecomment' where id='$id'";
 }
 
     if ($con->query($insert) == TRUE) {

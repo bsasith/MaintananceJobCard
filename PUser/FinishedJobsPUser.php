@@ -63,7 +63,7 @@ if (!($_SESSION['type'] == 'puser')) {
                         <th scope="col">Job Status Electrical</th>
                         <th scope="col">Job Status Mechanical</th>
                         <th scope="col">Breif <br>Description</th>
-                        <th scope="col">Approval Status </th>
+                        <th scope="col">Certification<br> Status </th>
                         <th scope="col">Operations</th>
                     </tr>
                 </thead>
@@ -73,7 +73,7 @@ if (!($_SESSION['type'] == 'puser')) {
                     $workplace = $_SESSION['workplace'];
                     //echo $workplace;
                     
-                    $sql = "Select * from `jobdatasheet` where  (JobStatusE='Finished' or JobStatusM='Finished') and JobPostingDev='$workplace' and Approval='Pending Approval' ";
+                    $sql = "Select * from `jobdatasheet` where  (JobStatusE='Finished' or JobStatusM='Finished') and JobPostingDev='$workplace' and Certification='Pending Certification' ";
 
                     $result = mysqli_query($con, $sql);
 
@@ -90,7 +90,7 @@ if (!($_SESSION['type'] == 'puser')) {
                         $JobStatusM = $row['JobStatusM'];
                         $BriefDescription = $row['BDescription'];
                         $JobStatusM = $row['JobStatusM'];
-                        $Approval = $row['Approval'];
+                        $Certification = $row['Certification'];
 
 
 
@@ -110,19 +110,19 @@ if (!($_SESSION['type'] == 'puser')) {
          <td>$JobStatusE</td>
           <td>$JobStatusM</td>
         <td style='white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;'>$BriefDescription</td>
-         <td>$Approval</td>
+         <td>$Certification</td>
          ";
                         // echo $JobStatusE;
                         //echo $JobStatusM;
                         if ($JobStatusE == 'Finished' and $JobStatusM == 'Finished') {
-                            echo " <td><a href='\MaintananceJobCard\PUser\ApproveJobPUser.php?updateid=$id' class='btn btn-warning'>Approve <br>Job</a></td>";
-                            echo " <td><a href='\MaintananceJobCard\PUser\\DisapproveJobPUser.php?updateid=$id' class='btn btn-danger'>Disapprove <br>Job</a></td>";
+                            echo " <td><a href='\MaintananceJobCard\PUser\CertifyJobPUser.php?updateid=$id' class='btn btn-warning'>Certify <br>Job</a></td>";
+                            echo " <td><a href='\MaintananceJobCard\PUser\\DisapproveJobPUser.php?updateid=$id' class='btn btn-danger'>Not <br>Satisfied</a></td>";
                         } elseif ($JobStatusE == 'Finished' and $JobStatusM == 'NA') {
-                            echo " <td><a href='\MaintananceJobCard\PUser\ApproveJobPUser.php?updateid=$id' class='btn btn-warning'>Approve <br>Job</a></td>";
-                            echo " <td><a href='\MaintananceJobCard\PUser\DisapproveJobPUser.php?updateid=$id' class='btn btn-danger'>Disapprove <br>Job</a></td>";
+                            echo " <td><a href='\MaintananceJobCard\PUser\CertifyJobPUser.php?updateid=$id' class='btn btn-warning'>Certify <br>Job</a></td>";
+                            echo " <td><a href='\MaintananceJobCard\PUser\DisapproveJobPUser.php?updateid=$id' class='btn btn-danger'>Not <br>Satisfied</a></td>";
                         } elseif ($JobStatusE == 'NA' and $JobStatusM == 'Finished') {
-                            echo " <td><a href='\MaintananceJobCard\PUser\ApproveJobPUser.php?updateid=$id' class='btn btn-warning'>Approve <br>Job</a></td>";
-                            echo " <td><a href='\MaintananceJobCard\PUser\DisapproveJobPUser.php?updateid=$id' class='btn btn-danger'>Disapprove <br>Job</a></td>";
+                            echo " <td><a href='\MaintananceJobCard\PUser\CertifyJobPUser.php?updateid=$id' class='btn btn-warning'>Certify <br>Job</a></td>";
+                            echo " <td><a href='\MaintananceJobCard\PUser\DisapproveJobPUser.php?updateid=$id' class='btn btn-danger'>Not <br>Satisfied</a></td>";
                         } elseif ($JobStatusE == 'Finished'  ) {
                             echo "<td>pending <br>finish M</tr></td>";
                         } elseif ($JobStatusM == 'Finished'  or $JobStatusM == 'Started') {

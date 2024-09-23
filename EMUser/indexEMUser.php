@@ -64,12 +64,12 @@ if (!($_SESSION['type'] == 'euser' or $_SESSION['type'] == 'muser')) {
             </a>
             <a href="\MaintananceJobCard\EMUser\FinishedJobsEMUser.php" style="text-decoration: none;">
                 <div class="grid-item" id="box2">
-                    <h1 class="box-text" style="color: black">Finished & Pending Approvals Jobs</h1>
+                    <h1 class="box-text" style="color: black">Finished & Pending <br>for Certification</h1>
                 </div>
             </a>
-            <a href="\MaintananceJobCard\EMUser\ApprovedJobsEMUser.php" style="text-decoration: none;">
+            <a href="\MaintananceJobCard\EMUser\CertifiedJobsEMUser.php" style="text-decoration: none;">
                 <div class="grid-item box5" id="box5">
-                    <h1 class="box-text" style="color: black">Approved Jobs</h1>
+                    <h1 class="box-text" style="color: black">Certified <br>Jobs</h1>
                 </div>
             </a>
             <a href="\MaintananceJobCard\ChangeAcountinfoAlluser.php" style="text-decoration: none;">

@@ -48,7 +48,7 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
     <div class="container mt-5 ">
 
         <div class="mt-5">
-            <h1>Approved Jobs</h1>
+            <h1>Certified Jobs</h1>
             <form method="post">
                 <div><input type="text" class="form-control w-25" style="float:left" name="query"></div>
                 <div><button class="btn btn-dark mb-4 mx-3 " type="submit" name="search" style="float:left">Search</button></div>
@@ -65,7 +65,7 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                         <th scope="col">Priority</th>
                         <th scope="col">Report To</th>
                         <th scope="col">Breif <br>Description</th>
-                        <th scope="col">Approval Status </th>
+                        <th scope="col">Certification<br> Status </th>
                         <!-- <th scope="col">Operations</th> -->
                     </tr>
                 </thead>
@@ -77,9 +77,9 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                     $workplace=$_SESSION['workplace'];
                    // echo $workplace;
                     if($workplace=='Electrical'){
-                        $sql = "Select * from `jobdatasheet` where (BDescription like '%$query%' or MachineName like '%$query%' or JobCodeNo like '%$query%' or JobPostingDev like '%$query%' or ReportTo like '%$query%') and JobStatusE='Finished' and Approval='Approved' and (ReportTo='$workplace' or ReportTo='Both') ";
+                        $sql = "Select * from `jobdatasheet` where (BDescription like '%$query%' or MachineName like '%$query%' or JobCodeNo like '%$query%' or JobPostingDev like '%$query%' or ReportTo like '%$query%') and JobStatusE='Finished' and Certification='Certified' and (ReportTo='$workplace' or ReportTo='Both') ";
                     }else{
-                        $sql = "Select * from `jobdatasheet` where (BDescription like '%$query%' or MachineName like '%$query%' or JobCodeNo like '%$query%' or JobPostingDev like '%$query%' or ReportTo like '%$query%') and  JobStatusM='Finished' and Approval='Approved' and (ReportTo='$workplace' or ReportTo='Both')";
+                        $sql = "Select * from `jobdatasheet` where (BDescription like '%$query%' or MachineName like '%$query%' or JobCodeNo like '%$query%' or JobPostingDev like '%$query%' or ReportTo like '%$query%') and  JobStatusM='Finished' and Certification='Certified' and (ReportTo='$workplace' or ReportTo='Both')";
                         }
                     
                     
@@ -96,7 +96,7 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                         $ReportTo = $row['ReportTo'];
                         $BriefDescription = $row['BDescription'];
                         $JobStatusM=$row['JobStatusM'];
-                        $Approval=$row['Approval'];
+                        $Approval=$row['Certification'];
 
 
 

@@ -36,17 +36,17 @@ $JobStatusM = $row['JobStatusM'];
 
 
 // update operation
-if (isset($_POST['approve'])) {
+if (isset($_POST['certify'])) {
 
-    $_SESSION['ApproveJobSucess']=true;
+    $_SESSION['CertifyJobSucess']=true;
 
-    $insert = "update jobdatasheet set Approval='Approved' where id='$id'";
+    $insert = "update jobdatasheet set Certification='Certified' where id='$id'";
 
     if ($con->query($insert) == TRUE) {
         //$_SESSION['SubmitJobSucess']=true;
         //echo "Sucessfully Approvd Job";
 
-        header('location:.\ApproveJobSucessPUser.php');
+        header('location:.\CertifyJobSucessPUser.php');
 
     } else {
 
@@ -111,7 +111,7 @@ if (isset($_POST['approve'])) {
 
     </div>
     <div class="container mt-5 ">
-        <h1> Approve Job </h1>
+        <h1> Certify Job </h1>
         <div class="mt-3">
             <form method="POST">
                 <table class="table table-striped w-50">
@@ -192,8 +192,8 @@ if (isset($_POST['approve'])) {
                 </table>
 
 
-                <button type="submit" class="btn btn-success mt-3" name="approve"
-                    onclick="return confirm('Are you sure?')">Approve Job</button>
+                <button type="submit" class="btn btn-success mt-3" name="certify"
+                    onclick="return confirm('Are you sure?')">Certify Job</button>
                 <!-- <button type="submit" class="btn btn-warning mt-3" name="notapprove"
             onclick="return confirm('Are you sure?')">Not Approve</button> -->
                 <button type="back" class="btn btn-danger mt-3" name="back"><a

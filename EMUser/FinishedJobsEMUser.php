@@ -64,7 +64,7 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                         <th scope="col">Job Mechanical<br> Status</th>
                         
                         <th scope="col">Breif <br>Description</th>
-                        <th scope="col">Approval Status </th>
+                        <th scope="col">Certiifcation <br> Status </th>
                         <!-- <th scope="col">Operations</th> -->
                     </tr>
                 </thead>
@@ -74,9 +74,9 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                     $workplace=$_SESSION['workplace'];
                     //echo $workplace;
             if($workplace=='Electrical'){
-                $sql = "Select * from `jobdatasheet` where  JobStatusE='Finished' and (ReportTo='$workplace' or ReportTo='Both') and Approval='Pending Approval'";
+                $sql = "Select * from `jobdatasheet` where  JobStatusE='Finished' and (ReportTo='$workplace' or ReportTo='Both') and Certification='Pending Certification'";
             }else{
-                $sql = "Select * from `jobdatasheet` where  JobStatusM='Finished' and (ReportTo='$workplace' or ReportTo='Both') and Approval='Pending Approval'";
+                $sql = "Select * from `jobdatasheet` where  JobStatusM='Finished' and (ReportTo='$workplace' or ReportTo='Both') and Certification='Pending Certification'";
             }
                     
                     $result = mysqli_query($con, $sql);
@@ -94,7 +94,7 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                         $JobStatusM= $row['JobStatusM'];
                         $BriefDescription = $row['BDescription'];
                         $JobStatusM=$row['JobStatusM'];
-                        $Approval=$row['Approval'];
+                        $Certification=$row['Certification'];
 
 
 
@@ -114,7 +114,7 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
         <td>$JobStatusE</td>
         <td>$JobStatusM</td>
         <td style='white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;'>$BriefDescription</td>
-         <td>$Approval</td>
+         <td>$Certification</td>
         
       </tr>
       

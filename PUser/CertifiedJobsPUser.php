@@ -14,7 +14,7 @@ if (!($_SESSION['type'] == 'puser')) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Approved Jobs</title>
+    <title>Certified Jobs</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,7 +48,7 @@ if (!($_SESSION['type'] == 'puser')) {
     <div class="container mt-5 ">
 
         <div class="mt-5">
-            <h1>Approved Jobs</h1>
+            <h1>Certified Jobs</h1>
             <form method="post">
                 <div><input type="text" class="form-control w-25" style="float:left" name="query"></div>
                 <div><button class="btn btn-dark mb-4 mx-3 " type="submit" name="search" style="float:left">Search</button></div>
@@ -65,7 +65,7 @@ if (!($_SESSION['type'] == 'puser')) {
                         <th scope="col">Priority</th>
                         <th scope="col">Report To</th>
                         <th scope="col">Breif <br>Description</th>
-                        <th scope="col">Approval Status </th>
+                        <th scope="col">Certification<br> Status </th>
                         <!-- <th scope="col">Operations</th> -->
                     </tr>
                 </thead>
@@ -77,7 +77,7 @@ if (!($_SESSION['type'] == 'puser')) {
                     $workplace = $_SESSION['workplace'];
                     //echo $workplace;
                     
-                    $sql = "Select * from `jobdatasheet` where  (BDescription like '%$query%' or MachineName like '%$query%' or ReportTo like '%$query%' or JobPostingDateTime	like '%$query%') and (Approval='Approved' and JobPostingDev='$workplace') order by JobPostingDateTime DESC";
+                    $sql = "Select * from `jobdatasheet` where  (BDescription like '%$query%' or MachineName like '%$query%' or ReportTo like '%$query%' or JobPostingDateTime	like '%$query%') and (Certification='Certified' and JobPostingDev='$workplace') order by JobPostingDateTime DESC";
                     $result = mysqli_query($con, $sql);
 
                     while ($row = mysqli_fetch_assoc($result)) {
@@ -91,7 +91,7 @@ if (!($_SESSION['type'] == 'puser')) {
                         $ReportTo = $row['ReportTo'];
                         $BriefDescription = $row['BDescription'];
                         $JobStatusM = $row['JobStatusM'];
-                        $Approval = $row['Approval'];
+                        $Certification = $row['Certification'];
 
 
 
@@ -109,7 +109,7 @@ if (!($_SESSION['type'] == 'puser')) {
         <td>$priority</td>
         <td>$ReportTo</td>
         <td style='white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;'>$BriefDescription</td>
-         <td>$Approval</td>
+         <td>$Certification</td>
         
       </tr>
       
