@@ -97,7 +97,7 @@ if (!($_SESSION['type'] == 'puser')) {
                             "
 
 
-     <tr class='clickable-row' data-href='\MaintananceJobCard\PUser\ViewJobPUserFinished.php?updateid=$id'>
+     <tr class='clickable-row' data-href='\MaintananceJobCard\PUser\ViewJobPUserStarted.php?updateid=$id'>
         
         <td>$JobCodeNo</td>
         <td>$username</td>

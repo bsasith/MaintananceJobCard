@@ -126,7 +126,7 @@ $TryCount = $row['TryCount'];
 
     </div>
     <div class="container mt-5 ">
-        <h1>View Job </h1>
+        <h1>View Certified Job </h1>
         <div class="mt-3 mb-5">
             <form method="POST">
                 <table class="table table-striped w-50">

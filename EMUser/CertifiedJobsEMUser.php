@@ -20,7 +20,8 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jockey+One&display=swap" rel="stylesheet">
-
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+    integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="\MaintananceJobCard\styles\SubmitJobstyle.css">
 
     <style>
@@ -71,8 +72,18 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                 </thead>
                 <tbody>
                     <?php
-                     if(isset($_POST['search'])){
-                        $query=$_POST['query'];
+                    if(isset($_SESSION["searchquery"]) or (isset($_POST['search'])))
+                    {
+                        if(isset($_SESSION["searchquery"])){
+                            $query= $_SESSION["searchquery"];
+
+                        }
+                        if(isset($_POST['search'])){
+                            $query=$_POST['query'];
+                            $_SESSION["searchquery"]=$query;
+                        }
+                    //  if(isset($_POST['search'])){
+                        // $query=$_POST['query'];
                     //sql fetch data
                     $workplace=$_SESSION['workplace'];
                    // echo $workplace;
@@ -104,7 +115,7 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                             "
 
 
-     <tr>
+     <tr class='clickable-row' data-href='\MaintananceJobCard\EMUser\ViewJobEMUserCertifed.php?updateid=$id'>
         
         <td>$JobCodeNo</td>
         <td>$username</td>
@@ -130,6 +141,11 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
     </div>
 
 
-
-</body>
+    <script>
+        jQuery(document).ready(function ($) {
+            $(".clickable-row").click(function () {
+                window.location = $(this).data("href");
+            });
+        });
+    </script>
 </body>

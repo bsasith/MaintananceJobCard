@@ -98,7 +98,7 @@ if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
                         echo
                             "
 
-        <tr class='clickable-row' data-href='\MaintananceJobCard\EMUser\ViewJobEMUser.php?updateid=$id'>
+        <tr class='clickable-row' data-href='\MaintananceJobCard\EMUser\ViewJobEMUserPending.php?updateid=$id'>
     
         
         <td>$JobCodeNo</td>

@@ -2,7 +2,7 @@
 include '../connect.php';
 include '../session.php';
 
-if (!($_SESSION['type'] == 'puser')) {
+if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
     header('location:..\index.php');
 }
 
@@ -21,12 +21,12 @@ $username = $_SESSION['username'];
 $JobIssuingDateTime = $row['JobPostingDateTime'];
 $JobIssuingDivision = $row['JobPostingDev'];
 $MachineName = $row['MachineName'];
-$Username2 = $row['Username'];
 $priority = $row['Priority'];
 $ReportTo = $row['ReportTo'];
 $BriefDescription = $row['BDescription'];
 $JobStatusM = $row['JobStatusM'];
 $JobStatusE = $row['JobStatusE'];
+$Username2 = $row['Username'];
 $FinishedCommentE = $row['FinishedCommentE'];
 $FinishedCommentM = $row['FinishedCommentM'];
 $TransferCommentE = $row['TransferCommentE'];
@@ -77,16 +77,16 @@ $TryCount = $row['TryCount'];
 
 
 // delete operation
-// if (isset($_POST['delete'])) {
+if (isset($_POST['delete'])) {
 
-//     $sql = "delete  from `jobdatasheet` where id='$idu'";
-//     $result = mysqli_query($con, $sql);
-//     $_SESSION['DeleteJobSucess'] = true;
-//     header('location:.\DeleteJobSuccess.php');
+    $sql = "delete  from `jobdatasheet` where id='$idu'";
+    $result = mysqli_query($con, $sql);
+    $_SESSION['DeleteJobSucess'] = true;
+    header('location:.\DeleteJobSuccess.php');
 
 
 
-// }
+}
 
 
 
@@ -115,7 +115,7 @@ $TryCount = $row['TryCount'];
     </style>
 </head>
 
-<body>
+<body onload="divSelect()">
     <div class="topbar">
         <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace'] ?> User</h1>
 
@@ -126,7 +126,7 @@ $TryCount = $row['TryCount'];
 
     </div>
     <div class="container mt-5 ">
-        <h1>View Pending Job </h1>
+        <h1>View Job </h1>
         <div class="mt-3 mb-5">
             <form method="POST">
                 <table class="table table-striped w-50">
@@ -143,7 +143,7 @@ $TryCount = $row['TryCount'];
                     <!-- Table row -->
                     <tr>
                         <td>
-                            Issuing User
+                        Issuing User
                         </td>
                         <td>
                             <?php echo $Username2; ?>
@@ -219,16 +219,13 @@ $TryCount = $row['TryCount'];
                         </td>
                         <td>
                             <?php
-                            // if ($TryCount == '1' or $TryCount == '4' ) {
-                            //     echo "Fresh Job";
-                            if ($TryCount == '2') {
+                             if ($TryCount == '1') {
+                                echo "Fresh Job";
+                            } else if ($TryCount == '2') {
                                 echo "Transferred<br>Job ";
                             } else if ($TryCount == '3') {
                                 echo "Disapproved<br> Job";
-                            } else {
-                                echo "Fresh Job";
-                            }
-                            ?>
+                            }?>
                         </td>
                     </tr>
                     <!-- Table row -->
@@ -341,13 +338,9 @@ $TryCount = $row['TryCount'];
                 <button type="back" class="btn btn-danger mt-3 mx-2" name="back"><a
                         href="\MaintananceJobCard\EMUser\indexEMUser.php" style="text-decoration:none;color:white">Back
                         to Main</a></button>
-                <button type="back" class="btn btn-warning mt-3 text-dark" name="back">
-                    <a class='text-dark' href='\MaintananceJobCard\PUser\DisplayPendingJobListPuser.php'
-                        style='text-decoration:none;color:white'>
-                        Back to List
-
-                </button>
-
+                        <button type="back" class="btn btn-warning mt-3" name="back"><a class="text-dark"
+                    href="\MaintananceJobCard\EMUser\FinishedJobsEMUser.php" style="text-decoration:none;color:white">Back to
+                    list</a></button>
             </form>
         </div>
     </div>
