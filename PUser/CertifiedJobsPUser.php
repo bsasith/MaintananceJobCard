@@ -20,7 +20,8 @@ if (!($_SESSION['type'] == 'puser')) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jockey+One&display=swap" rel="stylesheet">
-
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+    integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="\MaintananceJobCard\styles\SubmitJobstyle.css">
 
     <style>
@@ -71,54 +72,113 @@ if (!($_SESSION['type'] == 'puser')) {
                 </thead>
                 <tbody>
                     <?php
-                    if(isset($_POST['search'])){
-                        $query=$_POST['query'];
-                    //sql fetch data
-                    $workplace = $_SESSION['workplace'];
-                    //echo $workplace;
                     
-                    $sql = "Select * from `jobdatasheet` where  (BDescription like '%$query%' or MachineName like '%$query%' or ReportTo like '%$query%' or JobPostingDateTime	like '%$query%') and (Certification='Certified' and JobPostingDev='$workplace') order by JobPostingDateTime DESC";
-                    $result = mysqli_query($con, $sql);
+                    if(isset($_SESSION["searchquery"]) or (isset($_POST['search'])))
+                    {
+                        if(isset($_SESSION["searchquery"])){
+                            $query= $_SESSION["searchquery"];
 
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        $id = $row['id'];
-                        $JobCodeNo = $row['JobCodeNo'];
-                        $username = $row['Username'];
-                        $JobIssuingDateTime = $row['JobPostingDateTime'];
-                        $JobIssuingDivision = $row['JobPostingDev'];
-                        $MachineName = $row['MachineName'];
-                        $priority = $row['Priority'];
-                        $ReportTo = $row['ReportTo'];
-                        $BriefDescription = $row['BDescription'];
-                        $JobStatusM = $row['JobStatusM'];
-                        $Certification = $row['Certification'];
+                        }
+                        if(isset($_POST['search'])){
+                            $query=$_POST['query'];
+                            $_SESSION["searchquery"]=$query;
+                        }
+                            
+                        //sql fetch data
+                        $workplace = $_SESSION['workplace'];
+                        //echo $workplace;
+                        
+                        $sql = "Select * from `jobdatasheet` where  (BDescription like '%$query%' or MachineName like '%$query%' or ReportTo like '%$query%' or JobPostingDateTime	like '%$query%') and (Certification='Certified' and JobPostingDev='$workplace') order by JobPostingDateTime DESC";
+                        $result = mysqli_query($con, $sql);
+    
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            $id = $row['id'];
+                            $JobCodeNo = $row['JobCodeNo'];
+                            $username = $row['Username'];
+                            $JobIssuingDateTime = $row['JobPostingDateTime'];
+                            $JobIssuingDivision = $row['JobPostingDev'];
+                            $MachineName = $row['MachineName'];
+                            $priority = $row['Priority'];
+                            $ReportTo = $row['ReportTo'];
+                            $BriefDescription = $row['BDescription'];
+                            $JobStatusM = $row['JobStatusM'];
+                            $Certification = $row['Certification'];
+    
+    
+    
+                            echo
+                                "
+    
+    
+         <tr class='clickable-row' data-href='\MaintananceJobCard\PUser\ViewJobPUserCertified.php?updateid=$id'>
+            
+            <td>$JobCodeNo</td>
+            <td>$username</td>
+            <td>$JobIssuingDateTime</td>
+            <td>$JobIssuingDivision</td>
+            <td>$MachineName</td>
+            <td>$priority</td>
+            <td>$ReportTo</td>
+            <td style='white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;'>$BriefDescription</td>
+             <td>$Certification</td>
+            
+          </tr>
+          
+          ";
+    //unset($_SESSION["searchquery"]);
+                        } 
+                    }
+    //                 else if (isset($_POST['search'])){
+    //                     $query=$_POST['query'];
+    //                     $_SESSION["searchquery"]=$query;
+    //                 //sql fetch data
+    //                 $workplace = $_SESSION['workplace'];
+    //                 //echo $workplace;
+                    
+    //                 $sql = "Select * from `jobdatasheet` where  (BDescription like '%$query%' or MachineName like '%$query%' or ReportTo like '%$query%' or JobPostingDateTime	like '%$query%') and (Certification='Certified' and JobPostingDev='$workplace') order by JobPostingDateTime DESC";
+    //                 $result = mysqli_query($con, $sql);
+
+    //                 while ($row = mysqli_fetch_assoc($result)) {
+    //                     $id = $row['id'];
+    //                     $JobCodeNo = $row['JobCodeNo'];
+    //                     $username = $row['Username'];
+    //                     $JobIssuingDateTime = $row['JobPostingDateTime'];
+    //                     $JobIssuingDivision = $row['JobPostingDev'];
+    //                     $MachineName = $row['MachineName'];
+    //                     $priority = $row['Priority'];
+    //                     $ReportTo = $row['ReportTo'];
+    //                     $BriefDescription = $row['BDescription'];
+    //                     $JobStatusM = $row['JobStatusM'];
+    //                     $Certification = $row['Certification'];
 
 
 
-                        echo
-                            "
+    //                     echo
+    //                         "
 
 
-     <tr>
+    //  <tr class='clickable-row' data-href='\MaintananceJobCard\PUser\ViewJobPUserCertified.php?updateid=$id'>
         
-        <td>$JobCodeNo</td>
-        <td>$username</td>
-        <td>$JobIssuingDateTime</td>
-        <td>$JobIssuingDivision</td>
-        <td>$MachineName</td>
-        <td>$priority</td>
-        <td>$ReportTo</td>
-        <td style='white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;'>$BriefDescription</td>
-         <td>$Certification</td>
+    //     <td>$JobCodeNo</td>
+    //     <td>$username</td>
+    //     <td>$JobIssuingDateTime</td>
+    //     <td>$JobIssuingDivision</td>
+    //     <td>$MachineName</td>
+    //     <td>$priority</td>
+    //     <td>$ReportTo</td>
+    //     <td style='white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;'>$BriefDescription</td>
+    //      <td>$Certification</td>
         
-      </tr>
+    //   </tr>
       
-      ";
+    //   ";
 
-                    } }?>
+    //                 } }
+                    
+                    ?>
                 </tbody>
             </table>
-            <button type="back" class="btn btn-danger mt-3" name="back"><a
+            <button type="back" class="btn btn-danger mt-3" name="back" ><a
                     href="\MaintananceJobCard\PUser\indexPUser.php" style="text-decoration:none;color:white">Back to
                     Main</a></button>
         </div>
@@ -126,5 +186,11 @@ if (!($_SESSION['type'] == 'puser')) {
 
 
 
-</body>
+    <script>
+        jQuery(document).ready(function ($) {
+            $(".clickable-row").click(function () {
+                window.location = $(this).data("href");
+            });
+        });
+    </script>
 </body>

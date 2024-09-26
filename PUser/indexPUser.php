@@ -4,7 +4,9 @@ include '../session.php';
 if (!($_SESSION['type'] == 'puser')) {
     header('location:..\index.php');
 }
-
+if(isset($_SESSION["searchquery"])){
+    unset($_SESSION["searchquery"]);
+}
 
 ?>
 <!DOCTYPE html>

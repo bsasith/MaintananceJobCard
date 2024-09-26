@@ -3,7 +3,7 @@ include '../connect.php';
 include '../session.php';
 
 if (!($_SESSION['type'] == 'puser')) {
-    header('location:..\login.php');
+    header('location:..\index.php');
 }
 
 ?>
@@ -101,7 +101,7 @@ if (!($_SESSION['type'] == 'puser')) {
 
  echo
                                 "
-                        <tr class='clickable-row' data-href='\MaintananceJobCard\PUser\ViewJobPUser.php?updateid=$id'>
+                        <tr class='clickable-row' data-href='\MaintananceJobCard\PUser\ViewJobPUserPending.php?updateid=$id'>
                             
                            
         <td>$JobCodeNo</td>

@@ -22,7 +22,8 @@ if (!($_SESSION['type'] == 'puser')) {
     <link href="https://fonts.googleapis.com/css2?family=Jockey+One&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="\MaintananceJobCard\styles\SubmitJobstyle.css">
-
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+    integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <style>
         h1 {
             font-family: "Jockey One", sans-serif;
@@ -89,7 +90,7 @@ if (!($_SESSION['type'] == 'puser')) {
                             "
 
 
-     <tr>
+     <tr class='clickable-row' data-href='\MaintananceJobCard\PUser\ViewJobPUser.php?updateid=$id'>
         
         <td>$JobCodeNo</td>
         <td>$username</td>
@@ -115,6 +116,11 @@ if (!($_SESSION['type'] == 'puser')) {
     </div>
 
 
-
-</body>
+    <script>
+        jQuery(document).ready(function ($) {
+            $(".clickable-row").click(function () {
+                window.location = $(this).data("href");
+            });
+        });
+    </script>
 </body>

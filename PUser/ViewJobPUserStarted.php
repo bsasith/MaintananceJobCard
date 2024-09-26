@@ -21,7 +21,7 @@ $username = $_SESSION['username'];
 $JobIssuingDateTime = $row['JobPostingDateTime'];
 $JobIssuingDivision = $row['JobPostingDev'];
 $MachineName = $row['MachineName'];
-$Username2=$row['Username'];
+$Username2 = $row['Username'];
 $priority = $row['Priority'];
 $ReportTo = $row['ReportTo'];
 $BriefDescription = $row['BDescription'];
@@ -77,16 +77,16 @@ $TryCount = $row['TryCount'];
 
 
 // delete operation
-if (isset($_POST['delete'])) {
+// if (isset($_POST['delete'])) {
 
-    $sql = "delete  from `jobdatasheet` where id='$idu'";
-    $result = mysqli_query($con, $sql);
-    $_SESSION['DeleteJobSucess'] = true;
-    header('location:.\DeleteJobSuccess.php');
+//     $sql = "delete  from `jobdatasheet` where id='$idu'";
+//     $result = mysqli_query($con, $sql);
+//     $_SESSION['DeleteJobSucess'] = true;
+//     header('location:.\DeleteJobSuccess.php');
 
 
 
-}
+// }
 
 
 
@@ -115,7 +115,7 @@ if (isset($_POST['delete'])) {
     </style>
 </head>
 
-<body onload="divSelect()">
+<body>
     <div class="topbar">
         <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace'] ?> User</h1>
 
@@ -221,14 +221,14 @@ if (isset($_POST['delete'])) {
                             <?php
                             // if ($TryCount == '1' or $TryCount == '4' ) {
                             //     echo "Fresh Job";
-                             if ($TryCount == '2') {
+                            if ($TryCount == '2') {
                                 echo "Transferred<br>Job ";
                             } else if ($TryCount == '3') {
                                 echo "Disapproved<br> Job";
-                            } else{
+                            } else {
                                 echo "Fresh Job";
                             }
-                                ?>
+                            ?>
                         </td>
                     </tr>
                     <!-- Table row -->
@@ -341,16 +341,19 @@ if (isset($_POST['delete'])) {
                 <button type="back" class="btn btn-danger mt-3 mx-2" name="back"><a
                         href="\MaintananceJobCard\EMUser\indexEMUser.php" style="text-decoration:none;color:white">Back
                         to Main</a></button>
-                <button type="back" class="btn btn-warning mt-3" name="back"><a class="text-dark"
-                        href="\MaintananceJobCard\PUser\DisplayPendingJobListPuser.php"
-                        style="text-decoration:none;color:white">Back to
-                        list</a></button>
+                <button type="back" class="btn btn-warning mt-3 text-dark" name="back">
+                    <a class='text-dark' href='\MaintananceJobCard\PUser\StartedJobsPuser.php'
+                        style='text-decoration:none;color:white'>
+                        Back to List
+
+                </button>
+
             </form>
         </div>
     </div>
 
 
 
-    
+
 </body>
 </body>

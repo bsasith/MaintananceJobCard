@@ -20,7 +20,8 @@ if (!($_SESSION['type'] == 'puser')) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jockey+One&display=swap" rel="stylesheet">
-
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+    integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="\MaintananceJobCard\styles\SubmitJobstyle.css">
 
     <style>
@@ -98,7 +99,7 @@ if (!($_SESSION['type'] == 'puser')) {
                             "
 
 
-     <tr>
+     <tr class='clickable-row' data-href='\MaintananceJobCard\PUser\ViewJobPUserFinished.php?updateid=$id'>
         
         <td>$JobCodeNo</td>
         <td>$username</td>
@@ -141,7 +142,13 @@ if (!($_SESSION['type'] == 'puser')) {
         </div>
     </div>
 
-
+    <script>
+        jQuery(document).ready(function ($) {
+            $(".clickable-row").click(function () {
+                window.location = $(this).data("href");
+            });
+        });
+    </script>
 
 </body>
 </body>
