@@ -26,6 +26,7 @@ if(isset($_SESSION["searchquery"])){
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jockey+One&display=swap" rel="stylesheet">
+    <script src="https://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
 </head>
 
 <body>
@@ -113,12 +114,18 @@ if(isset($_SESSION["searchquery"])){
 
             <!-- </div> -->
 
-
+            <center><div  id="chart-container">FusionCharts will render here</div></center>
+<script src="../js/jquery-2.1.4.js"></script>
+  <script src="../js/fusioncharts.js"></script>
+  <script src="../js/fusioncharts.charts.js"></script>
+  <script src="../js/themes/fusioncharts.theme.zune.js"></script>
+  <script src="../js/app.js"></script>
         
 
     </div>
 
     </div>
+
 
 </body>
 

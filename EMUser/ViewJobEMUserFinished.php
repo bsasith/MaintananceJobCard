@@ -33,6 +33,7 @@ $TransferCommentE = $row['TransferCommentE'];
 $TransferCommentM = $row['TransferCommentE'];
 $DisapproveComment = $row['DisapproveComment'];
 $TryCount = $row['TryCount'];
+$DownTime = $row['DownTime'];
 // $gen = explode(",",$gender);
 // $lang = explode(",",$datas);
 // $pl = explode(",",$place);
@@ -143,7 +144,7 @@ if (isset($_POST['delete'])) {
                     <!-- Table row -->
                     <tr>
                         <td>
-                        Issuing User
+                            Issuing User
                         </td>
                         <td>
                             <?php echo $Username2; ?>
@@ -219,13 +220,13 @@ if (isset($_POST['delete'])) {
                         </td>
                         <td>
                             <?php
-                             if ($TryCount == '1') {
+                            if ($TryCount == '1') {
                                 echo "Fresh Job";
                             } else if ($TryCount == '2') {
                                 echo "Transferred<br>Job ";
                             } else if ($TryCount == '3') {
                                 echo "Disapproved<br> Job";
-                            }?>
+                            } ?>
                         </td>
                     </tr>
                     <!-- Table row -->
@@ -304,15 +305,38 @@ if (isset($_POST['delete'])) {
                         </td>
                         <td>
                             <?php
-                            date_default_timezone_set("Asia/Colombo");
-                            $now = date("Y-m-d H:i:s");
-                            $start_date = new DateTime(date("Y-m-d H:i:s"));
-                            $since_start = $start_date->diff(new DateTime($JobIssuingDateTime));
-                            echo $since_start->days . ' days total<br>';
-                            echo $since_start->m . ' months<br>';
-                            echo $since_start->d . ' days<br>';
-                            echo $since_start->h . ' hours<br>';
-                            echo $since_start->i . ' minutes<br>';
+                            // The downtime string in format "00-00-00 07:24:43" (years-months-days hours:minutes:seconds)
+                            
+
+                            // Split the string into date part and time part
+                            list($datePart, $timePart) = explode(' ', $DownTime);
+
+                            // Extract years, months, and days from the date part
+                            list($years, $months, $days) = explode('-', $datePart);
+
+                            // Extract hours, minutes, and seconds from the time part
+                            list($hours, $minutes, $seconds) = explode(':', $timePart);
+
+                            // Convert cumulative time to hours, minutes, days, and months
+// Assuming 1 month = 30 days, 1 year = 12 months, 1 day = 24 hours
+                            
+                            // Convert years to months, and add to existing months
+                            $totalMonths = ($years * 12) + $months;
+
+                            // Add days as they are
+                            $totalDays = $days;
+
+                            // Total hours are the hours from time string
+                            $totalHours = $hours;
+
+                            // Total minutes are the minutes from the time string
+                            $totalMinutes = $minutes;
+
+                            // Output the result cumulatively
+                            echo "Months: $totalMonths\n";
+                            echo "Days: $totalDays\n";
+                            echo "Hours: $totalHours\n";
+                            echo "Minutes: $totalMinutes\n";
                             ?>
                         </td>
                     </tr>
@@ -338,9 +362,10 @@ if (isset($_POST['delete'])) {
                 <button type="back" class="btn btn-danger mt-3 mx-2" name="back"><a
                         href="\MaintananceJobCard\EMUser\indexEMUser.php" style="text-decoration:none;color:white">Back
                         to Main</a></button>
-                        <button type="back" class="btn btn-warning mt-3" name="back"><a class="text-dark"
-                    href="\MaintananceJobCard\EMUser\FinishedJobsEMUser.php" style="text-decoration:none;color:white">Back to
-                    list</a></button>
+                <button type="back" class="btn btn-warning mt-3" name="back"><a class="text-dark"
+                        href="\MaintananceJobCard\EMUser\FinishedJobsEMUser.php"
+                        style="text-decoration:none;color:white">Back to
+                        list</a></button>
             </form>
         </div>
     </div>
