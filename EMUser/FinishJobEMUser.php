@@ -40,10 +40,16 @@ if (isset($_POST['finish'])) {
     $manpower=$_POST['manpower'];
     $finishcomment=$_POST['finishcomment'];
     date_default_timezone_set("Asia/Colombo");
-    $now = date("Y-m-d H:i:s");
-    $start_date = new DateTime(date("Y-m-d H:i:s"));
-    $since_start = $start_date->diff(new DateTime($JobIssuingDateTime));
-    $interval_string = $since_start->format('%Y-%M-%D %H:%I:%S');
+$now = date("Y-m-d H:i:s");
+$start_date = new DateTime($now); // Current date and time
+$jobIssuingDateTime = new DateTime($JobIssuingDateTime); // Convert the job issuing date-time string to DateTime object
+
+// Calculate the difference
+$since_start = $start_date->diff($jobIssuingDateTime);
+
+// Get the total difference in hours
+$totalHours = $since_start->days * 24 + $since_start->h + $since_start->i / 60 + $since_start->s / 3600;
+
     //$since_start=strval($since_start);
 
     ///////////////////
@@ -52,9 +58,9 @@ if (isset($_POST['finish'])) {
     $finishcomment = $_POST['finishcomment'];
     $_SESSION['FinishJob'] = true;
     if ($workplace == 'Electrical') {
-        $insert = "update jobdatasheet set JobStatusE='Finished',FinishedCommentE='$finishcomment',DownTime='$interval_string',ManPowerInvolved='$manpower' where id='$id'";
+        $insert = "update jobdatasheet set JobStatusE='Finished',FinishedCommentE='$finishcomment',DownTime='$totalHours',ManPowerInvolved='$manpower' where id='$id'";
     } elseif ($workplace == 'Mechanical') {
-        $insert = "update jobdatasheet set JobStatusM='Finished',FinishedCommentM='$finishcomment',DownTime='$interval_string',ManPowerInvolved='$manpower' where id='$id'";
+        $insert = "update jobdatasheet set JobStatusM='Finished',FinishedCommentM='$finishcomment',DownTime='$totalHours',ManPowerInvolved='$manpower' where id='$id'";
     }
 
     //$insert = "update jobdatasheet set JobStatusM='Finished' where id='$id'";

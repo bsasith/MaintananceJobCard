@@ -1,19 +1,36 @@
 <?php
 include '../connect.php';
-
+include '../session.php';
 
  //the SQL query to be executed
- $query = "SELECT 
-    JobPostingDev, 
-    ROUND(SUM(TIME_TO_SEC(DownTime)) / 3600, 2) AS TotalDownTimeInHours
-FROM 
-    jobdatasheet
-WHERE 
-    MONTH(JobPostingDateTime) = MONTH(CURRENT_DATE())
-    AND YEAR(JobPostingDateTime) = YEAR(CURRENT_DATE())
-    AND ReportTo = 'Mechanical' 
-GROUP BY 
-    JobPostingDev;";
+ if ($_SESSION['type'] == 'euser') {
+
+  $query = "SELECT 
+     JobPostingDev, 
+     ROUND(SUM(DownTime)) AS TotalDownTimeInHours
+ FROM 
+     jobdatasheet
+ WHERE 
+     MONTH(JobPostingDateTime) = MONTH(CURRENT_DATE())
+     AND YEAR(JobPostingDateTime) = YEAR(CURRENT_DATE())
+     AND ReportTo = 'Electrical' or 'Both'
+ GROUP BY 
+     JobPostingDev;";
+ }
+ if ($_SESSION['type'] == 'muser') {
+
+   $query = "SELECT 
+      JobPostingDev, 
+      ROUND(SUM(DownTime)) AS TotalDownTimeInHours
+  FROM 
+      jobdatasheet
+  WHERE 
+      MONTH(JobPostingDateTime) = MONTH(CURRENT_DATE())
+      AND YEAR(JobPostingDateTime) = YEAR(CURRENT_DATE())
+      AND ReportTo = 'Mechanical' or 'Both'
+  GROUP BY 
+      JobPostingDev;";
+  }
  //storing the result of the executed query
  $result = $con->query($query);
 

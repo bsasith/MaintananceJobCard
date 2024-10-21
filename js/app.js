@@ -1,14 +1,14 @@
 $(function () {
     $.ajax({
-        url: 'http://localhost/MaintananceJobCard/PUser/chart_data.php',
+        url: 'http://localhost/MaintananceJobCard/EMUser/chart_data.php',
         type: 'GET',
         dataType: 'json', // Ensures the response is treated as JSON
         success: function (data) {
             // `data` will already be a parsed JSON object because of dataType: 'json'
             var chartProperties = {
                 "caption": "Total down time This month in Hours for Each Factory",
-                "xAxisName": "Hours",
-                "yAxisName": "Factory",
+                "xAxisName": "Factory",
+                "yAxisName": "Hours",
                 "rotatevalues": "1",
                 "theme": "zune"
             };

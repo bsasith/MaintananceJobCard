@@ -5,7 +5,7 @@ if (!($_SESSION['type'] == 'euser' or $_SESSION['type'] == 'muser')) {
     header('location:..\index.php');
 }
 
-
+echo $_SESSION['type'];
 ?>
 <!DOCTYPE html>
 <html lang="en">

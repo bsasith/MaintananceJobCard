@@ -114,12 +114,6 @@ if(isset($_SESSION["searchquery"])){
 
             <!-- </div> -->
 
-            <center><div  id="chart-container">FusionCharts will render here</div></center>
-<script src="../js/jquery-2.1.4.js"></script>
-  <script src="../js/fusioncharts.js"></script>
-  <script src="../js/fusioncharts.charts.js"></script>
-  <script src="../js/themes/fusioncharts.theme.zune.js"></script>
-  <script src="../js/app.js"></script>
         
 
     </div>

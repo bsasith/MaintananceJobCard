@@ -144,7 +144,7 @@ if (isset($_POST['delete'])) {
                     <!-- Table row -->
                     <tr>
                         <td>
-                        Issuing User
+                            Issuing User
                         </td>
                         <td>
                             <?php echo $Username2; ?>
@@ -220,13 +220,13 @@ if (isset($_POST['delete'])) {
                         </td>
                         <td>
                             <?php
-                             if ($TryCount == '1') {
+                            if ($TryCount == '1') {
                                 echo "Fresh Job";
                             } else if ($TryCount == '2') {
                                 echo "Transferred<br>Job ";
                             } else if ($TryCount == '3') {
                                 echo "Disapproved<br> Job";
-                            }?>
+                            } ?>
                         </td>
                     </tr>
                     <!-- Table row -->
@@ -305,39 +305,14 @@ if (isset($_POST['delete'])) {
                         </td>
                         <td>
                         <?php
-// The downtime string in format "00-00-00 07:24:43" (years-months-days hours:minutes:seconds)
+                            
+                            $DownTimeDays=round($DownTime/24,0);
+                            $DownTimeHoursResidue=round(fmod($DownTime,24),0);
+                            $DownTiMinutesResidue=round(fmod($DownTime,1)*60,0);
+                             echo "days: $DownTimeDays and hours: $DownTimeHoursResidue and  Minutes:  $DownTiMinutesResidue";
+                           
+                             ?>
 
-
-// Split the string into date part and time part
-list($datePart, $timePart) = explode(' ', $DownTime);
-
-// Extract years, months, and days from the date part
-list($years, $months, $days) = explode('-', $datePart);
-
-// Extract hours, minutes, and seconds from the time part
-list($hours, $minutes, $seconds) = explode(':', $timePart);
-
-// Convert cumulative time to hours, minutes, days, and months
-// Assuming 1 month = 30 days, 1 year = 12 months, 1 day = 24 hours
-
-// Convert years to months, and add to existing months
-$totalMonths = ($years * 12) + $months;
-
-// Add days as they are
-$totalDays = $days;
-
-// Total hours are the hours from time string
-$totalHours = $hours;
-
-// Total minutes are the minutes from the time string
-$totalMinutes = $minutes;
-
-// Output the result cumulatively
-echo "Months: $totalMonths\n";
-echo "Days: $totalDays\n";
-echo "Hours: $totalHours\n";
-echo "Minutes: $totalMinutes\n";
-?>
                         </td>
                     </tr>
                     </tr>
@@ -362,9 +337,10 @@ echo "Minutes: $totalMinutes\n";
                 <button type="back" class="btn btn-danger mt-3 mx-2" name="back"><a
                         href="\MaintananceJobCard\EMUser\indexEMUser.php" style="text-decoration:none;color:white">Back
                         to Main</a></button>
-                        <button type="back" class="btn btn-warning mt-3" name="back"><a class="text-dark"
-                    href="\MaintananceJobCard\EMUser\CertifiedJobsEMUser.php" style="text-decoration:none;color:white">Back to
-                    list</a></button>
+                <button type="back" class="btn btn-warning mt-3" name="back"><a class="text-dark"
+                        href="\MaintananceJobCard\EMUser\CertifiedJobsEMUser.php"
+                        style="text-decoration:none;color:white">Back to
+                        list</a></button>
             </form>
         </div>
     </div>
