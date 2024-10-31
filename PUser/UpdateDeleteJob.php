@@ -262,19 +262,22 @@ if (isset($_POST['delete'])) {
 
                                     $query = "SELECT * FROM $Factory";
                                     $result = $con->query($query);
-
+                                    echo $row['MachineName'];
                                     if ($result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) { ?>
 
-                                            <option value="<?php echo $row['MachineName']; ?> " <?php if ($MachineName == $row['MachineName']) {
+                                            <option value="<?php echo $row['MachineName']; ?> " <?php if ($row['MachineName'] === $MachineName ) {
                                                      echo 'selected';
                                                  } ?>>
                                                 <?php echo $row['MachineName']; ?></option>
+                                           
                                         <?php }
+
                                     } else {
                                         echo '<option value="">No data available</option>';
                                     }
                                     ?>
+                                    
                                     <!-- <option value="<?php $MachineName ?>" <?php if ($MachineName != null) {
                                           echo "selected";
                                       } ?>tion> -->
