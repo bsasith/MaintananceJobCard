@@ -58,9 +58,9 @@ $totalHours = $since_start->days * 24 + $since_start->h + $since_start->i / 60 +
     $finishcomment = $_POST['finishcomment'];
     $_SESSION['FinishJob'] = true;
     if ($workplace == 'Electrical') {
-        $insert = "update jobdatasheet set JobStatusE='Finished',FinishedCommentE='$finishcomment',DownTime='$totalHours',ManPowerInvolved='$manpower' where id='$id'";
+        $insert = "update jobdatasheet set JobStatusE='Finished',FinishedCommentE='$finishcomment',DownTimeE='$totalHours',ManPowerInvolved='$manpower' where id='$id'";
     } elseif ($workplace == 'Mechanical') {
-        $insert = "update jobdatasheet set JobStatusM='Finished',FinishedCommentM='$finishcomment',DownTime='$totalHours',ManPowerInvolved='$manpower' where id='$id'";
+        $insert = "update jobdatasheet set JobStatusM='Finished',FinishedCommentM='$finishcomment',DownTimeM='$totalHours',ManPowerInvolved='$manpower' where id='$id'";
     }
 
     //$insert = "update jobdatasheet set JobStatusM='Finished' where id='$id'";

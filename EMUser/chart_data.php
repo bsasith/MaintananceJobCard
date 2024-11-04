@@ -7,7 +7,7 @@ include '../session.php';
 
   $query = "SELECT 
      JobPostingDev, 
-     ROUND(SUM(DownTime)) AS TotalDownTimeInHours
+     ROUND(SUM(DownTimeE)) AS TotalDownTimeInHours
  FROM 
      jobdatasheet
  WHERE 
@@ -21,7 +21,7 @@ include '../session.php';
 
    $query = "SELECT 
       JobPostingDev, 
-      ROUND(SUM(DownTime)) AS TotalDownTimeInHours
+      ROUND(SUM(DownTimeM)) AS TotalDownTimeInHours
   FROM 
       jobdatasheet
   WHERE 

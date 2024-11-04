@@ -33,7 +33,8 @@ $TransferCommentE = $row['TransferCommentE'];
 $TransferCommentM = $row['TransferCommentE'];
 $DisapproveComment = $row['DisapproveComment'];
 $TryCount = $row['TryCount'];
-$DownTime = $row['DownTime'];
+$DownTimeE = $row['DownTimeE'];
+$DownTimeM = $row['DownTimeM'];
 // $gen = explode(",",$gender);
 // $lang = explode(",",$datas);
 // $pl = explode(",",$place);
@@ -305,12 +306,19 @@ if (isset($_POST['delete'])) {
                         </td>
                         <td>
                         <?php
-                            
-                            $DownTimeDays=round($DownTime/24,0);
-                            $DownTimeHoursResidue=round(fmod($DownTime,24),0);
-                            $DownTiMinutesResidue=round(fmod($DownTime,1)*60,0);
+                        if ($_SESSION['type'] == 'euser') {
+                                                                          
+                            $DownTimeDays=round($DownTimeE/24,0);
+                            $DownTimeHoursResidue=round(fmod($DownTimeE,24),0);
+                            $DownTiMinutesResidue=round(fmod($DownTimeE,1)*60,0);
                              echo "days: $DownTimeDays and hours: $DownTimeHoursResidue and  Minutes:  $DownTiMinutesResidue";
-                           
+                        }else if ($_SESSION['type'] == 'muser')
+                        {
+                            $DownTimeDays=round($DownTimeM/24,0);
+                            $DownTimeHoursResidue=round(fmod($DownTimeM,24),0);
+                            $DownTiMinutesResidue=round(fmod($DownTimeM,1)*60,0);
+                             echo "days: $DownTimeDays and hours: $DownTimeHoursResidue and  Minutes:  $DownTiMinutesResidue";
+                        }
                              ?>
 
                         </td>
