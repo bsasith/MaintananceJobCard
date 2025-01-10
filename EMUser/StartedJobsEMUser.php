@@ -2,7 +2,7 @@
 include '../connect.php';
 include '../session.php';
 
-if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
+if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
     header('location:..\index.php');
 }
 
@@ -21,7 +21,7 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jockey+One&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.js"
-    integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="\MaintananceJobCard\styles\SubmitJobstyle.css">
 
     <style>
@@ -38,7 +38,7 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
 
 <body>
     <div class="topbar">
-        <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace']?> User</h1>
+        <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace'] ?> User</h1>
 
         <a href="\MaintananceJobCard\logout.php">
             <h1 class="topbar-logout">Logout &nbsp</h1>
@@ -61,7 +61,7 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                         <th scope="col">Name of<br> the Machine</th>
                         <th scope="col">Priority</th>
                         <th scope="col">Report To</th>
-                       
+
                         <th scope="col">Breif <br>Description</th>
                         <th scope="col">Job Status<br>Electrical</th>
                         <th scope="col">Job Status<br>Mecahnical</th>
@@ -71,16 +71,19 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                 <tbody>
                     <?php
                     //sql fetch data
-                    $workplace=$_SESSION['workplace'];
+                    $workplace = $_SESSION['workplace'];
                     //echo $workplace;
-            if ($workplace=='Electrical'){
-                $sql = "Select * from `jobdatasheet` where  JobStatusE='Started'and (ReportTo='Electrical' or ReportTo='Both') order by JobPostingDateTime DESC  ";
-            }else{
-                $sql = "Select * from `jobdatasheet` where  JobStatusM='Started' and (ReportTo='Mechanical' or ReportTo='Both') order by JobPostingDateTime DESC ";
-            }
-                    
-                    $result = mysqli_query($con, $sql);
+                    if ($workplace == 'Electrical') {
+                        $sql = "Select * from `jobdatasheet` where  JobStatusE='Started' and (ReportTo='Electrical' or ReportTo='Both') order by JobPostingDateTime DESC  ";
+                    } else if($workplace == 'Mechanical')
+                    {
+                        $sql = "Select * from `jobdatasheet` where  JobStatusM='Started' and (ReportTo='Mechanical' or ReportTo='Both') order by JobPostingDateTime DESC ";
+                    }
 
+                    $result = mysqli_query($con, $sql);
+                   
+                    //$JobStatusM = $row['JobStatusM'];
+                    //$JobStatusE = $row['JobStatusE'];
                     while ($row = mysqli_fetch_assoc($result)) {
                         $id = $row['id'];
                         $JobCodeNo = $row['JobCodeNo'];
@@ -91,8 +94,8 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                         $priority = $row['Priority'];
                         $ReportTo = $row['ReportTo'];
                         $BriefDescription = $row['BDescription'];
-                        $JobStatusM=$row['JobStatusE'];
-                        $JobStatusE=$row['JobStatusM'];
+                        $JobStatusM = $row['JobStatusM'];
+                        $JobStatusE = $row['JobStatusE'];
 
 
                         echo
@@ -109,16 +112,29 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
         <td>$priority</td>
         <td>$ReportTo</td>
         <td style='white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;'>$BriefDescription</td>
-        <td>$JobStatusM</td>
-        <td>$JobStatusE</td>
-       <td><a href='\MaintananceJobCard\EMUser\FinishJobEMUser.php?updateid=$id' class='btn btn-warning mt-1'>Finish</a> 
-       <a href='\MaintananceJobCard\EMUser\TransferStartedJobEMUser.php?updateid=$id' class='btn btn-danger mt-1'>Transfer</a> </td>
         
-      </tr>
-      
-      ";
+        <td>$JobStatusE</td>
+        <td>$JobStatusM</td>
+       <td><a href='\MaintananceJobCard\EMUser\FinishJobEMUser.php?updateid=$id' class='btn btn-warning mt-1'>Finish</a>"; ?>
+                        <?php
+                        //echo $JobStatusM;
+                        //echo $JobStatusE;
+                        if ($JobStatusM == 'Finished') {
+                            echo "Mechanical <br> finished the job</td>";
+                        } else if ($JobStatusE == 'Finished') {
+                            echo "Electrical <br>finished the job</td>";
+                        } else {
+                            echo "<a href='\MaintananceJobCard\EMUser\TransferStartedJobEMUser.php?updateid=$id' class='btn btn-danger mt-1'>Transfer</a> </td>";
+                        }
 
-                    } ?>
+
+
+
+
+
+
+
+                    } echo"</tr>";?>
                 </tbody>
             </table>
             <button type="back" class="btn btn-danger mt-3" name="back"><a

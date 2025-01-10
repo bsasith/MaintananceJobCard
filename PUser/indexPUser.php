@@ -34,7 +34,7 @@ if(isset($_SESSION["searchquery"])){
         <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace'];
          ?> User</h1>
 
-        <a href="\MaintananceJobCard\logout.php">
+        <a href="/MaintananceJobCard/logout.php">
             <h1 class="topbar-logout">Logout &nbsp</h1>
         </a>
         <h1 class="topbar-username"><?php echo $_SESSION['username'] ?>&nbsp</h1>

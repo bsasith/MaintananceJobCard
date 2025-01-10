@@ -26,6 +26,7 @@ $ReportTo = $row['ReportTo'];
 $BriefDescription = $row['BDescription'];
 $JobStatusM = $row['JobStatusM'];
 $JobStatusE = $row['JobStatusE'];
+$JobFinishingDateTime = $row['JobFinishingDateTime'];
 // $gen = explode(",",$gender);
 // $lang = explode(",",$datas);
 // $pl = explode(",",$place);
@@ -58,9 +59,9 @@ $totalHours = $since_start->days * 24 + $since_start->h + $since_start->i / 60 +
     $finishcomment = $_POST['finishcomment'];
     $_SESSION['FinishJob'] = true;
     if ($workplace == 'Electrical') {
-        $insert = "update jobdatasheet set JobStatusE='Finished',FinishedCommentE='$finishcomment',DownTimeE='$totalHours',ManPowerInvolved='$manpower' where id='$id'";
+        $insert = "update jobdatasheet set JobStatusE='Finished',FinishedCommentE='$finishcomment',DownTimeE='$totalHours',ManPowerInvolved='$manpower',JobFinishingDateTime='$now' where id='$id'";
     } elseif ($workplace == 'Mechanical') {
-        $insert = "update jobdatasheet set JobStatusM='Finished',FinishedCommentM='$finishcomment',DownTimeM='$totalHours',ManPowerInvolved='$manpower' where id='$id'";
+        $insert = "update jobdatasheet set JobStatusM='Finished',FinishedCommentM='$finishcomment',DownTimeM='$totalHours',ManPowerInvolved='$manpower',JobFinishingDateTime='$now' where id='$id'";
     }
 
     //$insert = "update jobdatasheet set JobStatusM='Finished' where id='$id'";
@@ -163,7 +164,8 @@ if (isset($_POST['delete'])) {
                             Job Issuing Time and Date
                         </td>
                         <td>
-                            <?php echo $JobIssuingDateTime; ?>
+                            <?php echo $JobIssuingDateTime;?>
+                            
                         </td>
                     </tr>
                     <!-- Table row -->

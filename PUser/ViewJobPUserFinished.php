@@ -33,7 +33,8 @@ $TransferCommentE = $row['TransferCommentE'];
 $TransferCommentM = $row['TransferCommentE'];
 $DisapproveComment = $row['DisapproveComment'];
 $TryCount = $row['TryCount'];
-$DownTime = $row['DownTime'];
+$DownTimeE = $row['DownTimeE'];
+$DownTimeM = $row['DownTimeM'];
 // $gen = explode(",",$gender);
 // $lang = explode(",",$datas);
 // $pl = explode(",",$place);
@@ -304,16 +305,40 @@ $DownTime = $row['DownTime'];
 
                     <tr>
                         <td>
-                            Total DownTime
+                            Total DownTime Electrical
                         </td>
                         <td>
                         <?php
                             
-                           $DownTimeDays=round($DownTime/24,0);
-                           $DownTimeHoursResidue=round(fmod($DownTime,24),0);
-                           $DownTiMinutesResidue=round(fmod($DownTime,1)*60,0);
-                            echo "days: $DownTimeDays and hours: $DownTimeHoursResidue and  Minutes:  $DownTiMinutesResidue";
-                          
+                            if ($DownTimeE ) {
+                                                                          
+                                $DownTimeDays=round($DownTimeE/24,0);
+                                $DownTimeHoursResidue=round(fmod($DownTimeE,24),0);
+                                $DownTiMinutesResidue=round(fmod($DownTimeE,1)*60,0);
+                                 echo "days: $DownTimeDays and hours: $DownTimeHoursResidue and  Minutes:  $DownTiMinutesResidue";
+                            }else{
+                                echo "NA";
+                            }
+                            ?>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Total DownTime Mechanical
+                        </td>
+                        <td>
+                        <?php
+                            
+                            if ($DownTimeM ) {
+                                                                          
+                                $DownTimeDays=round($DownTimeM/24,0);
+                                $DownTimeHoursResidue=round(fmod($DownTimeM,24),0);
+                                $DownTiMinutesResidue=round(fmod($DownTimeM,1)*60,0);
+                                 echo "days: $DownTimeDays and hours: $DownTimeHoursResidue and  Minutes:  $DownTiMinutesResidue";
+                            }else{
+                                echo "NA";
+                            }
                             ?>
 
                         </td>

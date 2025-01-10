@@ -11,9 +11,9 @@ include '../session.php';
  FROM 
      jobdatasheet
  WHERE 
-     MONTH(JobPostingDateTime) = MONTH(CURRENT_DATE())
-     AND YEAR(JobPostingDateTime) = YEAR(CURRENT_DATE())
-     AND ReportTo = 'Electrical' or 'Both'
+     MONTH(JobFinishingDateTime) = MONTH(CURRENT_DATE())
+     AND YEAR(JobFinishingDateTime) = YEAR(CURRENT_DATE())
+     AND (ReportTo = 'Electrical' or ReportTo ='Both')
  GROUP BY 
      JobPostingDev;";
  }
@@ -25,9 +25,9 @@ include '../session.php';
   FROM 
       jobdatasheet
   WHERE 
-      MONTH(JobPostingDateTime) = MONTH(CURRENT_DATE())
-      AND YEAR(JobPostingDateTime) = YEAR(CURRENT_DATE())
-      AND ReportTo = 'Mechanical' or 'Both'
+      MONTH(JobFinishingDateTime) = MONTH(CURRENT_DATE())
+      AND YEAR(JobFinishingDateTime) = YEAR(CURRENT_DATE())
+      AND (ReportTo = 'Mechanical' or ReportTo ='Both')
   GROUP BY 
       JobPostingDev;";
   }
