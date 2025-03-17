@@ -125,3 +125,8 @@ a {
     height: 215px;
     font-size: 3em;
 }
+
+#myChart {
+    max-width: 1000px; /* Set a maximum width */
+    height: auto;     /* Maintain aspect ratio */
+}

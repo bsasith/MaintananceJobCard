@@ -127,13 +127,6 @@ if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
                             echo "<a href='\MaintananceJobCard\EMUser\TransferStartedJobEMUser.php?updateid=$id' class='btn btn-danger mt-1'>Transfer</a> </td>";
                         }
 
-
-
-
-
-
-
-
                     } echo"</tr>";?>
                 </tbody>
             </table>
