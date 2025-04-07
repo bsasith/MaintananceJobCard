@@ -2,7 +2,7 @@
 include '../connect.php';
 include '../session.php';
 
-if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
+if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
     header('location:..\index.php');
 }
 
@@ -21,7 +21,7 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jockey+One&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.js"
-    integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="\MaintananceJobCard\styles\SubmitJobstyle.css">
 
     <style>
@@ -38,7 +38,7 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
 
 <body>
     <div class="topbar">
-        <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace']?> User</h1>
+        <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace'] ?> User</h1>
 
         <a href="\MaintananceJobCard\logout.php">
             <h1 class="topbar-logout">Logout &nbsp</h1>
@@ -52,8 +52,9 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
             <h1>Certified Jobs</h1>
             <form method="post">
                 <div><input type="text" class="form-control w-25" style="float:left" name="query"></div>
-                <div><button class="btn btn-dark mb-4 mx-3 " type="submit" name="search" style="float:left">Search</button></div>
-                
+                <div><button class="btn btn-dark mb-4 mx-3 " type="submit" name="search"
+                        style="float:left">Search</button></div>
+
             </form>
             <table class="table table-hover mt-3">
                 <thead>
@@ -72,47 +73,109 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                 </thead>
                 <tbody>
                     <?php
-                    if(isset($_SESSION["searchquery"]) or (isset($_POST['search'])))
-                    {
-                        if(isset($_SESSION["searchquery"])){
-                            $query= $_SESSION["searchquery"];
+                    if (isset($_SESSION["searchquery"]) or (isset($_POST['search']))) {
+                        if (isset($_SESSION["searchquery"])) {
+                            $query = $_SESSION["searchquery"];
 
                         }
-                        if(isset($_POST['search'])){
-                            $query=$_POST['query'];
-                            $_SESSION["searchquery"]=$query;
+                        if (isset($_POST['search'])) {
+                            $query = $_POST['query'];
+                            $_SESSION["searchquery"] = $query;
                         }
-                    //  if(isset($_POST['search'])){
+                        //  if(isset($_POST['search'])){
                         // $query=$_POST['query'];
-                    //sql fetch data
-                    $workplace=$_SESSION['workplace'];
-                   // echo $workplace;
-                    if($workplace=='Electrical'){
-                        $sql = "Select * from `jobdatasheet` where (BDescription like '%$query%' or MachineName like '%$query%' or JobCodeNo like '%$query%' or JobPostingDev like '%$query%' or ReportTo like '%$query%') and JobStatusE='Finished' and Certification='Certified' and (ReportTo='$workplace' or ReportTo='Both') ";
-                    }else{
-                        $sql = "Select * from `jobdatasheet` where (BDescription like '%$query%' or MachineName like '%$query%' or JobCodeNo like '%$query%' or JobPostingDev like '%$query%' or ReportTo like '%$query%') and  JobStatusM='Finished' and Certification='Certified' and (ReportTo='$workplace' or ReportTo='Both')";
+                        //sql fetch data
+                        $workplace = $_SESSION['workplace'];
+                        // echo $workplace;
+                        if (empty($query)) {
+    // No search query entered - show latest 10
+    if ($workplace == 'Electrical') {
+        $sql = "SELECT * FROM `jobdatasheet` 
+                WHERE JobStatusE='Finished' 
+                AND Certification='Certified' 
+                AND (ReportTo='$workplace' OR ReportTo='Both') 
+                ORDER BY JobPostingDateTime DESC 
+                LIMIT 10";
+    } else {
+        $sql = "SELECT * FROM `jobdatasheet` 
+                WHERE JobStatusM='Finished' 
+                AND Certification='Certified' 
+                AND (ReportTo='$workplace' OR ReportTo='Both') 
+                ORDER BY JobPostingDateTime DESC 
+                LIMIT 10";
+    }
+} else {
+    // Search query entered - return max 30 results
+    if ($workplace == 'Electrical') {
+        $sql = "SELECT * FROM `jobdatasheet` 
+                WHERE (BDescription LIKE '%$query%' 
+                OR MachineName LIKE '%$query%' 
+                OR JobCodeNo LIKE '%$query%' 
+                OR JobPostingDev LIKE '%$query%' 
+                OR ReportTo LIKE '%$query%') 
+                AND JobStatusE='Finished' 
+                AND Certification='Certified' 
+                AND (ReportTo='$workplace' OR ReportTo='Both') 
+                ORDER BY JobPostingDateTime DESC 
+                ";
+    } else {
+        $sql = "SELECT * FROM `jobdatasheet` 
+                WHERE (BDescription LIKE '%$query%' 
+                OR MachineName LIKE '%$query%' 
+                OR JobCodeNo LIKE '%$query%' 
+                OR JobPostingDev LIKE '%$query%' 
+                OR ReportTo LIKE '%$query%') 
+                AND JobStatusM='Finished' 
+                AND Certification='Certified' 
+                AND (ReportTo='$workplace' OR ReportTo='Both') 
+                ORDER BY JobPostingDateTime DESC 
+                ";
+    }
+}
+
+
+/*
+                        $result = mysqli_query($con, $sql);
+                        $num = mysqli_num_rows($result);
+                        $numberPerPages = 3;
+                        $totalPages = ceil($num / $numberPerPages);
+                        $btn=null;
+                        for ($btn = 1; $btn <= $totalPages; $btn++) {
+                            //echo $btn;
+                            echo "<button class='btn btn-dark mx-1 mb-3'><a href=CertifiedJobsEMUser.php?page=$btn class='text-light'>$btn</a></button>";
                         }
-                    
-                    
-                    $result = mysqli_query($con, $sql);
+                        if (isset($_GET['page'])) {
+                            $page = $_GET['page'];
+                           // echo $page;
+                        } else {
+                            $page = 1;
+                        }
+                        $startinglimit = (intval($page) - 1) * $numberPerPages;
 
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        $id = $row['id'];
-                        $JobCodeNo = $row['JobCodeNo'];
-                        $username = $row['Username'];
-                        $JobIssuingDateTime = $row['JobPostingDateTime'];
-                        $JobIssuingDivision = $row['JobPostingDev'];
-                        $MachineName = $row['MachineName'];
-                        $priority = $row['Priority'];
-                        $ReportTo = $row['ReportTo'];
-                        $BriefDescription = $row['BDescription'];
-                        $JobStatusM=$row['JobStatusM'];
-                        $Approval=$row['Certification'];
+                        if ($workplace == 'Electrical') {
+                            $sql3 = "Select * from `jobdatasheet` where (BDescription like '%$query%' or MachineName like '%$query%' or JobCodeNo like '%$query%' or JobPostingDev like '%$query%' or ReportTo like '%$query%') and JobStatusE='Finished' and Certification='Certified' and (ReportTo='$workplace' or ReportTo='Both') limit $startinglimit,$numberPerPages";
+                        } else {
+                            $sql3 = "Select * from `jobdatasheet` where (BDescription like '%$query%' or MachineName like '%$query%' or JobCodeNo like '%$query%' or JobPostingDev like '%$query%' or ReportTo like '%$query%') and  JobStatusM='Finished' and Certification='Certified' and (ReportTo='$workplace' or ReportTo='Both') limit $startinglimit,$numberPerPages";
+                        }
+                            */
+                        $result = mysqli_query($con, $sql);
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            $id = $row['id'];
+                            $JobCodeNo = $row['JobCodeNo'];
+                            $username = $row['Username'];
+                            $JobIssuingDateTime = $row['JobPostingDateTime'];
+                            $JobIssuingDivision = $row['JobPostingDev'];
+                            $MachineName = $row['MachineName'];
+                            $priority = $row['Priority'];
+                            $ReportTo = $row['ReportTo'];
+                            $BriefDescription = $row['BDescription'];
+                            $JobStatusM = $row['JobStatusM'];
+                            $Approval = $row['Certification'];
 
 
 
-                        echo
-                            "
+                            echo
+                                "
 
 
      <tr class='clickable-row' data-href='\MaintananceJobCard\EMUser\ViewJobEMUserCertifed.php?updateid=$id'>
@@ -131,7 +194,8 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
       
       ";
 
-                    } }?>
+                        }
+                    } ?>
                 </tbody>
             </table>
             <button type="back" class="btn btn-danger mt-3" name="back"><a
