@@ -38,7 +38,7 @@ $JobStatusM = $row['JobStatusM'];
 // update operation
 if (isset($_POST['certify'])) {
 
-    $_SESSION['CertifyJobSucess']=true;
+    $_SESSION['CertifyJobSucess'] = true;
 
     $insert = "update jobdatasheet set Certification='Certified' where id='$id'";
 
