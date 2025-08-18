@@ -108,7 +108,7 @@ $DownTimeM = $row['DownTimeM'];
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jockey+One&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="\MaintananceJobCard\styles\SubmitJobstyle.css">
+    <link rel="stylesheet" href="..\styles\SubmitJobstyle.css">
 
     <style>
         h1 {
@@ -121,7 +121,7 @@ $DownTimeM = $row['DownTimeM'];
     <div class="topbar">
         <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace'] ?> User</h1>
 
-        <a href="\MaintananceJobCard\logout.php">
+        <a href="..\logout.php">
             <h1 class="topbar-logout">Logout &nbsp</h1>
         </a>
         <h1 class="topbar-username"><?php echo $_SESSION['username'] ?>&nbsp</h1>

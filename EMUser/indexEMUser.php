@@ -32,7 +32,7 @@ if (!($_SESSION['type'] == 'euser' or $_SESSION['type'] == 'muser')) {
         <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace'];
         ?> User</h1>
 
-        <a href="\MaintananceJobCard\logout.php">
+        <a href="..\logout.php">
             <h1 class="topbar-logout">Logout &nbsp</h1>
         </a>
         <h1 class="topbar-username"><?php echo $_SESSION['username'] ?>&nbsp</h1>
@@ -186,7 +186,7 @@ $target = 2;
         data: {
             labels: labels,
             datasets: [{
-                label: 'Downtime (Hours)',
+                label: 'Downtime (Hours) Current Month',
                 data: data,
                 backgroundColor: 'rgba(75, 174, 192, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
