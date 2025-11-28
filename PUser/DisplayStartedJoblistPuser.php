@@ -76,7 +76,7 @@ if (!($_SESSION['type'] == 'puser')) {
                     while ($row = mysqli_fetch_assoc($result)) {
                         $id = $row['id'];
                         $JobCodeNo = $row['JobCodeNo'];
-                        $username = $_SESSION['username'];
+                        $username = $row['Username'];
                         $JobIssuingDateTime = $row['JobPostingDateTime'];
                         $JobIssuingDivision = $row['JobPostingDev'];
                         $MachineName = $row['MachineName'];

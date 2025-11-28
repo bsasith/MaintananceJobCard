@@ -198,6 +198,12 @@ if (isset($_POST['delete'])) {
                                     if ($_SESSION['workplace'] == "Carpentry") {
                                         echo "<option value='Carpentry'>Carpentry</option>";
                                     }
+                                    if ($_SESSION['workplace'] == "Quality Assurance") {
+                                        echo "<option value='Quality Assurance'>Quality Assurance Department</option>";
+                                    }
+                                    if ($_SESSION['workplace'] == "TSD") {
+                                        echo "<option value='TSD'>Technical Services Department</option>";
+                                    }
                                     ?>
                                     <!-- <option value="ACF" <?php if ($JobIssuingDivision == "ACF") {
                                         echo "selected";
@@ -258,6 +264,12 @@ if (isset($_POST['delete'])) {
                                     }
                                     if ($workplace == 'Carpentry') {
                                         $Factory = 'carpentrymachines';
+                                    }
+                                    if ($workplace == 'Quality Assurance') {
+                                        $Factory = 'common';
+                                    }
+                                    if ($workplace == 'TSD') {
+                                        $Factory = 'common';
                                     }
 
                                     $query = "SELECT * FROM $Factory";

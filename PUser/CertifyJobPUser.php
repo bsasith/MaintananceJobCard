@@ -18,7 +18,7 @@ $row = mysqli_fetch_assoc($result);
 
 $id = $row['id'];
 $JobCodeNo = $row['JobCodeNo'];
-$username = $_SESSION['username'];
+$username = $row['Username'];
 $JobIssuingDateTime = $row['JobPostingDateTime'];
 $JobIssuingDivision = $row['JobPostingDev'];
 $MachineName = $row['MachineName'];
@@ -36,26 +36,26 @@ $JobStatusM = $row['JobStatusM'];
 
 
 // update operation
-if (isset($_POST['certify'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    $ApproveComment  = $_POST['ApproveComment'] ?? '';
+    $ProdSettingTime = $_POST['prod-time'] ?? '';
 
     $_SESSION['CertifyJobSucess'] = true;
 
-    $insert = "update jobdatasheet set Certification='Certified' where id='$id'";
+    $insert = "UPDATE jobdatasheet 
+               SET Certification='Certified', 
+                   ApproveComment='$ApproveComment',
+                   ProdSettingTime='$ProdSettingTime'
+               WHERE id='$id'";
 
-    if ($con->query($insert) == TRUE) {
-        //$_SESSION['SubmitJobSucess']=true;
-        //echo "Sucessfully Approvd Job";
-
-        header('location:.\CertifyJobSucessPUser.php');
-
+    if ($con->query($insert) === TRUE) {
+        header('Location: .\CertifyJobSucessPUser.php');
+        exit;
     } else {
-
         echo mysqli_error($con);
-        //  header('location:location:..\PUser\indexPUser.php');
     }
-    //$insert->close();
 }
-
 
 
 
@@ -187,6 +187,44 @@ if (isset($_POST['certify'])) {
                         <td>
                             <?php echo $BriefDescription; ?>
                         </td>
+                    </tr>
+                    <!-- Table row -->
+                    <tr>
+                        <td>
+                            Certification Comment
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="ApproveComment" required>
+                        </td>
+                    </tr>
+                    <!-- Table row -->
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="cert" name="certcheckbox" value="cert" onclick="toggleInput()">
+                            <label for="cert"> Add Production Loss</label>
+                        </td>
+                        <td>
+                            <input class="form-control"
+                                type="number"
+                                name="prod-time"
+                                id="prod-time"
+                                placeholder="Production Loss in minutes"
+                                style="display:none;"
+                                min="0"
+                                step="1">
+                        </td>
+                        <script>
+                            function toggleInput() {
+                                let chk = document.getElementById("cert");
+                                let box = document.getElementById("prod-time");
+
+                                if (chk.checked) {
+                                    box.style.display = "block";
+                                } else {
+                                    box.style.display = "none";
+                                }
+                            }
+                        </script>
                     </tr>
 
                 </table>

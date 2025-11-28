@@ -4,32 +4,26 @@ include '../session.php';
 
 date_default_timezone_set('Asia/Colombo');
 $date = date("Y-m-d G:i:s");
+
 if (!($_SESSION['type'] == 'puser')) {
     header('location:..\index.php');
+    exit;
 }
-
-$sql = "SELECT * FROM jobdatasheet ORDER BY id DESC LIMIT 1";
-
-$result = mysqli_query($con, $sql);
-
-$row = mysqli_fetch_assoc($result);
-
-$id = $row['id'];
-//echo $id;
 
 if (isset($_POST['submit'])) {
 
-    $JobCodeNo = $_POST['JobCodeNo'];
-    $Jobtype = $_POST['JobType'];
+    // Read form data
+    $Jobtype            = $_POST['JobType'];
     $JobIssuingDivision = $_POST['JobIssuingDivision'];
-    $MachineName = $_POST['MachineName'];
-    $priority = $_POST['priority'];
-    $ReportTo = $_POST['ReportTo'];
-    $BriefDescription = $_POST['BriefDescription'];
-    $username = $_SESSION['username'];
+    $MachineName        = $_POST['MachineName'];
+    $priority           = $_POST['priority'];
+    $ReportTo           = $_POST['ReportTo'];
+    $BriefDescription   = $_POST['BriefDescription'];
+    $username           = $_SESSION['username'];
+
     $JobStatusE = null;
     $JobStatusM = null;
-    // echo $ReportTo;
+
     if ($ReportTo == 'Both') {
         $JobStatusE = 'Pending';
         $JobStatusM = 'Pending';
@@ -40,225 +34,98 @@ if (isset($_POST['submit'])) {
         $JobStatusE = 'NA';
         $JobStatusM = 'Pending';
     }
-    //echo $JobStatusE;
-    //echo $JobStatusM;
-    $_SESSION['SubmitJobSucess'] = true;
 
-    //-----------------------------------------------------------------------------------------------------
+    $_SESSION['SubmitJobSucess'] = false;
+
+    // --------- START TRANSACTION ------------
     try {
+        // Start transaction
         $con->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
-        $con->query("LOCK TABLES serial_numbers WRITE");
 
-        $sql2 = "SELECT * FROM serial_numbers ORDER BY id DESC LIMIT 1";
-        $result2 = mysqli_query($con, $sql2);
-        $num = mysqli_num_rows($result2);
-        $serial_no =null;
-if ($Jobtype =="JobOrder"){
-    $JobSerString="JO";
-}
-if ($Jobtype =="WorkOrder"){
-    $JobSerString="WO";
-}
-        if ($num == 0) {
-            
-            $serial_no = $JobSerString.$id ;
-
-            $sql3 = "INSERT INTO serial_numbers (serial_no, status) VALUES ('$serial_no', 'used')";
-            $result3 = mysqli_query($con, $sql3);
-            if(!$result3){
-                echo"not happen";
-            }
-
-        }
-        if ($num > 0) {
-            $row = mysqli_fetch_assoc($result);
-            $serial_no = $row['serial_no'];
-            $raw_serial = (substr($serial_no, 2));
-            if ($raw_serial == $id) {
-                $raw_serial = $id;
-                $raw_serial++;
-                $serial_no = $JobSerString . $raw_serial;
-                $sql4 = "INSERT INTO serial_numbers (serial_no, status) VALUES ('$serial_no', 'used')";
-                $result4 = mysqli_query($con, $sql4);
-                
-            } else {
-                $raw_serial = $id;
-                $raw_serial++;
-                
-                $serial_no = $JobSerString . $raw_serial;
-                $sql3 = "INSERT INTO serial_numbers (serial_no, status) VALUES ('$serial_no', 'used')";
-                $result3 = mysqli_query($con, $sql3);
-                
-            }
-
-        }
-        $con->query("LOCK TABLES `jobdatasheet` WRITE");
-        $insert = "insert into jobdatasheet (JobCodeNo,JobPostingDateTime,JobPostingDev,MachineName,Priority,ReportTo,BDescription,Username,JobStatusE,JobStatusM,TryCount) values 
-        ('$serial_no','$date','$JobIssuingDivision','$MachineName','$priority','$ReportTo','$BriefDescription','$username','$JobStatusE','$JobStatusM','1')";
-
-
-
-        if ($con->query($insert) == TRUE) {
-            $_SESSION['SubmitJobSucess'] = true;
-            $con->commit();
-            header('location:..\PUser\SubmitJobSuccess.php');
-
+        // Decide prefix for Job code
+        if ($Jobtype == "JobOrder") {
+            $JobSerString = "JO";
+        } elseif ($Jobtype == "WorkOrder") {
+            $JobSerString = "WO";
         } else {
-
-            echo mysqli_error($con);
-
+            $JobSerString = "XX"; // fallback, should not happen normally
         }
+
+        // Get next numeric part based on last jobdatasheet id
+        // Lock latest row to avoid race conditions
+        $sqlLast = "SELECT id FROM jobdatasheet ORDER BY id DESC LIMIT 1 FOR UPDATE";
+        $resLast = mysqli_query($con, $sqlLast);
+
+        if ($resLast && mysqli_num_rows($resLast) > 0) {
+            $rowLast = mysqli_fetch_assoc($resLast);
+            $nextId  = (int)$rowLast['id'] + 1;
+        } else {
+            $nextId  = 1; // first record
+        }
+
+        // Build ONE serial code used in BOTH tables
+        $serial_no = $JobSerString . $nextId; // e.g. JO1, JO2, WO3...
+
+        // 1) Insert into parent table: jobdatasheet
+        $insertJob = "
+            INSERT INTO jobdatasheet 
+                (JobCodeNo,
+                 JobPostingDateTime,
+                 JobPostingDev,
+                 MachineName,
+                 Priority,
+                 ReportTo,
+                 BDescription,
+                 Username,
+                 JobStatusE,
+                 JobStatusM,
+                 TryCount)
+            VALUES 
+                ('$serial_no',
+                 '$date',
+                 '$JobIssuingDivision',
+                 '$MachineName',
+                 '$priority',
+                 '$ReportTo',
+                 '$BriefDescription',
+                 '$username',
+                 '$JobStatusE',
+                 '$JobStatusM',
+                 '1')
+        ";
+
+        $resJob = mysqli_query($con, $insertJob);
+        if (!$resJob) {
+            throw new Exception("Job insert failed: " . mysqli_error($con));
+        }
+
+        // 2) Insert into child table: serial_numbers
+        $insertSerial = "
+            INSERT INTO serial_numbers (serial_no, status)
+            VALUES ('$serial_no', 'used')
+        ";
+
+        $resSerial = mysqli_query($con, $insertSerial);
+        if (!$resSerial) {
+            throw new Exception("Serial insert failed: " . mysqli_error($con));
+        }
+
+        // Commit if both inserts were successful
+        $con->commit();
+        $_SESSION['SubmitJobSucess'] = true;
+
+        // Redirect after success
+        header('location:..\PUser\SubmitJobSuccess.php');
+        exit;
+
     } catch (Exception $e) {
         // Rollback the transaction on error
         $con->rollback();
         echo "Failed to submit form: " . $e->getMessage();
-    } finally {
-        // Unlock the table
-        $con->query("UNLOCK TABLES");
-        // Close connection
-        $con->close();
     }
 }
 
-    //-----------------------------------------------------------------------------------------------------
-//     try {
-//         $con->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
-//         $con->query("LOCK TABLES serial_numbers WRITE");
-//         $sql = "SELECT * FROM serial_numbers ORDER BY id DESC LIMIT 1";
-//         $result = mysqli_query($con, $sql);
-//         $num = mysqli_num_rows($result);
-
-    //         if ($num > 0) {
-//             $row = mysqli_fetch_assoc($result);
-//             $serial_no = $row['serial_no'];
-//             $serial_id=$id;
-//             $serial_no = "JO".$id;
-//             $serial_id = $row['id'];
-//             $sql2 = "UPDATE serial_numbers SET status = 'used' WHERE id = $serial_id";
-//             $result2 = mysqli_query($con, $sql2);
-//         } else {
-//             $serial_id=$id;
-//             $serial_no = "JO".$id;
-//             $sql2 = "INSERT INTO serial_numbers ($serial_no, status) VALUES (NULL, 'used')";
-//             $result2 = mysqli_query($con, $sql2);
-//             $serial_no = $con->insert_id;
-//         }
-//         $con->query("LOCK TABLES `jobdatasheet` WRITE");
-//         $insert = "insert into jobdatasheet (JobCodeNo,JobPostingDateTime,JobPostingDev,MachineName,Priority,ReportTo,BDescription,Username,JobStatusE,JobStatusM,TryCount) values 
-//         ('$JobCodeNo','$date','$JobIssuingDivision','$MachineName','$priority','$ReportTo','$BriefDescription','$username','$JobStatusE','$JobStatusM','1')";
-
-
-
-    //         if ($con->query($insert) == TRUE) {
-//             $_SESSION['SubmitJobSucess'] = true;
-
-    //             header('location:..\PUser\SubmitJobSuccess.php');
-
-    //         } else {
-
-    //             echo mysqli_error($con);
-
-    //         }
-//     } catch (Exception $e) {
-//         // Rollback the transaction on error
-//         $con->rollback();
-//         echo "Failed to submit form: " . $e->getMessage();
-//     } finally {
-//         // Unlock the table
-//         $con->query("UNLOCK TABLES");
-//         // Close connection
-//         $con->close();
-//     }
-
-    // }
-//-----------------------------------------------------------------------------------------------
-// try {
-// // Start transaction
-//     $con->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
-
-    //      // Lock the serial_numbers table to prevent race conditions
-//      $con->query("LOCK TABLES serial_numbers WRITE");
-
-    //      // Check if there are any canceled serial numbers available
-//     $stmt = $con->prepare("SELECT id, serial_no FROM serial_numbers WHERE status = 'canceled' LIMIT 1 FOR UPDATE");
-//      $stmt->execute();
-//      $result = $stmt->get_result();
-
-    //     if ($result->num_rows > 0) {
-//          // Reuse the canceled serial number
-//          $row = $result->fetch_assoc();
-//          $serial_no = $row['serial_no'];
-//          $serial_id = $row['id'];
-
-    //         // Update the status to 'used'
-//         $stmt = $con->prepare("UPDATE serial_numbers SET status = 'used' WHERE id = ?");
-//         $stmt->bind_param("i", $serial_id);
-//         $stmt->execute();
-//     } else {
-//         // Generate a new serial number by inserting a new record
-//         $stmt = $con->prepare("INSERT INTO serial_numbers (serial_no, status) VALUES (NULL, 'used')");
-//         $stmt->execute();
-
-    //         // Get the newly generated serial number
-//         $serial_no = $con->insert_id;
-//     }
-
-    //     // Insert the form data with the serial number
-//     $con->query("LOCK TABLES `jobdatasheet` WRITE");
-//     $stmt = $con->prepare("INSERT INTO `jobdatasheet` 
-//     (JobCodeNo, JobPostingDateTime, JobPostingDev, MachineName, Priority, ReportTo, BDescription, Username, JobStatusE, JobStatusM) 
-//     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-
-    // if ($stmt === false) {
-//     throw new Exception("Prepare statement failed: " . $con->error);
-// }
-
-    // $stmt->bind_param("isssssssss", 
-//     $JobCodeNo, 
-//     $date, 
-//     $JobIssuingDivision, 
-//     $MachineName, 
-//     $priority, 
-//     $ReportTo, 
-//     $BriefDescription, 
-//     $username, 
-//     $JobStatusE, 
-//     $JobStatusM
-// );
-//     // Commit the transaction
-//     $con->commit();
-//     header('location:..\PUser\SubmitJobSuccess.php');
-//     echo "Form submitted successfully. Your serial number is: " . $serial_no;
-
-    // } catch (Exception $e) {
-//     // Rollback the transaction on error
-//     $con->rollback();
-//     echo "Failed to submit form: " . $e->getMessage();
-// } finally {
-//     // Unlock the table
-//     $con->query("UNLOCK TABLES");
-//     // Close connection
-//     $con->close();
-// }
-
-    //-----------------------------------------------------------------------------------------------
-//     $insert = "insert into jobdatasheet (JobCodeNo,JobPostingDateTime,JobPostingDev,MachineName,Priority,ReportTo,BDescription,Username,JobStatusE,JobStatusM,TryCount) values 
-//     ('$JobCodeNo','$date','$JobIssuingDivision','$MachineName','$priority','$ReportTo','$BriefDescription','$username','$JobStatusE','$JobStatusM','1')";
-
-//     if ($con->query($insert) == TRUE) {
-//         $_SESSION['SubmitJobSucess'] = true;
-
-//         header('location:..\PUser\SubmitJobSuccess.php');
-
-//     } else {
-
-//         echo mysqli_error($con);
-
-//     }
-
-// }
-
-
+// After this point, no transaction is running, connection is still open for form dropdowns.
 ?>
 
 <!DOCTYPE html>
@@ -267,7 +134,7 @@ if ($Jobtype =="WorkOrder"){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Job Submit Form</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -300,42 +167,38 @@ if ($Jobtype =="WorkOrder"){
                 <table>
                     <div class="form-group">
                         <tr>
-
                             <td style="width:200px;padding:5px">
                                 <label class="pr-3">Job Type</label>
                             </td>
                             <td style="width:500px;padding:5px">
-                                <select name="JobType" id="JobType" class="form-select" onchange="eee()" required>
-
+                                <select name="JobType" id="JobType" class="form-select" required>
                                     <option value="JobOrder">Job Order</option>
                                     <option value="WorkOrder">Work Order</option>
-
+                                </select>
                             </td>
-
                         </tr>
 
-                        <!-- Row of input fields -->
-                        <!-- <tr>
-
+                        <!-- If you want to SHOW Job Code to user, you can re-enable this as readonly
+                             but it is NOT required for saving to DB now. -->
+                        <!--
+                        <tr>
                             <td style="width:200px;padding:5px">
                                 <label class="pr-3">Job code No</label>
                             </td>
                             <td style="width:500px;padding:5px">
-                                <input type="text" name="JobCodeNo" class="form-control" id="JobCodeNo" readonly
-                                    required>
+                                <input type="text" name="JobCodeNo" class="form-control" id="JobCodeNo" readonly>
                             </td>
+                        </tr>
+                        -->
 
-                        </tr> -->
-
-                        <!-- Row of input fields -->
                         <tr>
-
                             <td style="width:200px;padding:5px">
                                 <label class="pr-3">Job Issuing Division</label>
                             </td>
                             <td style="width:500px;padding:5px">
                                 <select name="JobIssuingDivision" id="dept" class="form-select" required>
-                                    <?php if ($_SESSION['workplace'] == "ACF") {
+                                    <?php
+                                    if ($_SESSION['workplace'] == "ACF") {
                                         echo "<option value='ACF'>ACF</option>";
                                     }
                                     if ($_SESSION['workplace'] == "CCF") {
@@ -362,36 +225,22 @@ if ($Jobtype =="WorkOrder"){
                                     if ($_SESSION['workplace'] == "Carpentry") {
                                         echo "<option value='Carpentry'>Carpentry</option>";
                                     }
+                                    if ($_SESSION['workplace'] == "Quality Assurance") {
+                                        echo "<option value='Quality Assurance'>Quality Assurance Department</option>";
+                                    }
+                                    if ($_SESSION['workplace'] == "TSD") {
+                                        echo "<option value='TSD'>Technical Services Department</option>";
+                                    }
                                     ?>
-                                    <!-- <option value="ACF" <?php if ($_SESSION['workplace'] == "ACF") {
-                                        echo "selected";
-                                    } ?> >ACF</option>
-                                    <option value="CCF" <?php if ($_SESSION['workplace'] == "CCF") {
-                                        echo "selected";
-                                    } ?> >CCF</option>
-                                    <option value="DR" <?php if ($_SESSION['workplace'] == "DR") {
-                                        echo "selected";
-                                    } ?> >DR</option>
-                                    <option value="Flexible" <?php if ($_SESSION['workplace'] == "Flexible") {
-                                        echo "selected";
-                                    } ?> >Flexible</option>
-                                    <option value="Aluminium Rodmill" <?php if ($_SESSION['workplace'] == "Aluminium Rodmill") {
-                                        echo "selected";
-                                    } ?> >Aluminium Rodmill</option>
-                                    <option value="Ceylon Copper" <?php if ($_SESSION['workplace'] == "Ceylon Copper") {
-                                        echo "selected";
-                                    } ?> >Ceylon Copper</option> -->
                                 </select>
                             </td>
                         </tr>
-                        <!-- Row of input fields -->
-                        <tr>
 
+                        <tr>
                             <td style="width:200px;padding:5px">
                                 <label class="pr-3">Name of the Machine</label>
                             </td>
                             <td style="width:500px;padding:5px">
-
                                 <select id='division' class="form-select" name="MachineName" required>
                                     <?php
                                     $workplace = $_SESSION['workplace'];
@@ -416,192 +265,87 @@ if ($Jobtype =="WorkOrder"){
                                     if ($workplace == 'Drum Yard') {
                                         $Factory = 'drumyardmachines';
                                     }
-
                                     if ($workplace == 'Bail Room') {
                                         $Factory = 'bailmachines';
                                     }
                                     if ($workplace == 'Carpentry') {
                                         $Factory = 'carpentrymachines';
                                     }
+                                    if ($workplace == 'Quality Assurance') {
+                                        $Factory = 'common';
+                                    }
+                                    if ($workplace == 'TSD') {
+                                        $Factory = 'common';
+                                    }
 
                                     $query = "SELECT * FROM $Factory";
                                     $result = $con->query($query);
 
-                                    if ($result->num_rows > 0) {
+                                    if ($result && $result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {
-                                            echo '<option value="' . $row['MachineName'] . '">' . $row['MachineName'] . '</option>';
+                                            echo '<option value="' . htmlspecialchars($row['MachineName']) . '">' . htmlspecialchars($row['MachineName']) . '</option>';
                                         }
                                     } else {
                                         echo '<option value="">No data available</option>';
                                     }
                                     ?>
-                                    <!-- <option value="<?php $MachineName ?>" <?php if ($MachineName != null) {
-                                          echo "selected";
-                                      } ?>tion> -->
-
                                 </select>
                             </td>
                         </tr>
-                        <!-- Row of input fields -->
-                        <tr>
 
+                        <tr>
                             <td style="width:200px;padding:5px">
                                 <label class="pr-3">Priority</label>
                             </td>
                             <td style="width:500px;padding:5px">
-                                <select name="priority" id="dept" onchange='divSelect()' class="form-select" required
-                                    placeholder="Choose Priority">
-
+                                <select name="priority" id="priority" class="form-select" required>
                                     <option value="Low">Low</option>
                                     <option value="High">High</option>
                                     <option value="Critical">Critical</option>
                                 </select>
                             </td>
                         </tr>
-                        <!-- Row of input fields -->
-                        <tr>
 
+                        <tr>
                             <td style="width:200px;padding:5px">
                                 <label class="pr-3">Report to</label>
                             </td>
                             <td style="width:500px;padding:5px">
-                                <select name="ReportTo" class="form-select" required placeholder="Report To">
-
+                                <select name="ReportTo" class="form-select" required>
                                     <option value="Electrical">Electrical</option>
                                     <option value="Mechanical">Mechanical</option>
                                     <option value="Both">Both</option>
                                 </select>
                             </td>
                         </tr>
-                        <!-- Row of input fields -->
-                        <tr>
 
+                        <tr>
                             <td style="width:200px;padding:5px">
-                                <label class="pr-3">Breif Description</label>
+                                <label class="pr-3">Brief Description</label>
                             </td>
                             <td style="width:500px;padding:5px">
                                 <textarea name="BriefDescription" class="form-control" id="exampleFormControlTextarea1"
                                     rows="3" required></textarea>
                             </td>
-
                         </tr>
                     </div>
+                </table>
+
+                <button type="submit" class="btn btn-primary mt-3" name="submit">Submit</button>
+                <button type="button" class="btn btn-danger mt-3" name="back">
+                    <a href="\MaintananceJobCard\PUser\indexPUser.php"
+                        style="text-decoration:none;color:white">Back to Main</a>
+                </button>
+            </form>
         </div>
-        </table>
-        <button type="submit" class="btn btn-primary mt-3" name="submit">Submit</button>
-        <button type="back" class="btn btn-danger mt-3" name="back"><a href="\MaintananceJobCard\PUser\indexPUser.php"
-                style="text-decoration:none;color:white">Back to Main</a></button>
-        </form>
     </div>
-    </div>
-    <!-- <script>
-        function divSelect() {
 
-            var select = document.getElementById('division');
-            var dept = document.getElementById('dept').value;
-            var x = Array("");
-            var a = Array("MACHINES","JOHN ROYLE EXTRUDER","GENERAL ENGINEERING EXTRUDER","HIGH SPEED BOW STRANDER","MAJI LAYING UP MACHINE","ALIND STRANDER I","ALIND STRANDER II","SKIP STRANDER","BABCOCK W/D MACHINE I","BABCOCK W/D MACHINE II","AGEING FURNACE","CURING CHAMBER","REVOMAX STEAM BOILER","SM STRANDER II","HOSN 1600 BUNCHER","HOLD W/D MACHINE","AEI STRANDER","SCREW COMPRESSOR - 1   [ELANG]","PISTON TYPE COMPRESSOR - ATLAS COPCO","PISTON TYPE COMPRESSOR ","SCREW COMPRESSOR - LANG","SCREW COMPRESSOR - CICCATO");
-            var b = Array("SICTRA W/D MACHINE","RIGID STRANDER","GOLDEN EXTRUDER 120+45/60+45mm","YOSHIDA DRUM TWISTER","MAPRE EXTRUDER","GENERAL ENGINEERING EXTRUDER","BEKEART W/D MACHINE","DRUM TWISTER","ARMOURING MACHINE ","REELING WINDER ","MAJI ARMOURING MACHINE","SETIC BUNCHER  1250mm","TINNING PLANT","CUTTING WINDER I & II","PIONEER MEDIUM W/D MACHINE  [DB 17]","1250 PIONEER DOUBLE TWIST BUNCHER","SCREW COMPRESSOR - 1   [LANG]","SCREW COMPRESSOR - 2   [LANG]","PISTON TYPE COMPRESSOR - 1   [ATLAS]","PISTON TYPE COMPRESSOR - 2   [ATLAS]","PISTON TYPE COMPRESSOR - 3   [KIRLOSCAR]","PISTON TYPE COMPRESSOR - 4   [KIRLOSCAR]","PISTON TYPE COMPRESSOR - 5   [KIRLOSCAR]");
-            var c = Array("MICA TAPING MACHINE I","MICA TAPING MACHINE II","KU KA MA BUNCHER","FRANCIS SHAW MACHINE ","GOLDEN TEC. 80+45/90+45 EXTRUDER","NMC TANDEM EXTRUDER LINE","PIONEER EXTRUDER","REEL 'O' TECH CUTTING WINDER","CUTTING WINDER","NORTHEMPTON EXTRUDER","PIONEER TANDEM EXTRUDER 70+60mm","SCREW COMPRESSOR - LANG");
-            var d = Array("SETIC BUNCHER 630","ANDOURT EXTRUDER","CORTINOVIS BUNCHER","MULTI W/D MACHINE","CUTTING WINDER WITH PIONEER AUTO COILER","CUTTING WINDER WITH AUTO COILER","CUTTING WINDER I","CUTTING WINDER II","BOW TWINER");
-            var e = Array("MELTING FURNACE","HOLDING FURNACE","CASTING MACHINE","INDUCTION HEATER","ROD ROLLING MACHINE","TAKEUP 1 & 2","GANTRY CRANE 2T","GANTRY CRANE 3T","SCREW COMPRESSOR - LANG");
-            var f = Array("CONTINUOUS CASTING MACHINE 8-17mm ","BUSBAR MACHINE","PIONEER FURNACE","COMPRESSOR","PISTON TYPE COMPRESSOR - ATLAS COPCO");
-            var g = Array("FIREFOX MACHINE","PULAVERISER MACHINE","COMPACT MACHINE","STRIP MACHINE I , II , III","BAIL MACHINE I , II , III","HYDRAULIC CUTTER");
-            var h = Array("GANTRY CRANE 20T","CUTTING WINDER I , II , III","SCREW COMPRESSOR - CICCATO ");
-            var k = Array("WOOD PLANER MACHINE - 1 [LIDA]","WOOD PLANER MACHINE - 2","HOLE SAW MACHINE - 1","HOLE SAW MACHINE - 2","CIRCULAR SAW MACHINE - 1","CIRCULAR SAW MACHINE - 2","BAND SAW MACHINE - 1","BAND SAW MACHINE - 2","CUTOFF MACHINE","LATHE MACHINE - 1","LATHE MACHINE - 2","BUT WELDER","BENCH GRINDER");
-            select.options.length = 0;
-
-            if (dept === "") {
-                for (var i = 0; i < x.length; ++i) {
-                    select[select.length] = new Option(x[i], x[i]);
-                }
-            } else if (dept === "ACF") {
-                for (var i = 0; i < a.length; ++i) {
-                    select[select.length] = new Option(a[i], a[i]);
-                }
-            } else if (dept === "CCF") {
-                for (var i = 0; i < b.length; ++i) {
-                    select[select.length] = new Option(b[i], b[i]);
-                }
-            } else if (dept === "DR") {
-                for (var i = 0; i < c.length; ++i) {
-                    select[select.length] = new Option(c[i], c[i]);
-                }
-            } else if (dept === "Flexible") {
-                for (var i = 0; i < d.length; ++i) {
-                    select[select.length] = new Option(d[i], d[i]);
-                }
-            } else if (dept === "Aluminium Rodmill") {
-                for (var i = 0; i < e.length; ++i) {
-                    select[select.length] = new Option(e[i], e[i]);
-                }
-            } else if (dept === "Ceylon Copper") {
-                for (var i = 0; i < f.length; ++i) {
-                    select[select.length] = new Option(f[i], f[i]);
-                }
-            } else if (dept === "Bail Room") {
-                for (var i = 0; i < g.length; ++i) {
-                    select[select.length] = new Option(g[i], g[i]);
-                }
-            } else if (dept === "Drum Yard") {
-                for (var i = 0; i < h.length; ++i) {
-                    select[select.length] = new Option(h[i], h[i]);
-                }
-            }else if (dept === "Carpentry") {
-                for (var i = 0; i < k.length; ++i) {
-                    select[select.length] = new Option(k[i], k[i]);
-                }
-            }
-
-
-        }
-    </script> -->
-    <?php
-
-    ?>
     <script>
-        // var char = "123456759",
-        //     serialLenght = 6;
-
+        // Keep this function to avoid JS error from body onload="eee()"
         function eee() {
-            //     'use strict';
-
-            //     var randomKey = "";
-            //     for (var i = 0; i < serialLenght; ++i) {
-
-            //         var randomSingle = char[Math.floor(Math.random() * char.length)];
-            //         randomKey += randomSingle;
-
-            //     }
-            //     console.log(randomKey)
-            const selectedValue = document.getElementById("JobType").value;
-            //const selectedId = "<?php echo $id; ?>";
-            <?php
-            //$_SESSION['selectedId']=$id;
-            
-            // if (isset($_SESSION['selectedId'])) {
-            
-            //     $_SESSION['selectedId'] = $id;
-            //     $_SESSION['selectedId']++;
-            
-            // } 
-            // else if (!isset($_SESSION['selectedId'])) {
-            
-            //     $_SESSION['selectedId'] = $id;
-            //     $_SESSION['selectedId']++;
-            
-            // }
-            // echo $_SESSION['selectedId'];
-            ?>
-
-            if (selectedValue == "WorkOrder") {
-                document.getElementById('JobCodeNo').value = "WO" + "<?php echo $id + 1; ?>";
-            }
-            if (selectedValue == "JobOrder") {
-                document.getElementById('JobCodeNo').value = "JO" + "<?php echo $id + 1; ?>";
-            }
-
+            // You can add preview logic here if you want in future
         }
     </script>
-
 </body>
+
+</html>
