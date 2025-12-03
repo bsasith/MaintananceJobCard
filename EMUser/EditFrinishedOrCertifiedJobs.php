@@ -8,7 +8,7 @@ if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
 
 
 $idu = $_GET['updateid'];
-
+$workplace = $_SESSION['workplace'];
 $sql = "Select * from jobdatasheet where id='$idu'";
 
 $result = mysqli_query($con, $sql);
@@ -27,6 +27,10 @@ $BriefDescription = $row['BDescription'];
 $JobStatusM = $row['JobStatusM'];
 $JobStatusE = $row['JobStatusE'];
 $JobFinishingDateTime = $row['JobFinishingDateTime'];
+$manpowerE = $row['ManPowerInvolvedE'];
+$manpowerM = $row['ManPowerInvolvedM'];
+$finishedcommentE = $row['FinishedCommentE'];
+$finishedcommentM = $row['FinishedCommentM'];
 // $gen = explode(",",$gender);
 // $lang = explode(",",$datas);
 // $pl = explode(",",$place);
@@ -38,18 +42,18 @@ $JobFinishingDateTime = $row['JobFinishingDateTime'];
 // update operation
 if (isset($_POST['finish'])) {
     /////Down time Calculation
-    $manpowerE=$manpowerM=$_POST['manpower'];
-    $finishcommentE=$finishcommentM=$_POST['finishcomment'];
+    $manpowerE=$manpowerM = $_POST['manpower'];
+    $finishcomment = $_POST['finishcomment'];
     date_default_timezone_set("Asia/Colombo");
-$now = date("Y-m-d H:i:s");
-$start_date = new DateTime($now); // Current date and time
-$jobIssuingDateTime = new DateTime($JobIssuingDateTime); // Convert the job issuing date-time string to DateTime object
+    $now = date("Y-m-d H:i:s");
+    $start_date = new DateTime($now); // Current date and time
+    $jobIssuingDateTime = new DateTime($JobIssuingDateTime); // Convert the job issuing date-time string to DateTime object
 
-// Calculate the difference
-$since_start = $start_date->diff($jobIssuingDateTime);
+    // Calculate the difference
+    $since_start = $start_date->diff($jobIssuingDateTime);
 
-// Get the total difference in hours
-$totalHours = $since_start->days * 24 + $since_start->h + $since_start->i / 60 + $since_start->s / 3600;
+    // Get the total difference in hours
+    $totalHours = $since_start->days * 24 + $since_start->h + $since_start->i / 60 + $since_start->s / 3600;
 
     //$since_start=strval($since_start);
 
@@ -59,9 +63,9 @@ $totalHours = $since_start->days * 24 + $since_start->h + $since_start->i / 60 +
     $finishcomment = $_POST['finishcomment'];
     $_SESSION['FinishJob'] = true;
     if ($workplace == 'Electrical') {
-        $insert = "update jobdatasheet set JobStatusE='Finished',FinishedCommentE='$finishcommentE',DownTimeE='$totalHours',ManPowerInvolvedE='$manpowerE',JobFinishingDateTime='$now' where id='$id'";
+        $insert = "update jobdatasheet set JobStatusE='Finished',FinishedCommentE='$finishcomment',ManPowerInvolvedE='$manpowerE' where id='$id'";
     } elseif ($workplace == 'Mechanical') {
-        $insert = "update jobdatasheet set JobStatusM='Finished',FinishedCommentM='$finishcommentM',DownTimeM='$totalHours',ManPowerInvolvedM='$manpowerM',JobFinishingDateTime='$now' where id='$id'";
+        $insert = "update jobdatasheet set JobStatusM='Finished',FinishedCommentM='$finishcomment',ManPowerInvolvedM='$manpowerM' where id='$id'";
     }
 
     //$insert = "update jobdatasheet set JobStatusM='Finished' where id='$id'";
@@ -70,8 +74,7 @@ $totalHours = $since_start->days * 24 + $since_start->h + $since_start->i / 60 +
         //$_SESSION['SubmitJobSucess']=true;
         //echo "Sucessfully Started Job";
 
-        header('location:.\FinishedJobSuccesEMUser.php');
-
+        header('location:.\EditFrinishedOrCertifiedJobsSuccess.php');
     } else {
 
         echo mysqli_error($con);
@@ -92,9 +95,6 @@ if (isset($_POST['delete'])) {
     $result = mysqli_query($con, $sql);
     $_SESSION['DeleteJobSucess'] = true;
     header('location:.\DeleteJobSuccess.php');
-
-
-
 }
 
 
@@ -135,7 +135,7 @@ if (isset($_POST['delete'])) {
 
     </div>
     <div class="container mt-5 ">
-        <h1> Finish Job </h1>
+        <h1> Edit Finished Job </h1>
         <div class="mt-3">
             <form method="POST">
                 <table class="table table-striped w-50">
@@ -164,8 +164,8 @@ if (isset($_POST['delete'])) {
                             Job Issuing Time and Date
                         </td>
                         <td>
-                            <?php echo $JobIssuingDateTime;?>
-                            
+                            <?php echo $JobIssuingDateTime; ?>
+
                         </td>
                     </tr>
                     <!-- Table row -->
@@ -252,33 +252,42 @@ if (isset($_POST['delete'])) {
                     </tr>
                     <!-- table row comment -->
                     <tr>
+                        <td>Man Power Involved</td>
                         <td>
-                            Man Power Involved
-                        </td>
-                        <td>
-                            <input type="text" class="form-control" name="manpower" required>
+                            <input type="text" class="form-control" name="manpower"
+                                value="<?php if ($workplace == 'Electrical') {
+                                            echo $manpowerE;
+                                        } elseif ($workplace == 'Mechanical') {
+                                            echo $manpowerM;
+                                        } ?>" required>
                         </td>
                     </tr>
-                    <!-- table row comment -->
+
                     <tr>
+                        <td>Finish Comment</td>
                         <td>
-                            Finish Comment
-                        </td>
-                        <td>
-                            <input type="text" class="form-control" name="finishcomment" required>
+                            <input type="text" class="form-control" name="finishcomment"
+                                value="<?php
+                                        if ($workplace == 'Electrical') {
+                                            echo $finishedcommentE;
+                                        } elseif ($workplace == 'Mechanical') {
+                                            echo $finishedcommentM;
+                                        }
+                                        ?>" required>
                         </td>
                     </tr>
+
                     </tr>
 
                 </table>
 
 
                 <button type="submit" class="btn btn-success mt-3" name="finish"
-                    onclick="return confirm('Are you sure?')">Finish & send for Approval</button>
+                    onclick="return confirm('Are you sure?')">Finish Editing</button>
                 <!-- <button type="submit" class="btn btn-warning mt-3" name="delete"
             onclick="return confirm('Are you sure?')">Transfer</button> -->
                 <button type="back" class="btn btn-danger mt-3" name="back"><a
-                        href="\MaintananceJobCard\EMUser\indexEMUser.php" style="text-decoration:none;color:white">Back
+                        href="..\EMUser\indexEMUser.php" style="text-decoration:none;color:white">Back
                         to Main</a></button>
             </form>
         </div>

@@ -92,7 +92,7 @@ if (isset($_SESSION['dashboard-logged']) && $_SESSION['dashboard-logged'] === tr
                     <h1 class="box-text" style="color: black">Night Shift Dashboard</h1>
                 </div>
             </a>
-            <a href="\MaintananceJobCard\EMUser\DashBoard.php" style="text-decoration: none;">
+            <a href="\MaintananceJobCard\EMUser\EditFrinishedOrCertifiedJobsList.php" style="text-decoration: none;">
                 <div class="grid-item box9" id="box9">
                     <h1 class="box-text" style="color: black">Edit Data</h1>
                 </div>
