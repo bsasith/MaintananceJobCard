@@ -48,6 +48,17 @@ unset($_SESSION['StartJob']);
         <div class="mt-5">
             <h1>Job Finished Successfully</h1>
             <button type="back" class="btn btn-danger mt-3" name="back" ><a href="\MaintananceJobCard\PUser\indexPUser.php" style="text-decoration:none;color:white">Back to Main</a></button>
+             <!-- <?php
+            $backURL = "/MaintananceJobCard/PUser/indexPUser.php";   // default
+
+            if (isset($_SESSION['dashboard-logged']) && $_SESSION['dashboard-logged'] === true) {
+                $backURL = "/MaintananceJobCard/EMUser/Dashboard.php";
+            }
+            ?>
+            <button type="button" class="btn btn-danger mt-3">
+                <a href="<?php echo $backURL; ?>" style="text-decoration:none;color:white">Back to Main</a>
+            </button> -->
+
         </div>
     </div>
 

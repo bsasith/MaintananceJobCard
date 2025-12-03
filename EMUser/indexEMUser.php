@@ -5,6 +5,10 @@ if (!($_SESSION['type'] == 'euser' or $_SESSION['type'] == 'muser')) {
     header('location:..\index.php');
 }
 
+if (isset($_SESSION['dashboard-logged']) && $_SESSION['dashboard-logged'] === true) {
+    header('Location: /MaintananceJobCard/EMUser/Dashboard.php');
+    exit;
+}
 //echo $_SESSION['type'];
 ?>
 <!DOCTYPE html>
@@ -16,7 +20,7 @@ if (!($_SESSION['type'] == 'euser' or $_SESSION['type'] == 'muser')) {
     <title>Maintenance Job Card</title>
     <link rel="stylesheet" href="\MaintananceJobCard\styles\indexstyle.css">
 
-  
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,7 +34,7 @@ if (!($_SESSION['type'] == 'euser' or $_SESSION['type'] == 'muser')) {
 <body>
     <div class="topbar">
         <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace'];
-        ?> User</h1>
+                                        ?> User</h1>
 
         <a href="..\logout.php">
             <h1 class="topbar-logout">Logout &nbsp</h1>
@@ -83,22 +87,32 @@ if (!($_SESSION['type'] == 'euser' or $_SESSION['type'] == 'muser')) {
                     <h1 class="box-text" style="color: black">Reports</h1>
                 </div>
             </a>
+            <a href="\MaintananceJobCard\EMUser\DashBoard.php" style="text-decoration: none;">
+                <div class="grid-item box8" id="box8">
+                    <h1 class="box-text" style="color: black">Night Shift Dashboard</h1>
+                </div>
+            </a>
+            <a href="\MaintananceJobCard\EMUser\DashBoard.php" style="text-decoration: none;">
+                <div class="grid-item box9" id="box9">
+                    <h1 class="box-text" style="color: black">Edit Data</h1>
+                </div>
+            </a>
         </div>
 
-       
+
 
     </div>
 
     </div>
 
-<?php
+    <?php
 
-// Initialize arrays to store data
-$labels = [];
-$values = [];
+    // Initialize arrays to store data
+    $labels = [];
+    $values = [];
 
-if ($_SESSION['type'] == 'euser') {
-    $query = "SELECT 
+    if ($_SESSION['type'] == 'euser') {
+        $query = "SELECT 
         JobPostingDev, 
         ROUND(SUM(DownTimeE)) AS TotalDownTimeInHours
     FROM 
@@ -109,8 +123,8 @@ if ($_SESSION['type'] == 'euser') {
         AND (ReportTo = 'Electrical' or ReportTo ='Both')
     GROUP BY 
         JobPostingDev;";
-} elseif ($_SESSION['type'] == 'muser') {
-    $query = "SELECT 
+    } elseif ($_SESSION['type'] == 'muser') {
+        $query = "SELECT 
         JobPostingDev, 
         ROUND(SUM(DownTimeM)) AS TotalDownTimeInHours
     FROM 
@@ -121,91 +135,92 @@ if ($_SESSION['type'] == 'euser') {
         AND (ReportTo = 'Mechanical' or ReportTo ='Both')
     GROUP BY 
         JobPostingDev;";
-}
-
-$result = $con->query($query);
-
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $labels[] = $row['JobPostingDev'];
-        $values[] = $row['TotalDownTimeInHours'];
     }
-}
 
-$con->close();
-?>
+    $result = $con->query($query);
 
-<?php
-// Define target value
-$target = 2;
-?>
-
-
-   
-
-
-
-<canvas id="myChart" width="200" height="100">
-
-<script>
-    // Embed PHP arrays into JavaScript
-    const labels = <?php echo json_encode($labels); ?>;
-    const data = <?php echo json_encode($values); ?>;
-    const target = <?php echo json_encode($target); ?>; // Target value from PHP
-
-    // Plugin to draw a target line
-    const targetLine = {
-        id: 'targetLine',
-        afterDraw: (chart) => {
-            const ctx = chart.ctx;
-            const yScale = chart.scales['y']; // Get the y-axis scale
-            const yPos = yScale.getPixelForValue(target); // Get the position for the target value
-
-            // Draw the target line
-            ctx.save();
-            ctx.beginPath();
-            ctx.moveTo(chart.chartArea.left, yPos);
-            ctx.lineTo(chart.chartArea.right, yPos);
-            ctx.strokeStyle = 'red'; // Color of the target line
-            ctx.lineWidth = 2;
-            ctx.setLineDash([5, 5]); // Optional: Make the line dashed
-            ctx.stroke();
-            ctx.restore();
-
-            // Draw target label
-            ctx.fillStyle = 'red';
-            ctx.font = '12px Arial';
-            ctx.fillText('Target: ' + target, chart.chartArea.right - 70, yPos - 5);
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $labels[] = $row['JobPostingDev'];
+            $values[] = $row['TotalDownTimeInHours'];
         }
-    };
+    }
 
-    // Create the chart
-    const ctx = document.getElementById('myChart').getContext('2d');
-    const myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Downtime (Hours) Current Month',
-                data: data,
-                backgroundColor: 'rgba(75, 174, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            
-            scales: {
-                y: {
-                    beginAtZero: true
+    $con->close();
+    ?>
+
+    <?php
+    // Define target value
+    $target = 2;
+    ?>
+
+
+
+
+
+
+    <canvas id="myChart" width="200" height="100">
+
+        <script>
+            // Embed PHP arrays into JavaScript
+            const labels = <?php echo json_encode($labels); ?>;
+            const data = <?php echo json_encode($values); ?>;
+            const target = <?php echo json_encode($target); ?>; // Target value from PHP
+
+            // Plugin to draw a target line
+            const targetLine = {
+                id: 'targetLine',
+                afterDraw: (chart) => {
+                    const ctx = chart.ctx;
+                    const yScale = chart.scales['y']; // Get the y-axis scale
+                    const yPos = yScale.getPixelForValue(target); // Get the position for the target value
+
+                    // Draw the target line
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.moveTo(chart.chartArea.left, yPos);
+                    ctx.lineTo(chart.chartArea.right, yPos);
+                    ctx.strokeStyle = 'red'; // Color of the target line
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([5, 5]); // Optional: Make the line dashed
+                    ctx.stroke();
+                    ctx.restore();
+
+                    // Draw target label
+                    ctx.fillStyle = 'red';
+                    ctx.font = '12px Arial';
+                    ctx.fillText('Target: ' + target, chart.chartArea.right - 70, yPos - 5);
                 }
-            }
-        },
-        plugins: [targetLine] // Add the plugin to draw the target line
-    });
-</script>
-</canvas>
+            };
+
+            // Create the chart
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Downtime (Hours) Current Month',
+                        data: data,
+                        backgroundColor: 'rgba(75, 174, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                },
+                plugins: [targetLine] // Add the plugin to draw the target line
+            });
+        </script>
+    </canvas>
 </body>
+
 </html>
 
 </html>

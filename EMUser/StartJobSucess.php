@@ -5,11 +5,11 @@ include '../session.php';
 if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
     header('location:..\login.php');
 }
-if(!($_SESSION['StartJob']==true))
-{
+if (!($_SESSION['StartJob'] == true)) {
     header('location:..\index.php');
 }
 unset($_SESSION['StartJob']);
+
 ?>
 
 <!DOCTYPE html>
@@ -34,9 +34,9 @@ unset($_SESSION['StartJob']);
     </style>
 </head>
 
-<body >
+<body>
     <div class="topbar">
-        <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace']?> User</h1>
+        <h1 class="topbar-text">Welcome <?php echo $_SESSION['workplace'] ?> User</h1>
 
         <a href="..\logout.php">
             <h1 class="topbar-logout">Logout &nbsp</h1>
@@ -48,6 +48,8 @@ unset($_SESSION['StartJob']);
         <div class="mt-5">
             <h1>Job Started Successfully</h1>
             <button type="back" class="btn btn-danger mt-3" name="back" ><a href="\MaintananceJobCard\PUser\indexPUser.php" style="text-decoration:none;color:white">Back to Main</a></button>
+             
+            
         </div>
     </div>
 

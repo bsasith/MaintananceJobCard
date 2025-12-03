@@ -47,6 +47,17 @@ unset($_SESSION['TransferJob']);
     <div class="container mt-5 ">
         <div class="mt-5">
             <h1>Job Transferred Successfully</h1>
+            <!-- <?php
+            $backURL = "/MaintananceJobCard/EMUser/indexEMUser.php";   // default
+
+            if (isset($_SESSION['dashboard-logged']) && $_SESSION['dashboard-logged'] === true) {
+                $backURL = "/MaintananceJobCard/EMUser/Dashboard.php";
+            }
+            ?>
+            <button type="button" class="btn btn-danger mt-3">
+                <a href="<?php echo $backURL; ?>" style="text-decoration:none;color:white">Back to Main</a>
+            </button> -->
+
             <button type="back" class="btn btn-danger mt-3" name="back" ><a href="\MaintananceJobCard\PUser\indexPUser.php" style="text-decoration:none;color:white">Back to Main</a></button>
         </div>
     </div>

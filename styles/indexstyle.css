@@ -100,6 +100,24 @@ h1.box-text {
 
 }
 
+#box8 {
+    background-color:#808080;
+}
+
+#box8:hover {
+    opacity: 80%;
+
+}
+
+#box9 {
+    background-color:#CD853F;
+}
+
+#box9:hover {
+    opacity: 80%;
+
+}
+
 a {
     text-decoration: none;
 }
