@@ -75,9 +75,13 @@ if (!($_SESSION['type'] == 'puser')) {
                     $workplace = $_SESSION['workplace'];
 
                     echo $workplace;
-                    
-                    $sql = "Select * from `jobdatasheet` where `JobPostingDev`='$workplace' and (`JobStatusE`='Pending' or `JobStatusM`='Pending') and JobStatusE NOT IN('Started') and JobStatusM NOT IN('Started') order by JobPostingDateTime DESC ";
 
+                    $sql = "SELECT * FROM `jobdatasheet` 
+        WHERE `JobPostingDev` = '$workplace'
+          AND (`JobStatusE` = 'Pending' OR `JobStatusM` = 'Pending')
+          AND JobStatusE NOT IN ('Started', 'Finished')
+          AND JobStatusM NOT IN ('Started', 'Finished')
+        ORDER BY JobPostingDateTime DESC";
 
 
                     $result = mysqli_query($con, $sql);
@@ -92,15 +96,15 @@ if (!($_SESSION['type'] == 'puser')) {
                         $priority = $row['Priority'];
                         $ReportTo = $row['ReportTo'];
                         $BriefDescription = $row['BDescription'];
-                        $JobStatusE=$row['JobStatusE'];
-                        $JobStatusM=$row['JobStatusM'];
+                        $JobStatusE = $row['JobStatusE'];
+                        $JobStatusM = $row['JobStatusM'];
                         $TryCount = $row['TryCount'];
+                        // consider job locked if E or M is Started or Finished
                         
 
 
-
- echo
-                                "
+                        echo
+                        "
                         <tr class='clickable-row' data-href='\MaintananceJobCard\PUser\ViewJobPUserPending.php?updateid=$id'>
                             
                            
@@ -115,21 +119,13 @@ if (!($_SESSION['type'] == 'puser')) {
         <td>$ReportTo</td>
         <td style='white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;'>$BriefDescription</td>
 ";
-                            if ($TryCount == '1') {
-                                echo "<td><a href='\MaintananceJobCard\PUser\UpdateDeleteJob.php?updateid=$id' class='btn btn-warning'>Update or <br>Delete</a></td>";
-                            } else if ($TryCount == '3') {
-                                echo "<td>Disapproved <br>Job</td>  </tr>";
-                            } else{
-                                echo "<td>Transferred Job</td>  </tr>";
-                            }
-
-
-
-
-
-
-
-
+                        if ($TryCount == '1') {
+                            echo "<td><a href='\MaintananceJobCard\PUser\UpdateDeleteJob.php?updateid=$id' class='btn btn-warning'>Update or <br>Delete</a></td>";
+                        } else if ($TryCount == '3') {
+                            echo "<td>Disapproved <br>Job</td>  </tr>";
+                        } else {
+                            echo "<td>Transferred Job</td>  </tr>";
+                        }
                     } ?>
                 </tbody>
             </table>
@@ -141,8 +137,8 @@ if (!($_SESSION['type'] == 'puser')) {
 
 
     <script>
-        jQuery(document).ready(function ($) {
-            $(".clickable-row").click(function () {
+        jQuery(document).ready(function($) {
+            $(".clickable-row").click(function() {
                 window.location = $(this).data("href");
             });
         });

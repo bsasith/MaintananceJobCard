@@ -65,6 +65,48 @@ $totalHours = $since_start->days * 24 + $since_start->h + $since_start->i / 60 +
     }
 
     //$insert = "update jobdatasheet set JobStatusM='Finished' where id='$id'";
+// Example: Insert spare parts used
+
+// Example: Insert spare parts used (optional section)
+
+$part_names = isset($_POST['part_name']) ? $_POST['part_name'] : [];
+$qtys       = isset($_POST['qty'])       ? $_POST['qty']       : [];
+
+// Prepare insert only if array exists and has at least one element
+if (!empty($part_names)) {
+
+    $insert_spare = $con->prepare(
+        "INSERT INTO spare_parts (JobCodeNo, part_name, qty) VALUES (?, ?, ?)"
+    );
+
+  
+
+    for ($i = 0; $i < count($part_names); $i++) {
+
+        $name = trim($part_names[$i]);
+        $qty  = trim($qtys[$i]);
+
+        // If both fields are empty, skip (optional section)
+        if ($name === '' && $qty === '') {
+            continue;
+        }
+
+        // Only insert valid rows (JS should catch bad ones, but double-safety)
+        if (!empty($name) && !empty($qty) && is_numeric($qty)) {
+
+            // JobCodeNo = string, part_name = string, qty = int
+            $insert_spare->bind_param("ssi", $JobCodeNo, $name, $qty);
+
+            if (!$insert_spare->execute()) {
+                // For debugging; remove after testing
+                die("Execute failed: " . $insert_spare->error);
+            }
+        }
+    }
+
+    $insert_spare->close();
+}
+
 
     if ($con->query($insert) == TRUE) {
         //$_SESSION['SubmitJobSucess']=true;
@@ -268,7 +310,114 @@ if (isset($_POST['delete'])) {
                             <input type="text" class="form-control" name="finishcomment" required>
                         </td>
                     </tr>
-                    </tr>
+                   <!-- table row comment -->
+                    <!-- Row of input fields -->
+<!-- Row of input fields -->
+<tr>
+    <td class="py-3">
+        <label for="spareParts">Spare Parts Used</label>
+    </td>
+    <td class="px-3" style="width: 500px;">
+
+        <table id="sparePartsTable">
+            <thead>
+                <tr>
+                    <th>Part Name</th>
+                    <th>Qty.</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="sparePartsBody">
+                <tr>
+                    <td>
+                        <input class="form-control" type="text" name="part_name[]" placeholder="Enter part name">
+                    </td>
+                    <td>
+                        <input class="form-control" type="number" name="qty[]" min="1" placeholder="0">
+                    </td>
+                    <td class="text-center">
+                        <!-- first row usually not deleted, but keep button if you want -->
+                        <button type="button" class="btn btn-danger btn-sm" onclick="deleteRow(this)">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button class="form-control bg-info w-50 mt-2" type="button" onclick="addSparePart()">
+            Add Spare Part
+        </button>
+
+<script>
+    function addSparePart() {
+        let container = document.getElementById('sparePartsBody');
+        let newRow = document.createElement('tr');
+
+        newRow.innerHTML = `
+            <td>
+                <input class="form-control" type="text" name="part_name[]" placeholder="Enter part name">
+            </td>
+            <td>
+                <input class="form-control" type="number" name="qty[]" min="1" placeholder="0">
+            </td>
+            <td class="text-center">
+                <button type="button" class="btn btn-danger btn-sm" onclick="deleteRow(this)">
+                    Delete
+                </button>
+            </td>
+        `;
+
+        container.appendChild(newRow);
+    }
+
+    function deleteRow(button) {
+        let row = button.closest('tr');
+        row.remove();
+    }
+
+    // Validation on form submit (spare parts optional)
+    document.querySelector('form').addEventListener('submit', function (e) {
+        const partNames = document.querySelectorAll('input[name="part_name[]"]');
+        const qtys      = document.querySelectorAll('input[name="qty[]"]');
+
+        let errors = [];
+
+        for (let i = 0; i < partNames.length; i++) {
+            const name     = partNames[i].value.trim();
+            const qtyValue = qtys[i].value.trim();
+            const qty      = Number(qtyValue);
+
+            // If both empty → ignore row (optional section)
+            if (name === '' && qtyValue === '') {
+                continue;
+            }
+
+            // If one filled and one empty → error
+            if (name === '' && qtyValue !== '') {
+                errors.push(`Part name is required in row ${i + 1}`);
+            } else if (name !== '' && qtyValue === '') {
+                errors.push(`Quantity is required in row ${i + 1}`);
+            } else {
+                // Both filled → check quantity validity
+                if (isNaN(qty) || qty <= 0) {
+                    errors.push(`Quantity must be a positive number in row ${i + 1}`);
+                }
+            }
+        }
+
+        if (errors.length > 0) {
+            e.preventDefault();
+            alert(errors.join('\n'));
+        }
+    });
+</script>
+
+
+    </td>
+</tr>
+
+        <!-- end of row -->
 
                 </table>
 

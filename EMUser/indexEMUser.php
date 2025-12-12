@@ -94,7 +94,7 @@ if (isset($_SESSION['dashboard-logged']) && $_SESSION['dashboard-logged'] === tr
             </a>
             <a href="\MaintananceJobCard\EMUser\EditFrinishedOrCertifiedJobsList.php" style="text-decoration: none;">
                 <div class="grid-item box9" id="box9">
-                    <h1 class="box-text" style="color: black">Edit Data</h1>
+                    <h1 class="box-text" style="color: black">Edit Comments for<br>finished jobs</h1>
                 </div>
             </a>
         </div>
