@@ -35,6 +35,16 @@ if (!($_SESSION['type'] == 'puser')) {
             text-align: center;
             cursor: pointer;
         }
+
+        .not-certified td {
+            background-color: #f8d7da !important;
+            /* light red */
+        }
+
+        .transferred td {
+            background-color: #78d3f7ff !important;
+            /* light blue */
+        }
     </style>
 </head>
 
@@ -99,13 +109,31 @@ if (!($_SESSION['type'] == 'puser')) {
                         $JobStatusE = $row['JobStatusE'];
                         $JobStatusM = $row['JobStatusM'];
                         $TryCount = $row['TryCount'];
+                        $Certification = $row['Certification'];
                         // consider job locked if E or M is Started or Finished
-                        
 
+                        $classes = [];
+
+                        $Certification = isset($row['Certification']) ? trim($row['Certification']) : '';
+
+                        if (strcasecmp($Certification, 'Not Certified') == 0) {
+                            $classes[] = 'not-certified';
+                        }
+
+                        if ($TryCount == '2') {
+                            $classes[] = 'transferred';
+                        }
+
+                        $rowClass = implode(' ', $classes);
 
                         echo
                         "
-                        <tr class='clickable-row' data-href='\MaintananceJobCard\PUser\ViewJobPUserPending.php?updateid=$id'>
+                        
+
+
+<tr class='clickable-row $rowClass' data-href='\MaintananceJobCard\PUser\ViewJobPUserPending.php?updateid=$id'>
+
+
                             
                            
         <td>$JobCodeNo</td>

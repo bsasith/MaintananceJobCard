@@ -35,6 +35,15 @@ $DisapproveComment = $row['DisapproveComment'];
 $TryCount = $row['TryCount'];
 $DownTimeE = $row['DownTimeE'];
 $DownTimeM = $row['DownTimeM'];
+$ManPowerInvolvedE = $row['ManPowerInvolvedE'];
+$ManPowerInvolvedM = $row['ManPowerInvolvedM']; 
+
+
+$spareSql = "SELECT * FROM spare_parts WHERE JobCodeNo = '$JobCodeNo'";
+$spareResult = mysqli_query($con, $spareSql);
+
+
+
 // $gen = explode(",",$gender);
 // $lang = explode(",",$datas);
 // $pl = explode(",",$place);
@@ -324,15 +333,35 @@ if (isset($_POST['delete'])) {
                     </tr>
                     </tr>
                     <!-- table row comment -->
-                    <!-- <tr>
-                        <td>
-                            Finish Comment
-                        </td>
-                        <td>
-                            <input type="text" class="form-control" name="finishcomment">
-                        </td>
-                    </tr> -->
+                    <tr>
+                       
+    
+    
+<?php if ($spareResult && mysqli_num_rows($spareResult) > 0) { ?>
+    
+    <table class="table table-striped w-50">
+        <thead>
+            <h6>Spare Parts Used</h6>
+            <tr>
+                <th>Spare part name</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php while ($spareRow = mysqli_fetch_assoc($spareResult)) { ?>
+                <tr>
+                    <td><?php echo $spareRow['part_name']; ?></td>
+                    <td><?php echo $spareRow['qty']; ?></td>
+                </tr>
+            <?php } } else { echo "<tr><td colspan='2'>No spare parts recorded for this job.</td></tr>"; } ?>
+        </tbody>
+    </table>
+
+
+
+
                     </tr>
+                    
 
                 </table>
 

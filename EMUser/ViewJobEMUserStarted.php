@@ -290,7 +290,7 @@ if (isset($_POST['delete'])) {
                         if (!is_null($DisapproveComment)) {
                             echo "<tr>
                         <td>
-                            Transfer Comment Mechanical
+                            Disapprove Comment
                         </td>
                         <td>
                              $DisapproveComment

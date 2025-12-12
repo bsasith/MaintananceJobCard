@@ -293,7 +293,7 @@ $TryCount = $row['TryCount'];
                         if (!is_null($DisapproveComment)) {
                             echo "<tr>
                         <td>
-                            Transfer Comment Mechanical
+                            Disapprove Comment
                         </td>
                         <td>
                              $DisapproveComment

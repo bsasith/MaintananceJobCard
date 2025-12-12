@@ -31,16 +31,20 @@ $FinishedCommentE = $row['FinishedCommentE'];
 $FinishedCommentM = $row['FinishedCommentM'];
 $TransferCommentE = $row['TransferCommentE'];
 $TransferCommentM = $row['TransferCommentM'];
+$ApproveComment = $row['ApproveComment'];
 $DisapproveComment = $row['DisapproveComment'];
 $TryCount = $row['TryCount'];
 $DownTimeE = $row['DownTimeE'];
 $DownTimeM = $row['DownTimeM'];
+$ProdSettingTime = $row['ProdSettingTime'];
 // $gen = explode(",",$gender);
 // $lang = explode(",",$datas);
 // $pl = explode(",",$place);
 
 //echo  $BriefDescription;
 
+$spareSql = "SELECT * FROM spare_parts WHERE JobCodeNo = '$JobCodeNo'";
+$spareResult = mysqli_query($con, $spareSql);
 
 
 // update operation
@@ -85,9 +89,6 @@ if (isset($_POST['delete'])) {
     $result = mysqli_query($con, $sql);
     $_SESSION['DeleteJobSucess'] = true;
     header('location:.\DeleteJobSuccess.php');
-
-
-
 }
 
 
@@ -178,6 +179,7 @@ if (isset($_POST['delete'])) {
                             <?php echo $MachineName; ?>
                         </td>
                     </tr>
+                    
                     <!-- Table row -->
                     <tr>
                         <td>
@@ -238,101 +240,158 @@ if (isset($_POST['delete'])) {
                         <td>
                             <?php echo $BriefDescription; ?>
                         </td>
-                        <!-- Table row -->
-                        <?php
-                        if (!is_null($FinishedCommentE)) {
-                            echo "<tr>
+                    </tr>
+                    <!-- Table row -->
+                    <?php
+                    if (!is_null($FinishedCommentE)) {
+                        echo "<tr>
                         <td>
                             Finished Comment Electrical
                         </td>
                         <td>
                              $FinishedCommentE 
                         </td>";
-                        }
-                        ?>
-
-                        <!-- Table row -->
-                        <?php
-                        if (!is_null($FinishedCommentM)) {
-                            echo "<tr>
+                    }
+                    ?>
+                    </tr>
+                    <!-- Table row -->
+                    <?php
+                    if (!is_null($FinishedCommentM)) {
+                        echo "<tr>
                         <td>
                             Finished Comment Mechanical
                         </td>
                         <td>
                              $FinishedCommentM 
-                        </td>";
-                        }
-                        ?>
-                        <!-- Table row -->
-                        <?php
-                        if (!is_null($TransferCommentE)) {
-                            echo "<tr>
+                        </td></tr>";
+                    }
+                    ?>
+                    <!-- Table row -->
+                    <?php
+                    if (!is_null($TransferCommentE)) {
+                        echo "<tr>
                         <td>
                             Transfer Comment Electrical
                         </td>
                         <td>
                              $TransferCommentE 
                         </td>";
-                        }
-                        ?>
-                        <!-- Table row -->
-                        <?php
-                        if (!is_null($TransferCommentM)) {
-                            echo "<tr>
+                    }
+                    ?>
+                    <!-- Table row -->
+                    <?php
+                    if (!is_null($TransferCommentM)) {
+                        echo "<tr>
                         <td>
                             Transfer Comment Mechanical
                         </td>
                         <td>
                              $TransferCommentM 
                         </td>";
-                        }
-                        ?>
-                        <!-- Table row -->
-                        <?php
-                        if (!is_null($DisapproveComment)) {
-                            echo "<tr>
+                    }
+                    ?>
+                    <!-- Table row -->
+                    <?php
+                    if (!is_null($DisapproveComment)) {
+                        echo "<tr>
                         <td>
-                            Transfer Comment Mechanical
+                            Disapprove Comment
                         </td>
                         <td>
                              $DisapproveComment
                         </td>";
-                        }
-                        ?>
+                    }
+                    ?>
+                    <!-- Table row -->
+                    <?php
+                    if (!is_null($DownTimeE)) {
+                        echo "<tr>
+                        <td>
+                            DownTime Electrical
+                        </td>"; ?>
+                        <td>
+                            <?php
+                            if (!is_null($DownTimeE)) {
+                                $DownTimeDays = round($DownTimeE / 24, 0);
+                                $DownTimeHoursResidue = round(fmod($DownTimeE, 24), 0);
+                                $DownTiMinutesResidue = round(fmod($DownTimeE, 1) * 60, 0);
+                                echo "days: $DownTimeDays and hours: $DownTimeHoursResidue and  Minutes:  $DownTiMinutesResidue";
+                            } else {
+                                echo "NA";
+                            } ?>
+                        </td>
+                    <?php }
+                    ?>
 
+                     <!-- Table row -->
+                    <?php
+                    if (!is_null($DownTimeM)) {
+                        echo "<tr>
+                        <td>
+                            DownTime Mechanical
+                        </td>"; ?>
+                        <td>
+                            <?php
+                            if (!is_null($DownTimeM)) {
+                                $DownTimeDays = round($DownTimeM / 24, 0);
+                                $DownTimeHoursResidue = round(fmod($DownTimeM, 24), 0);
+                                $DownTiMinutesResidue = round(fmod($DownTimeM, 1) * 60, 0);
+                                echo "days: $DownTimeDays and ";
+                                echo "NA";
+                            } ?>
+                        </td>
+                    <?php }
+                    ?>
+                    <!-- Table row -->
                     <tr>
                         <td>
-                            Total DownTime
+                            Certify Comment
                         </td>
                         <td>
-                        <?php
-                        if ($_SESSION['type'] == 'euser') {
-                                                                          
-                            $DownTimeDays=round($DownTimeE/24,0);
-                            $DownTimeHoursResidue=round(fmod($DownTimeE,24),0);
-                            $DownTiMinutesResidue=round(fmod($DownTimeE,1)*60,0);
-                             echo "days: $DownTimeDays and hours: $DownTimeHoursResidue and  Minutes:  $DownTiMinutesResidue";
-                        }else if ($_SESSION['type'] == 'muser')
-                        {
-                            $DownTimeDays=round($DownTimeM/24,0);
-                            $DownTimeHoursResidue=round(fmod($DownTimeM,24),0);
-                            $DownTiMinutesResidue=round(fmod($DownTimeM,1)*60,0);
-                             echo "days: $DownTimeDays and hours: $DownTimeHoursResidue and  Minutes:  $DownTiMinutesResidue";
-                        }
-                             ?>
-
+                            <?php echo $ApproveComment; ?>
                         </td>
                     </tr>
+                    <!-- Table row -->
+                    <tr>
+                        <td>
+                            Production Loss(Miniutes)
+                        </td>
+                        <td>
+                            <?php echo $ProdSettingTime; ?>
+                        </td>
                     </tr>
                     <!-- table row comment -->
-                    <!-- <tr>
-                        <td>
-                            Finish Comment
-                        </td>
-                        <td>
-                            <input type="text" class="form-control" name="finishcomment">
-                        </td>
-                    </tr> -->
+                    <tr>
+
+
+
+                        <?php if ($spareResult && mysqli_num_rows($spareResult) > 0) { ?>
+
+                            <table class="table table-striped w-50">
+                                <thead>
+                                    <h6>Spare Parts Used</h6>
+                                    <tr>
+                                        <th>Spare part name</th>
+                                        <th>Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php while ($spareRow = mysqli_fetch_assoc($spareResult)) { ?>
+                                        <tr>
+                                            <td><?php echo $spareRow['part_name']; ?></td>
+                                            <td><?php echo $spareRow['qty']; ?></td>
+                                        </tr>
+                                <?php }
+                                } else {
+                                    echo "<tr><td colspan='2'>No spare parts recorded for this job.</td></tr>";
+                                } ?>
+                                </tbody>
+                            </table>
+
+
+
+
+                    </tr>
                     </tr>
 
                 </table>
@@ -343,10 +402,10 @@ if (isset($_POST['delete'])) {
                 <!-- <button type="submit" class="btn btn-warning mt-3" name="delete"
             onclick="return confirm('Are you sure?')">Transfer</button> -->
                 <button type="back" class="btn btn-danger mt-3 mx-2" name="back"><a
-                        href="\MaintananceJobCard\EMUser\indexEMUser.php" style="text-decoration:none;color:white">Back
+                        href=".\EMUser\indexEMUser.php" style="text-decoration:none;color:white">Back
                         to Main</a></button>
                 <button type="back" class="btn btn-warning mt-3" name="back"><a class="text-dark"
-                        href="\MaintananceJobCard\EMUser\CertifiedJobsEMUser.php"
+                        href=".\EMUser\CertifiedJobsEMUser.php"
                         style="text-decoration:none;color:white">Back to
                         list</a></button>
             </form>
