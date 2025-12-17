@@ -336,10 +336,10 @@ if (isset($_POST['delete'])) {
                 <!-- <button type="submit" class="btn btn-warning mt-3" name="delete"
             onclick="return confirm('Are you sure?')">Transfer</button> -->
                 <button type="back" class="btn btn-danger mt-3 mx-2" name="back"><a
-                        href="\MaintananceJobCard\EMUser\indexEMUser.php" style="text-decoration:none;color:white">Back
+                        href=".\indexEMUser.php" style="text-decoration:none;color:white">Back
                         to Main</a></button>
                         <button type="back" class="btn btn-warning mt-3" name="back"><a class="text-dark"
-                    href="\MaintananceJobCard\EMUser\DislplayPendingJobListEMUser.php" style="text-decoration:none;color:white">Back to
+                    href=".\DislplayPendingJobListEMUser.php" style="text-decoration:none;color:white">Back to
                     list</a></button>
             </form>
         </div>

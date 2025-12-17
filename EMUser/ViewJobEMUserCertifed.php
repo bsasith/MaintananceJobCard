@@ -4,96 +4,58 @@ include '../session.php';
 
 if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
     header('location:..\index.php');
+    exit();
 }
-
 
 $idu = $_GET['updateid'];
 
-$sql = "Select * from jobdatasheet where id='$idu'";
-
+$sql = "SELECT * FROM jobdatasheet WHERE id = '$idu'";
 $result = mysqli_query($con, $sql);
-
 $row = mysqli_fetch_assoc($result);
 
-$id = $row['id'];
-$JobCodeNo = $row['JobCodeNo'];
-$username = $_SESSION['username'];
+$id                = $row['id'];
+$JobCodeNo         = $row['JobCodeNo'];
+$username          = $_SESSION['username'];
 $JobIssuingDateTime = $row['JobPostingDateTime'];
 $JobIssuingDivision = $row['JobPostingDev'];
-$MachineName = $row['MachineName'];
-$priority = $row['Priority'];
-$ReportTo = $row['ReportTo'];
-$BriefDescription = $row['BDescription'];
-$JobStatusM = $row['JobStatusM'];
-$JobStatusE = $row['JobStatusE'];
-$Username2 = $row['Username'];
-$FinishedCommentE = $row['FinishedCommentE'];
-$FinishedCommentM = $row['FinishedCommentM'];
-$TransferCommentE = $row['TransferCommentE'];
-$TransferCommentM = $row['TransferCommentM'];
-$ApproveComment = $row['ApproveComment'];
+$MachineName       = $row['MachineName'];
+$priority          = $row['Priority'];
+$ReportTo          = $row['ReportTo'];
+$BriefDescription  = $row['BDescription'];
+$JobStatusM        = $row['JobStatusM'];
+$JobStatusE        = $row['JobStatusE'];
+$Username2         = $row['Username'];
+$FinishedCommentE  = $row['FinishedCommentE'];
+$FinishedCommentM  = $row['FinishedCommentM'];
+$TransferCommentE  = $row['TransferCommentE'];
+$TransferCommentM  = $row['TransferCommentM'];
+$ApproveComment    = $row['ApproveComment'];
 $DisapproveComment = $row['DisapproveComment'];
-$TryCount = $row['TryCount'];
-$DownTimeE = $row['DownTimeE'];
-$DownTimeM = $row['DownTimeM'];
-$ProdSettingTime = $row['ProdSettingTime'];
-// $gen = explode(",",$gender);
-// $lang = explode(",",$datas);
-// $pl = explode(",",$place);
+$TryCount          = $row['TryCount'];
+$DownTimeE         = $row['DownTimeE'];
+$DownTimeM         = $row['DownTimeM'];
+$ProdSettingTime   = $row['ProdSettingTime'];
 
-//echo  $BriefDescription;
+// Spare parts – Electrical
+$spareSqlE = "SELECT * FROM spare_parts 
+              WHERE JobCodeNo = '$JobCodeNo' 
+                AND UserType = 'euser'";
+$spareResultE = mysqli_query($con, $spareSqlE);
 
-$spareSql = "SELECT * FROM spare_parts WHERE JobCodeNo = '$JobCodeNo'";
-$spareResult = mysqli_query($con, $spareSql);
-
-
-// update operation
-// if (isset($_POST['finish'])) {
-//     $workplace=$_SESSION['workplace'];
-// $finishcomment=$_POST['finishcomment'];
-//     $_SESSION['FinishJob'] = true;
-//     if ($workplace=='Electrical')
-//     {
-//         $insert = "update jobdatasheet set JobStatusE='Finished',FinishedCommentE='$finishcomment' where id='$id'";
-//     }
-//     elseif($workplace=='Mechanical')
-//     {
-//         $insert = "update jobdatasheet set JobStatusM='Finished',FinishedCommentM='$finishcomment' where id='$id'";
-//     }
-
-//     //$insert = "update jobdatasheet set JobStatusM='Finished' where id='$id'";
-
-//     if ($con->query($insert) == TRUE) {
-//         //$_SESSION['SubmitJobSucess']=true;
-//         //echo "Sucessfully Started Job";
-
-//         header('location:.\FinishedJobSuccesEMUser.php');
-
-//     } else {
-
-//         echo mysqli_error($con);
-//         //  header('location:location:..\PUser\indexPUser.php');
-//     }
-//     //$insert->close();
-// }
-
-
-
-
-
+// Spare parts – Mechanical
+$spareSqlM = "SELECT * FROM spare_parts 
+              WHERE JobCodeNo = '$JobCodeNo' 
+                AND UserType = 'muser'";
+$spareResultM = mysqli_query($con, $spareSqlM);
 
 // delete operation
 if (isset($_POST['delete'])) {
-
-    $sql = "delete  from `jobdatasheet` where id='$idu'";
-    $result = mysqli_query($con, $sql);
+    $sqlDel = "DELETE FROM `jobdatasheet` WHERE id = '$idu'";
+    $resultDel = mysqli_query($con, $sqlDel);
     $_SESSION['DeleteJobSucess'] = true;
     header('location:.\DeleteJobSuccess.php');
+    exit();
 }
-
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -102,7 +64,7 @@ if (isset($_POST['delete'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>View Job</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -126,294 +88,203 @@ if (isset($_POST['delete'])) {
             <h1 class="topbar-logout">Logout &nbsp</h1>
         </a>
         <h1 class="topbar-username"><?php echo $_SESSION['username'] ?>&nbsp</h1>
-
     </div>
+
     <div class="container mt-5 ">
-        <h1>View Job </h1>
+        <h1>View Job</h1>
         <div class="mt-3 mb-5">
             <form method="POST">
+                <!-- Main Job Details Table -->
                 <table class="table table-striped w-50">
                     <tr>
-                        <!-- Table row -->
-                    <tr>
-                        <td>
-                            Job code No
-                        </td>
-                        <td>
-                            <?php echo $JobCodeNo; ?>
-                        </td>
+                        <td>Job code No</td>
+                        <td><?php echo $JobCodeNo; ?></td>
                     </tr>
-                    <!-- Table row -->
                     <tr>
-                        <td>
-                            Issuing User
-                        </td>
-                        <td>
-                            <?php echo $Username2; ?>
-                        </td>
+                        <td>Issuing User</td>
+                        <td><?php echo $Username2; ?></td>
                     </tr>
-                    <!-- Table row -->
                     <tr>
-                        <td>
-                            Job Issuing Time and Date
-                        </td>
-                        <td>
-                            <?php echo $JobIssuingDateTime; ?>
-                        </td>
+                        <td>Job Issuing Time and Date</td>
+                        <td><?php echo $JobIssuingDateTime; ?></td>
                     </tr>
-                    <!-- Table row -->
                     <tr>
-                        <td>
-                            Job Issuing Division
-                        </td>
-                        <td>
-                            <?php echo $JobIssuingDivision; ?>
-                        </td>
+                        <td>Job Issuing Division</td>
+                        <td><?php echo $JobIssuingDivision; ?></td>
                     </tr>
-                    <!-- Table row -->
                     <tr>
-                        <td>
-                            Machine Name
-                        </td>
-                        <td>
-                            <?php echo $MachineName; ?>
-                        </td>
+                        <td>Machine Name</td>
+                        <td><?php echo $MachineName; ?></td>
                     </tr>
-                    
-                    <!-- Table row -->
                     <tr>
-                        <td>
-                            Priority
-                        </td>
-                        <td>
-                            <?php echo $priority; ?>
-                        </td>
+                        <td>Priority</td>
+                        <td><?php echo $priority; ?></td>
                     </tr>
-                    <!-- Table row -->
                     <tr>
-                        <td>
-                            Report To
-                        </td>
-                        <td>
-                            <?php echo $ReportTo; ?>
-                        </td>
+                        <td>Report To</td>
+                        <td><?php echo $ReportTo; ?></td>
                     </tr>
-                    <!-- Table row -->
                     <tr>
-                        <td>
-                            Electrical Department Status
-                        </td>
-                        <td>
-                            <?php echo $JobStatusE; ?>
-                        </td>
+                        <td>Electrical Department Status</td>
+                        <td><?php echo $JobStatusE; ?></td>
                     </tr>
-                    <!-- Table row -->
                     <tr>
-                        <td>
-                            Mechanical Department Status
-                        </td>
-                        <td>
-                            <?php echo $JobStatusM; ?>
-                        </td>
+                        <td>Mechanical Department Status</td>
+                        <td><?php echo $JobStatusM; ?></td>
                     </tr>
-                    <!-- Table row -->
                     <tr>
-                        <td>
-                            Job Origin
-                        </td>
+                        <td>Job Origin</td>
                         <td>
                             <?php
                             if ($TryCount == '1') {
                                 echo "Fresh Job";
-                            } else if ($TryCount == '2') {
-                                echo "Transferred<br>Job ";
-                            } else if ($TryCount == '3') {
-                                echo "Disapproved<br> Job";
-                            } ?>
+                            } elseif ($TryCount == '2') {
+                                echo "Transferred Job";
+                            } elseif ($TryCount == '3') {
+                                echo "Disapproved Job";
+                            } else {
+                                echo "N/A";
+                            }
+                            ?>
                         </td>
                     </tr>
-                    <!-- Table row -->
                     <tr>
-                        <td>
-                            Brief Description
-                        </td>
-                        <td>
-                            <?php echo $BriefDescription; ?>
-                        </td>
+                        <td>Brief Description</td>
+                        <td><?php echo $BriefDescription; ?></td>
                     </tr>
-                    <!-- Table row -->
-                    <?php
-                    if (!is_null($FinishedCommentE)) {
-                        echo "<tr>
-                        <td>
-                            Finished Comment Electrical
-                        </td>
-                        <td>
-                             $FinishedCommentE 
-                        </td>";
-                    }
-                    ?>
-                    </tr>
-                    <!-- Table row -->
-                    <?php
-                    if (!is_null($FinishedCommentM)) {
-                        echo "<tr>
-                        <td>
-                            Finished Comment Mechanical
-                        </td>
-                        <td>
-                             $FinishedCommentM 
-                        </td></tr>";
-                    }
-                    ?>
-                    <!-- Table row -->
-                    <?php
-                    if (!is_null($TransferCommentE)) {
-                        echo "<tr>
-                        <td>
-                            Transfer Comment Electrical
-                        </td>
-                        <td>
-                             $TransferCommentE 
-                        </td>";
-                    }
-                    ?>
-                    <!-- Table row -->
-                    <?php
-                    if (!is_null($TransferCommentM)) {
-                        echo "<tr>
-                        <td>
-                            Transfer Comment Mechanical
-                        </td>
-                        <td>
-                             $TransferCommentM 
-                        </td>";
-                    }
-                    ?>
-                    <!-- Table row -->
-                    <?php
-                    if (!is_null($DisapproveComment)) {
-                        echo "<tr>
-                        <td>
-                            Disapprove Comment
-                        </td>
-                        <td>
-                             $DisapproveComment
-                        </td>";
-                    }
-                    ?>
-                    <!-- Table row -->
-                    <?php
-                    if (!is_null($DownTimeE)) {
-                        echo "<tr>
-                        <td>
-                            DownTime Electrical
-                        </td>"; ?>
-                        <td>
-                            <?php
-                            if (!is_null($DownTimeE)) {
+
+                    <?php if (!is_null($FinishedCommentE)) { ?>
+                        <tr>
+                            <td>Finished Comment Electrical</td>
+                            <td><?php echo $FinishedCommentE; ?></td>
+                        </tr>
+                    <?php } ?>
+
+                    <?php if (!is_null($FinishedCommentM)) { ?>
+                        <tr>
+                            <td>Finished Comment Mechanical</td>
+                            <td><?php echo $FinishedCommentM; ?></td>
+                        </tr>
+                    <?php } ?>
+
+                    <?php if (!is_null($TransferCommentE)) { ?>
+                        <tr>
+                            <td>Transfer Comment Electrical</td>
+                            <td><?php echo $TransferCommentE; ?></td>
+                        </tr>
+                    <?php } ?>
+
+                    <?php if (!is_null($TransferCommentM)) { ?>
+                        <tr>
+                            <td>Transfer Comment Mechanical</td>
+                            <td><?php echo $TransferCommentM; ?></td>
+                        </tr>
+                    <?php } ?>
+
+                    <?php if (!is_null($DisapproveComment)) { ?>
+                        <tr>
+                            <td>Disapprove Comment</td>
+                            <td><?php echo $DisapproveComment; ?></td>
+                        </tr>
+                    <?php } ?>
+
+                    <?php if (!is_null($DownTimeE)) { ?>
+                        <tr>
+                            <td>DownTime Electrical</td>
+                            <td>
+                                <?php
                                 $DownTimeDays = round($DownTimeE / 24, 0);
                                 $DownTimeHoursResidue = round(fmod($DownTimeE, 24), 0);
                                 $DownTiMinutesResidue = round(fmod($DownTimeE, 1) * 60, 0);
-                                echo "days: $DownTimeDays and hours: $DownTimeHoursResidue and  Minutes:  $DownTiMinutesResidue";
-                            } else {
-                                echo "NA";
-                            } ?>
-                        </td>
-                    <?php }
-                    ?>
+                                echo "days: $DownTimeDays, hours: $DownTimeHoursResidue, minutes: $DownTiMinutesResidue";
+                                ?>
+                            </td>
+                        </tr>
+                    <?php } ?>
 
-                     <!-- Table row -->
-                    <?php
-                    if (!is_null($DownTimeM)) {
-                        echo "<tr>
-                        <td>
-                            DownTime Mechanical
-                        </td>"; ?>
-                        <td>
-                            <?php
-                            if (!is_null($DownTimeM)) {
-                                $DownTimeDays = round($DownTimeM / 24, 0);
-                                $DownTimeHoursResidue = round(fmod($DownTimeM, 24), 0);
-                                $DownTiMinutesResidue = round(fmod($DownTimeM, 1) * 60, 0);
-                                echo "days: $DownTimeDays and ";
-                                echo "NA";
-                            } ?>
-                        </td>
-                    <?php }
-                    ?>
-                    <!-- Table row -->
+                    <?php if (!is_null($DownTimeM)) { ?>
+                        <tr>
+                            <td>DownTime Mechanical</td>
+                            <td>
+                                <?php
+                                $DownTimeDaysM = round($DownTimeM / 24, 0);
+                                $DownTimeHoursResidueM = round(fmod($DownTimeM, 24), 0);
+                                $DownTiMinutesResidueM = round(fmod($DownTimeM, 1) * 60, 0);
+                                echo "days: $DownTimeDaysM, hours: $DownTimeHoursResidueM, minutes: $DownTiMinutesResidueM";
+                                ?>
+                            </td>
+                        </tr>
+                    <?php } ?>
+
                     <tr>
-                        <td>
-                            Certify Comment
-                        </td>
-                        <td>
-                            <?php echo $ApproveComment; ?>
-                        </td>
+                        <td>Certify Comment</td>
+                        <td><?php echo $ApproveComment; ?></td>
                     </tr>
-                    <!-- Table row -->
+
                     <tr>
-                        <td>
-                            Production Loss(Miniutes)
-                        </td>
-                        <td>
-                            <?php echo $ProdSettingTime; ?>
-                        </td>
+                        <td>Production Loss (Minutes)</td>
+                        <td><?php echo $ProdSettingTime; ?></td>
                     </tr>
-                    <!-- table row comment -->
-                    <tr>
-
-
-
-                        <?php if ($spareResult && mysqli_num_rows($spareResult) > 0) { ?>
-
-                            <table class="table table-striped w-50">
-                                <thead>
-                                    <h6>Spare Parts Used</h6>
-                                    <tr>
-                                        <th>Spare part name</th>
-                                        <th>Quantity</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php while ($spareRow = mysqli_fetch_assoc($spareResult)) { ?>
-                                        <tr>
-                                            <td><?php echo $spareRow['part_name']; ?></td>
-                                            <td><?php echo $spareRow['qty']; ?></td>
-                                        </tr>
-                                <?php }
-                                } else {
-                                    echo "<tr><td colspan='2'>No spare parts recorded for this job.</td></tr>";
-                                } ?>
-                                </tbody>
-                            </table>
-
-
-
-
-                    </tr>
-                    </tr>
-
                 </table>
 
+                <!-- Spare Parts – Electrical -->
+                <h5 class="mt-4">Spare Parts Used – Electrical</h5>
+                <?php if ($spareResultE && mysqli_num_rows($spareResultE) > 0) { ?>
+                    <table class="table table-striped w-50">
+                        <thead>
+                            <tr>
+                                <th>Spare part name</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php while ($spE = mysqli_fetch_assoc($spareResultE)) { ?>
+                                <tr>
+                                    <td><?php echo $spE['part_name']; ?></td>
+                                    <td><?php echo $spE['qty']; ?></td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                <?php } else { ?>
+                    <p>No spare parts recorded for Electrical department.</p>
+                <?php } ?>
 
-                <!-- <button type="submit" class="btn btn-success mt-3" name="finish"
-                    onclick="return confirm('Are you sure?')">Finish & send for Approval</button> -->
-                <!-- <button type="submit" class="btn btn-warning mt-3" name="delete"
-            onclick="return confirm('Are you sure?')">Transfer</button> -->
-                <button type="back" class="btn btn-danger mt-3 mx-2" name="back"><a
-                        href=".\EMUser\indexEMUser.php" style="text-decoration:none;color:white">Back
-                        to Main</a></button>
-                <button type="back" class="btn btn-warning mt-3" name="back"><a class="text-dark"
-                        href=".\EMUser\CertifiedJobsEMUser.php"
-                        style="text-decoration:none;color:white">Back to
-                        list</a></button>
+                <!-- Spare Parts – Mechanical -->
+                <h5 class="mt-4">Spare Parts Used – Mechanical</h5>
+                <?php if ($spareResultM && mysqli_num_rows($spareResultM) > 0) { ?>
+                    <table class="table table-striped w-50">
+                        <thead>
+                            <tr>
+                                <th>Spare part name</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php while ($spM = mysqli_fetch_assoc($spareResultM)) { ?>
+                                <tr>
+                                    <td><?php echo $spM['part_name']; ?></td>
+                                    <td><?php echo $spM['qty']; ?></td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                <?php } else { ?>
+                    <p>No spare parts recorded for Mechanical department.</p>
+                <?php } ?>
+
+                <button type="back" class="btn btn-danger mt-3 mx-2" name="back">
+                    <a href=".\indexEMUser.php" style="text-decoration:none;color:white">Back to Main</a>
+                </button>
+
+                <button type="back" class="btn btn-warning mt-3" name="back">
+                    <a class="text-dark" href=".\CertifiedJobsEMUser.php" style="text-decoration:none;color:white">
+                        Back to list
+                    </a>
+                </button>
             </form>
         </div>
     </div>
-
-
-
-
 </body>
-</body>
+
+</html>

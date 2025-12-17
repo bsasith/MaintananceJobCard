@@ -76,7 +76,7 @@ $qtys       = isset($_POST['qty'])       ? $_POST['qty']       : [];
 if (!empty($part_names)) {
 
     $insert_spare = $con->prepare(
-        "INSERT INTO spare_parts (JobCodeNo, part_name, qty) VALUES (?, ?, ?)"
+        "INSERT INTO spare_parts (JobCodeNo, UserType, part_name, qty) VALUES (?, ?, ?, ?)"
     );
 
   
@@ -95,7 +95,7 @@ if (!empty($part_names)) {
         if (!empty($name) && !empty($qty) && is_numeric($qty)) {
 
             // JobCodeNo = string, part_name = string, qty = int
-            $insert_spare->bind_param("ssi", $JobCodeNo, $name, $qty);
+            $insert_spare->bind_param("sssi", $JobCodeNo,$_SESSION['type'], $name, $qty);
 
             if (!$insert_spare->execute()) {
                 // For debugging; remove after testing
@@ -427,7 +427,7 @@ if (isset($_POST['delete'])) {
                 <!-- <button type="submit" class="btn btn-warning mt-3" name="delete"
             onclick="return confirm('Are you sure?')">Transfer</button> -->
                 <button type="back" class="btn btn-danger mt-3" name="back"><a
-                        href="\MaintananceJobCard\EMUser\indexEMUser.php" style="text-decoration:none;color:white">Back
+                        href=".\indexEMUser.php" style="text-decoration:none;color:white">Back
                         to Main</a></button>
             </form>
         </div>

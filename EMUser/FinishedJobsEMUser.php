@@ -134,7 +134,7 @@ if (!(($_SESSION['type'] == 'euser')or($_SESSION['type'] == 'muser'))) {
                 </tbody>
             </table>
             <button type="back" class="btn btn-danger mt-3" name="back"><a
-                    href="\MaintananceJobCard\PUser\indexPUser.php" style="text-decoration:none;color:white">Back to
+                    href=".\indexEMUser.php" style="text-decoration:none;color:white">Back to
                     Main</a></button>
         </div>
     </div>

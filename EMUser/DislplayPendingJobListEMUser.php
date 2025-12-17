@@ -34,6 +34,15 @@ if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
         td {
             text-align: center;
         }
+        .not-certified td {
+            background-color: #f8d7da !important;
+            /* light red */
+        }
+
+        .transferred td {
+            background-color: #78d3f7ff !important;
+            /* light blue */
+        }
     </style>
 </head>
 
@@ -93,12 +102,24 @@ if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
                         $ReportTo = $row['ReportTo'];
                         $BriefDescription = $row['BDescription'];
                         $TryCount = $row['TryCount'];
+$classes = [];
 
+                        $Certification = isset($row['Certification']) ? trim($row['Certification']) : '';
+
+                        if (strcasecmp($Certification, 'Not Certified') == 0) {
+                            $classes[] = 'not-certified';
+                        }
+
+                        if ($TryCount == '2') {
+                            $classes[] = 'transferred';
+                        }
+
+                        $rowClass = implode(' ', $classes);
 
                         echo
                             "
 
-        <tr class='clickable-row' data-href='\MaintananceJobCard\EMUser\ViewJobEMUserPending.php?updateid=$id'>
+        <tr class='clickable-row $rowClass' data-href='\MaintananceJobCard\EMUser\ViewJobEMUserPending.php?updateid=$id'>
     
         
         <td>$JobCodeNo</td>
@@ -128,7 +149,7 @@ if (!(($_SESSION['type'] == 'euser') or ($_SESSION['type'] == 'muser'))) {
                 </tbody>
             </table>
             <button type="back" class="btn btn-danger mt-3" name="back"><a
-                    href="\MaintananceJobCard\PUser\indexPUser.php" style="text-decoration:none;color:white">Back to
+                    href=".\indexEMUser.php" style="text-decoration:none;color:white">Back to
                     Main</a></button>
             
         </div>
